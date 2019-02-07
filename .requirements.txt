@@ -1,0 +1,4 @@
+pyrogram[fast]
+requests
+TgCrypto
+Flask
