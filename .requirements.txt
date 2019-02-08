@@ -1,4 +1,6 @@
-pyrogram[fast]
+https://github.com/pyrogram/pyrogram/archive/develop.zip
 requests
 TgCrypto
-Flask
+bs4
+clint
+python-telegram-bot

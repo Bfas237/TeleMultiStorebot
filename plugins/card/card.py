@@ -17,5 +17,21 @@ def start(c, m):
  
     #message.delete()
 
-  
-    m.reply(smsg, quote=True)
+    con = sqlite3.connect('inshorts.db', check_same_thread=False)
+
+    with con:
+
+      con.row_factory = sqlite3.Row
+
+      cur = con.cursor()
+      cur.execute("SELECT * FROM files")
+
+      rows = cur.fetchall()
+
+      for row in rows:
+        results = "{} {} {}".format(row["ID"], row["Fname"], row["FileId"])
+        o = " ".join()
+        m.reply(str(results), quote=True)
+      
+
+    
