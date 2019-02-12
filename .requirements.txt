@@ -1,6 +1,6 @@
-https://github.com/pyrogram/pyrogram/archive/develop.zip
+pyrogram[fast]
 requests
 TgCrypto
 bs4
 clint
-python-telegram-bot
+beautifultable

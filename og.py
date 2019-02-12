@@ -2,7 +2,7 @@ import site
 import os, site
 import os.path
 import io  
-
+ 
 user_site_dir = site.getusersitepackages()
 user_customize_filename = os.path.join(user_site_dir, 'typing.py')
 

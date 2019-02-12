@@ -1,0 +1,25 @@
+{
+    "user_id": 770345593,
+    "peers_by_username": {
+        "jhbjh14514jjhbot": 770345593,
+        "bfaschat": 197005208
+    },
+    "dc_id": 4,
+    "auth_key": [
+        "pcPOxfbMM/RcH39/KpUe9Zi68PtouHodJimejO43Ori",
+        "ZglVNN+PWVm0w31sK27Au7F90KwRCp/txfRheUjEfOf",
+        "x6RNPCOfEbDcyjD7X9aZaBoQlxtUJesC6+gWNGMAp1i",
+        "1wqkrY5gS8ae/ZRpOAY6DHotIHP/FW/lusHhzaph52+",
+        "eS/KQpS82hV9Z32yYK7XPzPeuKbKdW+pQIq3ZuVYjEu",
+        "dVpsSIySqYiQGgLyjY/U5zZjeDaivTF3WVpyYcnxZS5",
+        "CxFvSAmT6BqfISZ1sLLnJWLXHQB2gkH0EWDL1ASCzo8",
+        "Ww0+Hwyp3QsR78TF6sRyZ3QNBVO4hVMXZHb5Zo1wA=="
+    ],
+    "test_mode": false,
+    "date": 1549981994,
+    "peers_by_phone": {},
+    "peers_by_id": {
+        "197005208": 7728863373916166327,
+        "770345593": -3702891029780116368
+    }
+}
