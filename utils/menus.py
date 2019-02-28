@@ -16,7 +16,7 @@ SETTINGS_MENU = [
         InlineKeyboardButton('🧰 Upgrade Plan', callback_data=b'plan'),  
         InlineKeyboardButton('👤 Contribute', callback_data=b'plan')  
     ],[
-        InlineKeyboardButton('🔙 Back', callback_data=b'main') 
+        InlineKeyboardButton('🔙 Back', callback_data=b'setupdate') 
     ],
 ]
 

@@ -10,11 +10,14 @@ try:
     pass
 except:  
   pass 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 plugins = dict(
     root="plugins" 
-)
+)    
 
-#Client("", plugins=plugins).run()
+if __name__ == "__main__" :
+
+    # create download directory, if not exist
+    Client("123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11", plugins=plugins).run()

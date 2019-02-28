@@ -29,15 +29,22 @@ def loadDB():
     UserID TEXT,
     User TEXT);'''
     )
-    cur.executescript('''CREATE TABLE IF NOT EXISTS Uploads
+    #cur.executescript('''DROP TABLE IF EXISTS Uploads;''')
+    
+    cur.executescript('''CREATE TABLE IF NOT EXISTS Ytube
     (
     id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
     ChatID INTEGER, 
     Username TEXT,
-    Files TEXT NOT NULL,
-    Details TEXT);'''
+    Title TEXT NOT NULL,
+    Thumb TEXT NOT NULL,
+    FileId TEXT NOT NULL,
+    Date TEXT,
+    Time TEXT,
+    Link TEXT
+    Link_id TEXT);'''
     )
-    #cur.executescript('''DROP TABLE IF EXISTS files;''')
+    
     cur.executescript('''CREATE TABLE IF NOT EXISTS files
     (
     ID INTEGER NOT NULL PRIMARY KEY UNIQUE,
@@ -71,6 +78,25 @@ def fetchNews(fn, fs, fid, dlid, times, dates, user, link):
     print ("Total news written to database : ", count)
 
     cur.close()
+def Ycheck(fn, fs, fid, dlid, times, dates, user, link):
+    conn = sqlite3.connect('inshorts.db')
+    cur = conn.cursor()
+    title = fn
+    thumb = fid
+    link = fs 
+    link_id = dlid
+    count = 0 
+    cur.execute('''SELECT Link_id FROM Ytube WHERE Title = ? OR Link_id = ?''', (title, content))
+    row = cur.fetchone()
+    if row is None:
+        cur.execute('''INSERT INTO Ytube (Title, Link_id, Thumb, Date, Time, Link, ChatID) VALUES ( ?, ?, ?, ?, ?, ?, ? )''', (title, link_id, thumb, dates, times, link, user ))
+        count += 1 
+    conn.commit()
+
+    print ("Total news written to database : ", count)
+
+    cur.close()
+
 
 def checkUserLastNews(chat_id):
     conn = sqlite3.connect('inshorts.db')
@@ -114,7 +140,18 @@ def fileid(fid):
     if row is None:
         news = 0
     else: 
-        
+        news = row[3]
+    cur.close()  
+    return news
+
+def delid(fid):
+    conn = sqlite3.connect('inshorts.db')
+    cur = conn.cursor() 
+    cur.execute("DELETE FROM files WHERE DownloadId= (?) AND User= (?)", (tnews, chat_id, ))
+    row = cur.fetchone()
+    if row is None:
+        news = 0
+    else: 
         news = row[3]
     cur.close()  
     return news
@@ -127,7 +164,6 @@ def filen(fid):
     if row is None:
         news = 0
     else: 
-        
         news = row[2]
     cur.close()  
     return news

@@ -1,5 +1,6 @@
 from utils.typing import *
 import utils.menus
+import traceback 
 
 @Client.on_message(Filters.regex("dl_"))
 def my_handler(bot, m):
@@ -16,7 +17,7 @@ def my_handler(bot, m):
     try:
       if tnews:
         bot.send_chat_action(chat_id,'UPLOAD_DOCUMENT')
-        time.sleep(3)
+        time.sleep(1)
         bot.send_document(m.chat.id, tnews, caption="Powered with ❤️ - @Bfas2327Bots")
       else:
         
@@ -69,7 +70,9 @@ def sendServerStartedMessage(bot, m):
       
       
       
-      
+abs_path = os.path.abspath("__file__"+"/../../Downloads/")
+logger.info(abs_path)      
+
 @Client.on_callback_query(dynamic_data(b"apks"))
 def pyrogram_data(client, callback_query):
     client.answer_callback_query(callback_query.id, "it works! {}".format(callback_query.from_user.first_name), show_alert=True)
@@ -83,17 +86,18 @@ def random_with_N_digits(n):
     range_start = 10**(n-1)
     range_end = (10**n)-1
     return randint(range_start, range_end)
-@Client.on_message(Filters.command("dl", prefix="!") & Filters.private)
+  
+  
+  
+@Client.on_message(Filters.command("get"))
 def dl(client, message, **current):
     try:
       url = " ".join(message.command[1:])
       logger.info(message.from_user)
-      if len(url) < 3: 
-        message.reply("That is not a valid command")
-        return True
+      if not "http" in message.text: 
+        message.reply("That is not a valid link. Use /help for more info")
+        return True 
       else:
-        sent = message.reply("Processing your request...", quote=True, reply_to_message_id=message.message_id).message_id
-        time.sleep(2)
         ctype = is_downloadable(url) 
         if ctype:
           with requests.get(url, allow_redirects=True) as r:
@@ -112,8 +116,7 @@ def dl(client, message, **current):
                 fnames = url.split("/")[-1]
                 fnames = fnames.strip('\n').replace('\"','').replace(" ", "_")
                 required_file_name = os.path.basename(fnames) 
-            
-            client.edit_message_text(message.chat.id, sent, "**Checking:** `{}`\n\n if it exist on my server..".format(required_file_name))
+            sent = message.reply("**Checking:** `{}`\n\n if it exist on my server..".format(required_file_name), quote=True, reply_to_message_id=message.message_id)
             time.sleep(2)
             lr = checkUserLastNews(message.chat.id)
             tr = checkTodayFirstNewsID()
@@ -131,17 +134,16 @@ def dl(client, message, **current):
               tnews, size = sfileid(url) 
             if(tnews != 0):
               client.send_document(message.chat.id, tnews, caption="Oh! i had this alread so it was faster")
-              client.delete_messages(message.chat.id, sent)
+              sent.delete()
             elif(size == 0):
               rd = 1
-              client.edit_message_text(message.chat.id, sent, "Downloading your file")
-              
+              sent.delete()
+              sent = message.reply("**Downloading...:**", quote=True, reply_to_message_id=message.message_id)
               downl = DownLoadFile(url, required_file_name)
               if downl:
-                  time.sleep(5)
-                  client.edit_message_text(message.chat.id, sent, "Done ✅.. Now uploading..")
+                  sent.edit("Done ✅.. Now uploading..")
                   chat_id = message.chat.id
-                  file = client.send_document(message.chat.id, required_file_name, progress = prog, progress_args = (sent, message.chat.id, required_file_name), reply_to_message_id=sent)  
+                  file = client.send_document(message.chat.id, required_file_name, progress = prog, progress_args = (sent, message.chat.id, required_file_name))  
                   os.remove(required_file_name)
                   download_id = generate_uuid()
                   file_size = file.document.file_size
@@ -165,16 +167,16 @@ def dl(client, message, **current):
                     LastReadNewsID = TodayFirstNewsID
                   if(TodayFirstNewsID != 0):
                     news = getNews(LastReadNewsID, chat_id)
-                  
+                   
                   message.reply(news) 
               else:
-                client.edit_message_text(message.chat.id, sent, "An error occured while downloading....")
+                er = "An error occured while downloading...."
+                sent.edit(er)
+                logger.info(er)
         else:
-          client.edit_message_text(message.chat.id, sent, "`Your link doesn't look like a downloadable link...... Kindly try again`")
+          err = "`Your link doesn't look like a downloadable link...... Kindly try again`"
+          message.reply(str(err), quote=True)
+          logger.debug(str(err))
         
-    except Exception as e:
-      message.reply("**Exception Error:**\n\n `{}`".format(e))
-    except TypeError as e:
-      message.reply("**Pyrogram Error:**\n\n `{}`".format(e))
-    except NameError as e:
-      message.reply("**Pyrogram Error:**\n\n `{}`".format(e)) 
+    except:
+      traceback.print_exc()

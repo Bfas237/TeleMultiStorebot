@@ -1,0 +1,29 @@
+{
+    "auth_key": [
+        "Xh4xZDF5ly1OY5sQ04MpIcSBoqewzQnsiiYm0lJc334",
+        "1fMX0Rac5akn0O23e6sSQt4t3wkBit7FYLL0TjsGaA8",
+        "nFkBFF4L/FfPBnoMJxv52xCqj+AmPwpmobKYVizA89P",
+        "Aw7K4M5kBsVasaslgFad3/kIeZRlxxAhEya4XVy8OSP",
+        "w2lI5zT0ux8dcrmR+JAgj2kRUAUAfLQj2KNCk9B73ef",
+        "PYntTA0PzoatcXMVJ+4LPGrgxvLSA3XfieIIA3kuHYG",
+        "hMSNFalnI/JL0jPCRW9wmg73O7mkPMTP99FbIFRGBLC",
+        "70C0KivWuhHey+sFEBuZ1WCPs2ElLnQiIzNUK/QAA=="
+    ],
+    "peers_by_id": {
+        "197005208": 7728863373916166327,
+        "770345593": -3702891029780116368,
+        "-1001139726492": -4539116680367830444,
+        "582005141": 3687567170520774863
+    },
+    "dc_id": 4,
+    "test_mode": false,
+    "peers_by_username": {
+        "bfaschat": 197005208,
+        "sunda001": 582005141,
+        "jhbjh14514jjhbot": 770345593,
+        "bfas237botsdevs": -1001139726492
+    },
+    "peers_by_phone": {},
+    "user_id": 770345593,
+    "date": 1551396301
+}

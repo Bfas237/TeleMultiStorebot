@@ -21,8 +21,6 @@ def dynamic_data(data):
         func=lambda filter, callback_query: filter.data == callback_query.data,
         data=data  # "data" kwarg is accessed with "filter.data"
     )
-ip = get('https://api.ipify.org').text
-
 logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -47,8 +45,10 @@ from urllib.parse import unquote, urlparse
 import requests
 import re
 
+from os import path
+from urllib.parse import urlparse
+import os, logging, re, urllib, sys, datetime, urllib.request, os.path, requests
 from os.path import splitext, basename
-
 
 options={}
 base_headers = {   

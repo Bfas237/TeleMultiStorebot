@@ -3,4 +3,3 @@ requests
 TgCrypto
 bs4
 clint
-beautifultable

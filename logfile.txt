@@ -1,0 +1,6 @@
+2019-02-28 22:29:42,080 - utils.typing - INFO - /Downloads
+2019-02-28 22:29:42,084 - pyrogram.client.client - WARNING - Successfully loaded 6 plugins from "plugins"
+2019-02-28 22:29:55,127 - utils.typing - INFO - /Downloads
+2019-02-28 22:29:55,130 - pyrogram.client.client - WARNING - Successfully loaded 6 plugins from "plugins"
+2019-02-28 22:30:02,435 - utils.typing - INFO - /Downloads
+2019-02-28 22:30:02,438 - pyrogram.client.client - WARNING - Successfully loaded 6 plugins from "plugins"
