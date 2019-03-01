@@ -1,53 +1,36 @@
-import traceback
-# Enable logging
-import time, datetime, os, re, sys, sqlite3, json, io, requests, pyrogram
+from utils.dbmanager import loadDB
+loadDB()
+from os import path
+import logging, urllib, os, re, sys, sqlite3, json, io, requests, datetime, requests, shutil, traceback, os.path, urllib.request, time, fnmatch
+#shutil.rmtree('/screenshots/') 
 from pyrogram import Client, Filters, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove, ForceReply
-from utils.dbmanager import *
-import logging
-import subprocess
 
-from uuid import uuid4 
-from utils.dbmanager import loadDB, fetchNews, checkUserLastNews, checkTodayFirstNewsID, fileid, sfileid
-
-from datetime import datetime
-
-from requests import get
-import sqlite3 as lite
-
-from datetime import date, datetime
-def dynamic_data(data):
-    return Filters.create(
-        name="DynamicData",
-        func=lambda filter, callback_query: filter.data == callback_query.data,
-        data=data  # "data" kwarg is accessed with "filter.data"
-    )
 logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING) 
+from uuid import uuid4 
 
+import random as r
+from requests import get
+import sqlite3 as lite
+from utils.guess import *
+
+
+def random_with_N_digits(n):
+    range_start = 10**(n-1)
+    range_end = (10**n)-1
+    return randint(range_start, range_end)
+  
+  
 
 from urllib.request import urlopen
-from utils.handlers import *
-import datetime, urllib.request
+
 from clint.textui import progress
-import fnmatch 
 from bs4 import BeautifulSoup
-
-
-from subprocess import Popen, PIPE
-
-from datetime import datetime, timezone
-import os,json,datetime,subprocess,time
+from datetime import datetime, timezone, date
 from urllib.parse import unquote, urlparse
-
-import requests
-import re
-
-from os import path
-from urllib.parse import urlparse
-import os, logging, re, urllib, sys, datetime, urllib.request, os.path, requests
 from os.path import splitext, basename
 
 options={}
@@ -57,8 +40,6 @@ base_headers = {
         'Accept-Language': 'zh-CN,zh;q=0.8'
     }
 headers = dict(base_headers, **options) 
-
-
-
-from datetime import datetime, timezone
+from utils.dbmanager import *
+from utils.handlers import *
 

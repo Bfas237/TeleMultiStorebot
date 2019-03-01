@@ -1,5 +1,0 @@
-pyrogram[fast]
-requests
-TgCrypto
-bs4
-clint

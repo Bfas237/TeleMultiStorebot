@@ -1,7 +1,9 @@
-from utils.typing import *
-import utils.menus
-import traceback 
 
+from utils.typing import *
+
+
+#getd = DownL("https://bfas237blog.com/wp-content/uploads/2018/12/bfas237blog-transpa.png")
+# Fix extensions
 @Client.on_message(Filters.regex("dl_"))
 def my_handler(bot, m):
     chat_id = m.chat.id
@@ -18,7 +20,7 @@ def my_handler(bot, m):
       if tnews:
         bot.send_chat_action(chat_id,'UPLOAD_DOCUMENT')
         time.sleep(1)
-        bot.send_document(m.chat.id, tnews, caption="Powered with ❤️ - @Bfas2327Bots")
+        bot.send_document(m.chat.id, tnews, thumb="bfas237blog-transpa.png", caption="Powered with ❤️ - @Bfas2327Bots")
       else:
         
         bot.send_chat_action(chat_id,'TYPING')
@@ -54,7 +56,7 @@ def sendServerStartedMessage(bot, m):
             items +=  (
               "<code>#{}</code> " 
               " <b>{}</b>"     
-              "\n<a href='https://telegram.me/jhbjh14514jjhbot?start=dl_{}'>Click to download</a>\n"       
+              "\n<a href='https://telegram.me/megabookstorebot?start=dl_{}'>Click to download</a>\n"       
               "<i>{}</i>\n"  
               "------\n" 
               "".format(str(row[0]), row[1], row[2], pretty_size(int(row[3]))))
@@ -68,27 +70,7 @@ def sendServerStartedMessage(bot, m):
       
       
       
-      
-      
-abs_path = os.path.abspath("__file__"+"/../../Downloads/")
-logger.info(abs_path)      
 
-@Client.on_callback_query(dynamic_data(b"apks"))
-def pyrogram_data(client, callback_query):
-    client.answer_callback_query(callback_query.id, "it works! {}".format(callback_query.from_user.first_name), show_alert=True)
-
-from datetime import datetime, timezone
-
-
-from random import randint
-
-def random_with_N_digits(n):
-    range_start = 10**(n-1)
-    range_end = (10**n)-1
-    return randint(range_start, range_end)
-  
-  
-  
 @Client.on_message(Filters.command("get"))
 def dl(client, message, **current):
     try:
@@ -102,14 +84,12 @@ def dl(client, message, **current):
         if ctype:
           with requests.get(url, allow_redirects=True) as r:
            
-            fname = ''
+            fname = None
             fname = get_filename(url)
             if fname:
                 fnames, ext = fname 
-                if ext:
-                  required_file_name = fnames+ext
-                else:
-                  required_file_name = fnames
+                required_file_name = fnames+ext
+                message.reply(required_file_name)
             else:
                 message.reply("😭 Invalid file name... retrying")
                 time.sleep(5)
@@ -139,7 +119,7 @@ def dl(client, message, **current):
               rd = 1
               sent.delete()
               sent = message.reply("**Downloading...:**", quote=True, reply_to_message_id=message.message_id)
-              downl = DownLoadFile(url, required_file_name)
+              downl = DownLoadFile(url, required_file_name, client, sent, message.chat.id)
               if downl:
                   sent.edit("Done ✅.. Now uploading..")
                   chat_id = message.chat.id
@@ -170,6 +150,10 @@ def dl(client, message, **current):
                    
                   message.reply(news) 
               else:
+                try:
+                  os.remove(required_file_name)
+                except:
+                  pass
                 er = "An error occured while downloading...."
                 sent.edit(er)
                 logger.info(er)

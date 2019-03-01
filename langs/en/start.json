@@ -1,6 +1,0 @@
-{
-	"start_msg": "Sorry [{}](tg://user?id={})! I work only in private. ",
-	"pm_start_msg": "Hello! [{}](tg://user?id={})! I can or may be able to download any downloadble file link you send to me and upload for you if and only if its a valid link. \n\n Send /faq to learn more about the usage and other useful tips",
-	"lang_changed": "Language changed.\n\nPlese note that this function isn't yet complete.",
-  "files_menu": "Here you can manage everthing that concerns files uploaded through this bot.\n\n Use the navigation menus to explore"
-}

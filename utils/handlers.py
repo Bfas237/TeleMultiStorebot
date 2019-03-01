@@ -1,10 +1,60 @@
 from utils.typing import *
-from clint.textui import progress
-import time, datetime, os, re, sys, sqlite3, json, io, requests, pyrogram
-from pyrogram import Client, Filters
-req_headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.A.B.C Safari/525.13',
-        'Referer': 'http://python.org'}
+import mimetypes
+import mimetypes, magic
+import filetype
+
+common_words = frozenset(("if", "but", "and", "the", "when", "use", "to", "for"))
+title = "When to use Python for web applications"
+title_words = set(title.lower().split())
+keywords = title_words.difference(common_words)
+def mime_content_type(url, content_type, name):
+    """Get mime type
+    :param filename: str
+    :type filename: str
+    :rtype: str
+    """
+    
+    filenam = basename(name)
+    
+    exts = os.path.splitext(filenam)[1][1:].lower()
+    if exts:
+      exts = "."+exts
+    else:
+      exts = None
+      logger.warning("No filetype could be determined for '%s', skipping.",
+            filenam
+        )
+      
+    
+    if exts in common_types or exts in types_map: 
+        ext = '{}'.format(exts)
+        mime_typ = '{}'.format(types_map[exts])
+        print(ext) 
+        print(mime_typ)
+      
+    elif content_type == 'image/jpeg' or content_type == 'image/jpg' or content_type == 'image/jpe':
+            ext = '.jpeg'
+        
+    elif content_type == 'image/x-icon' or content_type == 'image/vnd.microsoft.icon':
+            ext = '.ico'
+        
+    elif content_type == 'application/x-7z-compressed':
+            ext = '.7z'
+    elif content_type == 'image/png':
+            ext = '.png'
+        
+    elif None == exts:
+        ext = mimetypes.guess_extension(content_type)
+        logger.warning("No extension for '%s', guessed '%s'.",
+        filenam, ext
+                  )
+        
+        print(ext)
+    ent = ext
+
+    if ent in common_types or ent in types_map: 
+        print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
+    return ext
 def is_downloadable(url):
     """
     Does the url contain a downloadable resource
@@ -22,16 +72,35 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
-from urllib.parse import unquote, urlparse
 
-import requests
-import re
+def get_filename(url):
+    """
+    Does the url contain a downloadable resource
+    """
+    request = urllib.request.Request(url, headers=req_headers)
+    opener = urllib.request.build_opener()
+    response = opener.open(request)
+    code = response.code
+    headers = response.headers
+    if code < 400:
+       disassembled = urlparse(url)
+       filenam, file_ext = splitext(basename(disassembled.path))
+       if(filenam != None):
+         filename = unquote(filenam).strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
+         ext = file_ext
+         
+       else:
+         filename = None
+         ext = None
+        
+    return filename, ext
+def dynamic_data(data):
+    return Filters.create(
+        name="DynamicData",
+        func=lambda filter, callback_query: filter.data == callback_query.data,
+        data=data  # "data" kwarg is accessed with "filter.data"
+    )
 
-from os.path import splitext, basename
-
-from urllib.request import urlopen
-from utils.handlers import *
-import datetime, urllib.request
 def fileExt(url):
     """
     Check if file extention exist then
@@ -53,7 +122,7 @@ def fileExt(url):
     if None != matches:
         return matches.group(1)
     return None
-def get_filenameg(url):
+def get_filename(url):
     """
     Get an authentique filename from content-dispostion
     """
@@ -123,37 +192,14 @@ def get_filenameg(url):
           name = path.basename(unquote(urlparse(url).path))
           
         name = unquote(name).strip('\n').strip('\*').replace('UTF-8', "").strip('\=').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-        
+      
       filenam, ext = splitext(basename(name))
-      if None != ext:
-        ext = headers['content-type'].split('/')[-1] 
-      else:
+      if ext:
         ext = fileExt(url)
+      else:
+        content_type = headers['content-type']
+        ext = mime_content_type(url, content_type, name)
     return filenam, ext
-
-def get_filename(url):
-    """
-    Does the url contain a downloadable resource
-    """
-    request = urllib.request.Request(url, headers=req_headers)
-    opener = urllib.request.build_opener()
-    response = opener.open(request)
-    code = response.code
-    headers = response.headers
-    if code < 400:
-       disassembled = urlparse(url)
-       filenam, file_ext = splitext(basename(disassembled.path))
-       if(filenam != None):
-         filename = unquote(filenam).strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-         ext = file_ext
-         
-       else:
-         filename = None
-         ext = None
-        
-    return filename, ext
-import random as r
-
 def generate_uuid():
         random_string = ''
         random_str_seq = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -208,12 +254,13 @@ def prog(client, current, total, message_id, chat_id, required_file_name):
   try:
    file_size = os.stat(required_file_name).st_size
    client.send_chat_action(chat_id,'UPLOAD_DOCUMENT')
-   message_id.edit("**⬇️ Uploading:** {}% of {}".format(round(current/total*100, 0), str(pretty_size(file_size)))
+   message_id.edit("**⬆️ Uploading:** {}% of {}".format(round(current/total*100, 0), str(pretty_size(file_size)))
    )
  
   except:
    pass
          
+
 from pyrogram.api.errors import (
     BadRequest, Flood, InternalServerError,
     SeeOther, Unauthorized, UnknownError
@@ -236,9 +283,9 @@ base_headers = {
     }
 headers = dict(base_headers, **options) 
 
-
- 
-def DownLoadFile(url, file_name):
+def DownL(url):
+    fname, ext = get_filename(url)
+    file_name = fname+ext
     r = requests.get(url, stream=True, allow_redirects=True, headers=headers)
     with open(file_name, 'wb') as file:
       total_length = r.headers.get('content-length')
@@ -253,4 +300,38 @@ def DownLoadFile(url, file_name):
             done = int(100 * dl / total_length)
             file.write(chunk)
             file.flush()
+            os.fsync(file.fileno())
+
+def DownLoadFile(url, file_name, client, message_id, chat_id, **current):
+    r = requests.get(url, stream=True, allow_redirects=True, headers=headers)
+    fname, ext = get_filename(url)
+    file_name = fname+ext
+    
+    with open(file_name, 'wb') as file:
+      total_length = int(r.headers.get('content-length', 0)) or None
+      downloaded_size = 0
+      chunk_size=8192*1024
+      if total_length is None:  # no content length header
+        file.write(r.content)
+      else:
+        dl = 0
+        total_length = int(total_length)
+        for chunk in progress.bar(r.iter_content(chunk_size=chunk_size), expected_size=(total_length / 1024) + 1):
+          if chunk:
+            dl += len(chunk)
+            done = int(100 * dl / total_length)
+            file.write(chunk)
+            file.flush()
+            os.fsync(file.fileno())
+            downloaded_size += chunk_size
+          if round(total_length/downloaded_size*100, 0) % 5 == 0:
+            try:
+              file_size = os.stat(file_name).st_size
+              client.send_chat_action(chat_id,'UPLOAD_DOCUMENT') 
+              message_id.edit("**⬇️ Downloading:** {}% of {}".format(round(total_length/downloaded_size*100, 0), str(pretty_size(file_size)))
+   )
+            except:
+              pass
+               
+                    
     return file_name

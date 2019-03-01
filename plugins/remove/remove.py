@@ -27,7 +27,7 @@ def my_handler(bot, m):
         chat_id = str(m.from_user.id)
         stmt="DELETE FROM files WHERE DownloadId= (?) AND User= (?)"
         args=(tnews, chat_id )
-        report = "❗Report\n\n✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
+        report = "✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
         err = "\n❌ Invalid file token:\n\nUse /help to learn more about me"
         snews = fileid(tnews) 
         if snews:
