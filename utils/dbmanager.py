@@ -14,10 +14,20 @@ def dict_factory(cursor, row):
 cf = sqlite3.connect('inshorts.db', check_same_thread=False)
 
 cursors = cf.cursor()
- 
+def add_column_to_table(c, table_name, column_name, column_type):
+    for row in c.execute('PRAGMA table_info({})'.format(table_name)):
+        if row[1] == column_name:
+            print('column {} already exists in {}'.format(column_name, table_name))
+            break
+    else:
+        print('add column {} to {}'.format(column_name, table_name))
+        c.execute('ALTER TABLE {} ADD COLUMN {} {}'.format(table_name, column_name, column_type))
+
+c = cf.cursor()  
+#add_column_to_table(c, 'files', 'User', 'TEXT') 
 def loadDB(): 
     # Creates SQLite database to store info.
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor()
     conn.text_factory = str
     cur.executescript('''CREATE TABLE IF NOT EXISTS Users
@@ -25,17 +35,14 @@ def loadDB():
     id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
     ChatID INTEGER, 
     LastNewsID INTEGER,
-    Lang TEXT,
-    UserID TEXT,
-    User TEXT);'''
+    UserID TEXT);''' 
     )
-    #cur.executescript('''DROP TABLE IF EXISTS Uploads;''')
+    #cur.executescript('''DROP TABLE IF EXISTS files;''') 
     
     cur.executescript('''CREATE TABLE IF NOT EXISTS Ytube
     (
     id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-    ChatID INTEGER, 
-    Username TEXT,
+    ChatID INTEGER,
     Title TEXT NOT NULL,
     Thumb TEXT NOT NULL,
     FileId TEXT NOT NULL,
@@ -61,7 +68,7 @@ def loadDB():
     conn.close()
        
 def fetchNews(fn, fs, fid, dlid, times, dates, user, link):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor()
     title = fn
     content = fid
@@ -79,7 +86,7 @@ def fetchNews(fn, fs, fid, dlid, times, dates, user, link):
 
     cur.close()
 def Ycheck(fn, fs, fid, dlid, times, dates, user, link):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor()
     title = fn
     thumb = fid
@@ -99,7 +106,7 @@ def Ycheck(fn, fs, fid, dlid, times, dates, user, link):
 
 
 def checkUserLastNews(chat_id):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor()
     cur.execute('SELECT LastNewsID FROM Users WHERE ChatID = ?', (chat_id, ))
     row = cur.fetchone()
@@ -115,7 +122,7 @@ def checkUserLastNews(chat_id):
     return LastReadNewsID 
 
 def checkTodayFirstNewsID():
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor()
     now = datetime.now()
     date = now.strftime("%B %d, %Y")
@@ -132,7 +139,7 @@ def checkTodayFirstNewsID():
     return TodayFirstNewsID
 
 def fileid(fid):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 
     likeDate = "%" + fid + "%"  
     cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
@@ -144,8 +151,45 @@ def fileid(fid):
     cur.close()  
     return news
 
-def delid(fid):
-    conn = sqlite3.connect('inshorts.db')
+def vfileid(fid):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor() 
+    likeDate = "%" + fid + "%"  
+    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+    row = cur.fetchone()
+    if row is None:
+        news = 0
+    else: 
+        news = row[0], row[2], row[3], row[1], row[4], row[5], row[6]
+    cur.close()  
+    return news  
+def ufil(fid):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor() 
+    likeDate = "%" + fid + "%"  
+    cur.execute("SELECT User, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
+    row = cur.fetchone()
+    if row is None:
+        news = 0
+    else: 
+        news = row[1]
+    cur.close()  
+    return news  
+def doc(fid):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor() 
+    likeDate = "%" + fid + "%"  
+    cur.execute("SELECT Fname, DownloadId FROM files WHERE Fname LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
+    row = cur.fetchone()
+    if row is None:
+        news = 0
+        
+    else: 
+        news = row[1]
+    cur.close()  
+    return news  
+def delid(fid): 
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 
     cur.execute("DELETE FROM files WHERE DownloadId= (?) AND User= (?)", (tnews, chat_id, ))
     row = cur.fetchone()
@@ -155,8 +199,9 @@ def delid(fid):
         news = row[3]
     cur.close()  
     return news
+
 def filen(fid):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 
     likeDate = "%" + fid + "%"  
     cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE Fname LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
@@ -164,11 +209,11 @@ def filen(fid):
     if row is None:
         news = 0
     else: 
-        news = row[2]
+        news = row[7]    
     cur.close()  
     return news
 def sfileid(fid):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 
     likeDate = "%" + fid + "%"  
     cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE Link LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
@@ -182,17 +227,18 @@ def sfileid(fid):
     cur.close()  
     return (tfid, size) 
 def getNews(LastReadNewsID, chat_id):
-    conn = sqlite3.connect('inshorts.db')
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor()
     print (LastReadNewsID)
     cur.execute("SELECT ID, Date, Fname, FileId, Size, Time, DownloadId, User, Link FROM files WHERE ID > ? ORDER BY ID ASC LIMIT 1", (LastReadNewsID, ))
     row = cur.fetchone()
     if row is None:
-        news = "Added to my db for future use. You can see all your saved files using /files."
+        news = "Saved for future use. You can see all your saved files using /files."
+    elif(row[0] > LastReadNewsID):
+        
+        news = "Ok I got it. Access your library using /files."
     else:
-        
-        news = row[1] + "\n\n" + row[2] + "\n\n" + row[3]
-        
+        news = ""
         cursor = conn.execute("UPDATE Users SET `LastNewsID` = ? WHERE ChatID = ?", (row[0], chat_id))
     conn.commit()
     cur.close()  

@@ -1,0 +1,21 @@
+{
+  "install": {
+    "include": [
+      "^package\\.json$",
+      "^.requirements.txt$",
+      "^\\.env$"
+    ]
+  },
+  "restart": {
+    "exclude": [],
+    "include": [
+      "\\.js$",
+      "\\.coffee$",
+      "\\.json",
+      "\\.py",
+      "^static/",
+      "^templates/"
+    ]
+  },
+  "throttle": 100
+}

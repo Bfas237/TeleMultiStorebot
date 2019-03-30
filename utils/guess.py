@@ -184,7 +184,7 @@ def default_mime_types():
 
     # These are non-standard types, commonly found in the wild.  They will
     # only match if strict=0 flag is given to the API methods.
-
+    
     # Please sort these too
     common_types = {
         '.jpg' : 'image/jpg',

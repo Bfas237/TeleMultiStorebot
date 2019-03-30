@@ -1,9 +1,0 @@
-pytube
-requests
-filetype
-tqdm
-unidecode
-https://github.com/pyrogram/pyrogram/archive/develop.zip
-TgCrypto
-bs4
-python-magic
