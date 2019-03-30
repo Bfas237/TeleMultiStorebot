@@ -1,4 +1,4 @@
-pyrogram[fast]
+https://github.com/pyrogram/pyrogram/archive/develop.zip
 requests
 TgCrypto
 bs4
