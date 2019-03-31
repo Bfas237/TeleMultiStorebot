@@ -1,4 +1,4 @@
-https://github.com/pyrogram/pyrogram/archive/develop.zip
+https://github.com/Bfaschat/pyrobeta/archive/master.zip
 requests
 TgCrypto
 bs4
