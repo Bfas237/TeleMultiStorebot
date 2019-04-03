@@ -22,7 +22,7 @@ def my_handler(bot, m, *args, **kwargs):
            
           bot.send_chat_action(chat_id,'UPLOAD_DOCUMENT')
           time.sleep(1)
-          bot.send_document(m.chat.id, tnews, caption="Powered with ❤️ - @Bfas2327Bots")
+          m.reply_cached_media(tnews, caption="Powered with ❤️ - @Bfas237Bots")
         except FileIdInvalid:
           okok(bot, m,  g)
     else:

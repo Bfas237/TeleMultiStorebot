@@ -1,37 +1,11 @@
 from utils.typing import *
 
-class DBHelper:
-       def __init__(self, dbname="inshorts.db"):
-            self.dbname = dbname
-            self.conn = sqlite3.connect(dbname, check_same_thread=False)
-            self.c = self.conn.cursor()
-        
-       def checkifexist(self, item_text, owner):
-            likeDate = "%" + str(item_text) + "%"
-            self.c.execute("SELECT DownloadId, User FROM files WHERE User= (?) AND DownloadId LIKE ?", (owner, likeDate, )) 
-            user = self.c.fetchone()
-            if user is not None:
-                return user[1]
-            else: 
-                return None
-                
-                
-       def delete_item(self, item_text,owner):
-                stmt="DELETE FROM files WHERE DownloadId= (?) AND User= (?)"
-                args=(item_text,owner )
-                self.conn.execute(stmt,args)
-                self.conn.commit() 
-                
-                
-       def delete_all(self, owner):
-                stmt="DELETE FROM files WHERE User= (?)"
-                args=(owner )
-                self.conn.execute(stmt,args)
-                self.conn.commit() 
-                 
                  
 db= DBHelper()
-      
+  
+
+            
+ 
  
 @Client.on_callback_query()
 def pyrogram_data(m, query):
@@ -54,6 +28,7 @@ def pyrogram_data(m, query):
     action = ''
     offset = 0
     q = ''
+    adm = ''
     inv = "😔 `404` **Invalid FILE_ID**.\n\n Send /files to see your saved files"
     hide = False
     disabled_attachments = set()
@@ -70,8 +45,8 @@ def pyrogram_data(m, query):
             offset = int(args[0])
         elif name == b'noatt':
             disabled_attachments = set(int(arg) for arg in args if arg != '')
-        elif name == b'mid':
-            mid = int(args[0])
+        elif name == b'adm':
+            adm = int(args[0])
         elif name == b'cnf':
             confirmed = bool(int(args[0]))
         elif name == b'qry':
@@ -168,16 +143,23 @@ def pyrogram_data(m, query):
           try:
               tnews = str(q.decode('UTF-8'))
               snews = fileid(tnews)
-              dg = copy(tnews, times, dates, chat_id, link, year, month, day, hr, mins, sec)
-              ver = db.checkifexist(tnews, chat_id)
+              #(dlid, times, dates, user, year, month, day, h, m, s)
+              fids = db.copy(tnews, str(download_id+"b"), times, dates, chat_id, year, month, day, hr, mins, sec)
+              if fids is not None:
+                fidse = fids
+              else:
+                m.answer_callback_query(query.id, "There was an error")
+                return
+              logger.warning(fids)
+              ver = db.checkifexist(fidse, chat_id)
               item = ""
               reply_markups = InlineKeyboardMarkup(kbs)
               if snews:
-                num, row, fid, dat, tim, siz, did = vfileid(tnews)
-                nums = checkd(chat_id, tnews)
+                num, row, fid, dat, tim, siz, did = vfileid(fidse)
+                nums = checkd(chat_id, did)
               else:
                 did = None
-              
+               
               if ver:
                 if did:
                   yr, mm, day, hr, mte, sec = cdate(did)
@@ -321,6 +303,7 @@ def reg_keyboard(id, admin, confirmed, ids, chat_id):
     data.append('cnf=' + str(int(confirmed)))
     data.append('hide=' + str(int(ids)))
     data.append('qry=' + str(id))
+    data.append('adm=' + str(ids))
     data = '%'.join(data)
     logger.warning(data)
     

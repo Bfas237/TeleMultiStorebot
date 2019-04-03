@@ -11,19 +11,135 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
-cf = sqlite3.connect('inshorts.db', check_same_thread=False)
+  
+class DBHelper:
+       def __init__(self, dbname="inshorts.db"):
+            self.dbname = dbname
+            self.conn = sqlite3.connect(dbname, check_same_thread=False)
+            self.c = self.conn.cursor()
+            self.setup()
+      
 
-cursors = cf.cursor()
-def add_column_to_table(c, table_name, column_name, column_type, default, value):
-    for row in c.execute('PRAGMA table_info({})'.format(table_name)):
-        if row[1] == column_name:
-            print('column {} already exists in {}'.format(column_name, table_name))
-            break
-    else:
-        print('add column {} to {}'.format(column_name, table_name))
-        c.execute('ALTER TABLE {} ADD COLUMN {} {} {} {}'.format(table_name, column_name, column_type, default, value))
+       def setup(self):
+          
+            self.conn.text_factory = str
+            self.c.executescript('''CREATE TABLE IF NOT EXISTS Users
+    (
+    id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
+    ChatID INTEGER, 
+    LastNewsID INTEGER,
+    UserID TEXT);''' 
+    )
+    #cur.executescript('''DROP TABLE IF EXISTS files;''') 
+    
+    
+            self.c.executescript('''CREATE TABLE IF NOT EXISTS Ytube
+    (
+    id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
+    ChatID INTEGER,
+    Title TEXT NOT NULL,
+    Thumb TEXT NOT NULL,
+    FileId TEXT NOT NULL,
+    Date TEXT,
+    Time TEXT,
+    Link TEXT
+    Link_id TEXT);'''
+    )
+    
+    
+            self.c.executescript('''CREATE TABLE IF NOT EXISTS files
+    (
+    ID INTEGER NOT NULL PRIMARY KEY UNIQUE,
+    Fname TEXT, 
+    Size TEXT,
+    FileId INTEGER,
+    Date TEXT,
+    Time TEXT,
+    DownloadId TEXT,
+    Link TEXT,
+    User TEXT);'''
+    )  
+    
+            self.conn.commit()
+       def checkifexist(self, item_text, owner):
+            likeDate = "%" + str(item_text) + "%"
+            self.c.execute("SELECT DownloadId, User FROM files WHERE User= (?) AND DownloadId LIKE ?", (owner, likeDate, )) 
+            user = self.c.fetchone()
+            if user is not None:
+                return user[1]
+            else: 
+                return None
+        
+        
+       def fetchNews(self, fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s):
+            title = fn
+            content = fid
+            fsize = fs 
+            downloadid = dlid
+            count = 0 
+            self.c.execute('''SELECT Fname FROM files WHERE Fname = ? OR FileId = ?''', (title, content))
+            row = self.c.fetchone()
+            if row is None:
+                self.c.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s ))
+                count += 1 
+            self.conn.commit()
 
-c = cf.cursor()  
+            print ("Total news written to database : ", count)
+        
+       def checkUserLastNews(self, chat_id):
+    
+            self.c.execute('SELECT LastNewsID FROM Users WHERE ChatID = ?', (chat_id, ))
+            row = self.c.fetchone()
+            if row is None:
+                self.c.execute('INSERT INTO Users (ChatID, LastNewsID) VALUES (? , ?)', (chat_id, 1))
+                LastReadNewsID = 1
+                print ("\nNew User :", chat_id, "\nLast Read News ID =", LastReadNewsID)
+            else:
+                LastReadNewsID = row[0]
+                print ("\nOld User :", chat_id, "\nLast Read News ID =", LastReadNewsID)
+            self.conn.commit()
+    
+            return LastReadNewsID 
+
+        
+       def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec):
+            likeDate = "%" + dlid + "%"
+            self.c.execute('SELECT Fname, FileId, Size, Link, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (dlid, ))
+            row = self.c.fetchone() 
+            if row is not None: 
+                self.c.execute('INSERT OR IGNORE INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], dates, times, tnews, chat_id, row[3], year, month, day, hr, mins, sec, ))
+                LastReadNewsID = tnews
+                print ("\nnNew file token :", dlid, "\nLast Read News ID =", LastReadNewsID)
+            else:
+                LastReadNewsID = None
+                print ("\nOld  file token :", dlid, "\nLast Read News ID =", LastReadNewsID)
+            self.conn.commit()
+            return LastReadNewsID 
+
+                
+       def delete_item(self, item_text,owner):
+                stmt="DELETE FROM files WHERE DownloadId= (?) AND User= (?)"
+                args=(item_text,owner )
+                self.conn.execute(stmt,args)
+                self.conn.commit() 
+                
+                
+       def delete_all(self, owner):
+                stmt="DELETE FROM files WHERE User= (?)"
+                args=(owner )
+                self.conn.execute(stmt,args)
+                self.conn.commit() 
+                
+       def add_column_to_table(self, table_name, column_name, column_type, default, value):
+    
+                for row in self.c.execute('PRAGMA table_info({})'.format(table_name)):
+                    if row[1] == column_name:
+                        print('column {} already exists in {}'.format(column_name, table_name))
+                        break
+                    else:
+                        print('add column {} to {}'.format(column_name, table_name))
+                        self.c.execute('ALTER TABLE {} ADD COLUMN {} {} {} {}'.format(table_name, column_name, column_type, default, value))
+db = DBHelper()
 now = datetime.now()
 y = int(now.strftime("%Y"))
 mm = int(now.strftime("%m")) 
@@ -39,101 +155,9 @@ s = int(now.strftime("%S"))
 #add_column_to_table(c, 'files', 'Month', 'INTEGER', 'DEFAULT', mm) 
 #add_column_to_table(c, 'files', 'Day', 'INTEGER', 'DEFAULT', d)  
 #add_column_to_table(c, 'files', 'User', 'TEXT') 
-def loadDB(): 
-    # Creates SQLite database to store info.
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    conn.text_factory = str
-    cur.executescript('''CREATE TABLE IF NOT EXISTS Users
-    (
-    id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-    ChatID INTEGER, 
-    LastNewsID INTEGER,
-    UserID TEXT);''' 
-    )
-    #cur.executescript('''DROP TABLE IF EXISTS files;''') 
-    
-    cur.executescript('''CREATE TABLE IF NOT EXISTS Ytube
-    (
-    id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-    ChatID INTEGER,
-    Title TEXT NOT NULL,
-    Thumb TEXT NOT NULL,
-    FileId TEXT NOT NULL,
-    Date TEXT,
-    Time TEXT,
-    Link TEXT
-    Link_id TEXT);'''
-    )
-    
-    cur.executescript('''CREATE TABLE IF NOT EXISTS files
-    (
-    ID INTEGER NOT NULL PRIMARY KEY UNIQUE,
-    Fname TEXT, 
-    Size TEXT,
-    FileId INTEGER,
-    Date TEXT,
-    Time TEXT,
-    DownloadId TEXT,
-    Link TEXT,
-    User TEXT);'''
-    )  
-    conn.commit()
-    conn.close()
+  
        
-def fetchNews(fn, fs, fid, dlid, times, dates, user, link):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    title = fn
-    content = fid
-    fsize = fs 
-    downloadid = dlid
-    count = 0 
-    cur.execute('''SELECT Fname FROM files WHERE Fname = ? OR FileId = ?''', (title, content))
-    row = cur.fetchone()
-    if row is None:
-        cur.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link ))
-        count += 1 
-    conn.commit()
 
-    print ("Total news written to database : ", count)
-
-    cur.close()
-def Ycheck(fn, fs, fid, dlid, times, dates, user, link):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    title = fn
-    thumb = fid
-    link = fs 
-    link_id = dlid
-    count = 0 
-    cur.execute('''SELECT Link_id FROM Ytube WHERE Title = ? OR Link_id = ?''', (title, content))
-    row = cur.fetchone()
-    if row is None:
-        cur.execute('''INSERT INTO Ytube (Title, Link_id, Thumb, Date, Time, Link, ChatID) VALUES ( ?, ?, ?, ?, ?, ?, ? )''', (title, link_id, thumb, dates, times, link, user ))
-        count += 1 
-    conn.commit()
-
-    print ("Total news written to database : ", count)
-
-    cur.close()
-
-
-def checkUserLastNews(chat_id):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    cur.execute('SELECT LastNewsID FROM Users WHERE ChatID = ?', (chat_id, ))
-    row = cur.fetchone()
-    if row is None:
-        cur.execute('INSERT INTO Users (ChatID, LastNewsID) VALUES (? , ?)', (chat_id, 1))
-        LastReadNewsID = 1
-        print ("\nNew User :", chat_id, "\nLast Read News ID =", LastReadNewsID)
-    else:
-        LastReadNewsID = row[0]
-        print ("\nOld User :", chat_id, "\nLast Read News ID =", LastReadNewsID)
-    conn.commit()
-    cur.close()
-    return LastReadNewsID 
 
 def checkTodayFirstNewsID():
     conn = sqlite3.connect('inshorts.db', check_same_thread=False)
@@ -210,8 +234,6 @@ def checkd(id, q):
     cur.close()
     return TodayFirstNewsID
   
-  
- 
 def cdate(fid):
     conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 

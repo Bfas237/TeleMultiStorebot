@@ -123,11 +123,16 @@ def my_handler(bot, m):
        
       else:
         download_id = generate_uuid()
-        file_name = file_name
+        now = datetime.now()
+        year = int(now.strftime("%Y"))
+        month = int(now.strftime("%m")) 
+        day = int(now.strftime("%d"))
+        h = int(now.strftime("%H"))
+        m = int(now.strftime("%M"))
+        s = int(now.strftime("%S"))
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
-        fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url)
-                  
+        db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s)
         LastReadNewsID = checkUserLastNews(chat_id)
           
         TodayFirstNewsID = checkTodayFirstNewsID()

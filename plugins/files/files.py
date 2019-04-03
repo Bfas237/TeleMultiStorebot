@@ -1,17 +1,7 @@
 from utils.typing import *
-class DBHelper:
-       def __init__(self,dbname="inshorts.db"):
-                self.dbname=dbname
-                self.conn=sqlite3.connect(dbname)
+
                 
-                
-       def delete_item(self, item_text,owner):
-                stmt="DELETE FROM files WHERE DownloadId= (?) AND User= (?)"
-                args=(item_text,owner )
-                self.conn.execute(stmt,args)
-                self.conn.commit() 
-                
-db= DBHelper()
+
 state = {}
 @Client.on_message(Filters.command("files")) 
 def sendServerStartedMessage(bot, m):

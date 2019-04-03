@@ -11,10 +11,9 @@ class DBHelper:
                 self.conn.execute(stmt,args)
                 self.conn.commit() 
                 
-db= DBHelper()
+
 state = {}
 
-      
  
       
 @Client.on_message(Filters.regex("de_"))

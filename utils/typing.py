@@ -1,5 +1,4 @@
-from utils.dbmanager import loadDB
-loadDB()
+
 from os import path
 import logging, urllib, os, re, sys, sqlite3, json, io, requests, datetime, requests, shutil, traceback, os.path, urllib.request, time, fnmatch
 #shutil.rmtree('/screenshots/') 
