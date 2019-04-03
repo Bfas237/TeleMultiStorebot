@@ -8,6 +8,18 @@ if not os.path.isdir(download_path):
   os.makedirs(download_path)
 print(download_path)   
 
+def timedates(dat, df, ff): 
+    import timeago, datetime
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    date = datetime.datetime.now() 
+    return timeago.format(datetime.date(dat, df, ff), now)  
+
+def timedate(dat): 
+    import timeago, datetime
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    date = datetime.datetime.now() 
+    return timeago.format(dat, now)   
+  
 def Search(query): 
     session = requests.Session()
     opt={}

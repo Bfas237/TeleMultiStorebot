@@ -42,13 +42,14 @@ def sendServerStartedMessage(bot, m):
     chat_id = str(dd)
     c.execute("SELECT ID, Fname, DownloadId, Size FROM files WHERE User = ? ORDER BY ID DESC LIMIT 5 OFFSET ?", (chat_id, off, ))
     con.execute("SELECT COUNT (*) FROM files WHERE User = ?", (chat_id, ))
+    last = 0
     rowcount = con.fetchone()[0]
     rows = c.fetchall() 
     conn.close() 
     try:  
       if len(rows) > 0: 
         items = ""
-        lens = len(rows)
+        lens = len(rows) 
         for row in rows:
             items +=  (
               "<code>#{}</code> " 
@@ -58,7 +59,7 @@ def sendServerStartedMessage(bot, m):
               "------\n" 
               "".format(str(row[0]), row[1][:50], row[2], row[2], pretty_size(int(row[3]))))
         
-        kb = search_keyboard(offset=0)
+        kb = search_keyboard(offset=0, rows=rowcount, last=last, show_download=True)
         reply_markup = InlineKeyboardMarkup(kb)
         username = m.from_user.username
         src = m.reply("📄 <b>{}</b>'s files Library:   <b>{} out of {}</b> \n\n {}".format(username, lens, rowcount, items),reply_markup = reply_markup, parse_mode="html")
@@ -101,6 +102,21 @@ def my_handler(bot, m):
     chat_id = str(user)
     c.execute("SELECT ID, Fname, DownloadId, Size FROM files WHERE User = ? ORDER BY ID DESC LIMIT 5 OFFSET ?", (chat_id, off, ))
     con.execute("SELECT COUNT (*) FROM files WHERE User = ?", (chat_id, ))
+    last = 0
+    try:
+      cf.execute("SELECT DISTINCT * FROM files WHERE User = ? ORDER BY ID DESC LIMIT 1", (chat_id, )) 
+      l = cf.fetchone()
+      if l is not None:
+        last = l[0]
+      else:
+        last = 0
+    except TypeError:
+      m.reply("Unidentified error has been encountered")
+      return
+    except AttributeError:
+      m.reply("There was an error. My master has been notified")
+      return 
+      
     rowcount = con.fetchone()[0]
     rows = c.fetchall() 
     conn.close() 
@@ -117,12 +133,12 @@ def my_handler(bot, m):
               "------\n" 
               "".format(str(row[0]), row[1][:50], row[2], row[2], pretty_size(int(row[3]))))
         
-        kb = search_keyboard(offset=0)
+        kb = search_keyboard(offset=0, rows=rowcount, last=last, show_download=True)
         reply_markup = InlineKeyboardMarkup(kb)
         username = m.from_user.username
         src = m.reply("📄 <b>{}</b>'s files Library:   <b>{} out of {}</b> \n\n {}".format(username, lens, rowcount, items),reply_markup = reply_markup, parse_mode="html")
         user_chat = state.get(m.from_user.id, None)
-        user_chat['msg'] = None
+        user_chat['msg'] = None 
         user_chat['msgid'] = src
         user_chat['off'] = off
       
@@ -132,9 +148,9 @@ def my_handler(bot, m):
         traceback.print_exc()
     apk_string = "{}".format("apks")
       
+from utils.strings import * 
  
-@Client.on_callback_query()
-def pyrogram_data(m, query):
+def bbb(m, query):
     global state 
     off = 0
     user_chat = state.get(query.from_user.id, None)
@@ -215,7 +231,7 @@ def pyrogram_data(m, query):
     else:
         m.edit_message_reply_markup(chat_id, query.message.message_id,
                                    reply_markup=reply_markup)
-def search_keyboard(offset):
+def ff(offset):
     data = list()
 
     data.append('off=' + str(int(offset)))

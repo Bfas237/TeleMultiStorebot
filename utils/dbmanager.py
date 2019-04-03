@@ -14,16 +14,30 @@ def dict_factory(cursor, row):
 cf = sqlite3.connect('inshorts.db', check_same_thread=False)
 
 cursors = cf.cursor()
-def add_column_to_table(c, table_name, column_name, column_type):
+def add_column_to_table(c, table_name, column_name, column_type, default, value):
     for row in c.execute('PRAGMA table_info({})'.format(table_name)):
         if row[1] == column_name:
             print('column {} already exists in {}'.format(column_name, table_name))
             break
     else:
         print('add column {} to {}'.format(column_name, table_name))
-        c.execute('ALTER TABLE {} ADD COLUMN {} {}'.format(table_name, column_name, column_type))
+        c.execute('ALTER TABLE {} ADD COLUMN {} {} {} {}'.format(table_name, column_name, column_type, default, value))
 
 c = cf.cursor()  
+now = datetime.now()
+y = int(now.strftime("%Y"))
+mm = int(now.strftime("%m")) 
+d = int(now.strftime("%d"))
+h = int(now.strftime("%H"))
+m = int(now.strftime("%M"))
+s = int(now.strftime("%S")) 
+#add_column_to_table(c, 'files', 'Hour', 'INTEGER', 'DEFAULT', h)   
+#add_column_to_table(c, 'files', 'Minute', 'INTEGER', 'DEFAULT', m) 
+#add_column_to_table(c, 'files', 'Seconds', 'INTEGER', 'DEFAULT', s) 
+  
+#add_column_to_table(c, 'files', 'Year', 'INTEGER', 'DEFAULT', y)   
+#add_column_to_table(c, 'files', 'Month', 'INTEGER', 'DEFAULT', mm) 
+#add_column_to_table(c, 'files', 'Day', 'INTEGER', 'DEFAULT', d)  
 #add_column_to_table(c, 'files', 'User', 'TEXT') 
 def loadDB(): 
     # Creates SQLite database to store info.
@@ -163,25 +177,61 @@ def vfileid(fid):
         news = row[0], row[2], row[3], row[1], row[4], row[5], row[6]
     cur.close()  
     return news  
-def ufil(fid):
+def ufil(fid, user):
     conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 
     likeDate = "%" + fid + "%"  
-    cur.execute("SELECT User, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
+    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (user, likeDate, ))
+    row = cur.fetchone()
+    if row is None: 
+        news = 0
+    else: 
+        news = row[7]  
+    cur.close()  
+    return news   
+
+def checkd(id, q):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor()
+    now = datetime.now()
+    date = now.strftime("%B %d, %Y")
+    likeDate = "%" + q + "%"
+    TodayFirstNewsID = ""
+    items = ""
+    cur.execute("SELECT DownloadId from files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (id, likeDate, ))
+    row = cur.fetchone()
+    if row is not None:
+        TodayFirstNewsID = row[0]
+        print ("\nUploader :", TodayFirstNewsID)
+    else: 
+        TodayFirstNewsID = None
+        print ("\nGuest :", "Not the uploader")
+        
+    cur.close()
+    return TodayFirstNewsID
+  
+  
+ 
+def cdate(fid):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor() 
+    likeDate = "%" + fid + "%"  
+    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
     row = cur.fetchone()
     if row is None:
         news = 0
     else: 
-        news = row[1]
+        news = row[9], row[10], row[11], row[12], row[12], row[13]
     cur.close()  
-    return news  
+    return news   
+  
 def doc(fid):
     conn = sqlite3.connect('inshorts.db', check_same_thread=False)
     cur = conn.cursor() 
     likeDate = "%" + fid + "%"  
     cur.execute("SELECT Fname, DownloadId FROM files WHERE Fname LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
     row = cur.fetchone()
-    if row is None:
+    if row is None: 
         news = 0
         
     else: 
