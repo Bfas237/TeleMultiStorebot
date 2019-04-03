@@ -1,7 +1,7 @@
 from utils.typing import *
 import mimetypes
 import mimetypes, magic, math
-from fake_useragent import  UserAgent  
+
 import time
 download_path = "{}/Downloads".format(os.getcwd())
 if not os.path.isdir(download_path):

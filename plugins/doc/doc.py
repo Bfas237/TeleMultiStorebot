@@ -53,6 +53,7 @@ def my_handler(bot, m):
     file_size = ""
     file_id = ""
     #logger.info(file) 
+    
     if file.document:
       file_size = file.document.file_size
       file_name = file.document.file_name
@@ -60,7 +61,7 @@ def my_handler(bot, m):
       extension = guess_extension(file.document.mime_type)
     elif file.video:
       file_size = file.video.file_size
-      file_name = file.video.file_name
+      file_name = file.video.file_name 
       file_id = file.video.file_id
       extension = guess_extension(file.video.mime_type)
     elif file.audio:
@@ -71,7 +72,7 @@ def my_handler(bot, m):
     elif file.photo:
       file_size = file.photo.sizes[2]["file_size"]
       file_id = file.photo.sizes[2]["file_id"]
-      download_id = generate_uuid()
+      
       file_name = file.photo.id + ".jpg" 
       extension = get_extension(file)
       
@@ -121,7 +122,7 @@ def my_handler(bot, m):
       
        
       else:
-          
+        download_id = generate_uuid()
         file_name = file_name
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
@@ -130,7 +131,7 @@ def my_handler(bot, m):
         LastReadNewsID = checkUserLastNews(chat_id)
           
         TodayFirstNewsID = checkTodayFirstNewsID()
-        news = "No news"
+        news = "No news" 
         tfiles = None 
         if(TodayFirstNewsID == 0):
           news = "No news for today."

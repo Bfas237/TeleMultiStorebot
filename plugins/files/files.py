@@ -29,7 +29,7 @@ def sendServerStartedMessage(bot, m):
     c = conn.cursor()
     con = conn.cursor()
     dd = m.from_user.id
-    send_cached_media
+    
     try: 
       t = int(re.search(r'\d+', link).group())
       off = int(t) 
