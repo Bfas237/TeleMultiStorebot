@@ -123,7 +123,7 @@ def pyrogram_data(m, query):
           report = "**❗Report:**\n\n✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
           err = "\n**❌ Invalid file token:**\n\nUse /help to learn more about me"
           nauth = "\n**⚠️ 506 Unknown Error:**\n\n You are not authorised to delete this file because are not the owner\n\n Your uploaded file can be accessed using /files"
-          user = ufil(str(q), str(chat_id))
+          user = db.ufil(str(q), str(chat_id))
           ids = [chat_id, str(user)]
         
           kbs =  regs_keyboard(id=str(q), admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
@@ -142,7 +142,7 @@ def pyrogram_data(m, query):
           sec = int(now.strftime("%S"))
           try:
               tnews = str(q.decode('UTF-8'))
-              snews = fileid(tnews)
+              snews = db.fileid(tnews)
               #(dlid, times, dates, user, year, month, day, h, m, s)
               fids = db.copy(tnews, str(download_id+"b"), times, dates, chat_id, year, month, day, hr, mins, sec)
               if fids is not None:
@@ -155,16 +155,16 @@ def pyrogram_data(m, query):
               item = ""
               reply_markups = InlineKeyboardMarkup(kbs)
               if snews:
-                num, row, fid, dat, tim, siz, did = vfileid(fidse)
-                nums = checkd(chat_id, did)
+                num, row, fid, dat, tim, siz, did = db.vfileid(fidse)
+                nums = db.checkd(chat_id, did)
               else:
                 did = None
                
               if ver:
                 if did:
-                  yr, mm, day, hr, mte, sec = cdate(did)
+                  yr, mm, day, hr, mte, sec = db.cdate(did)
                   ds = datetime(yr, mm, day, hr, mte, sec )
-                  user = ufil(did, str(chat_id))
+                  user = db.ufil(did, str(chat_id))
                   ids = [chat_id, str(user)]
                   kbs =  reg_keyboard(id=did, admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
                   reply_markups = InlineKeyboardMarkup(kbs) 
@@ -187,7 +187,7 @@ def pyrogram_data(m, query):
                     
                     m.edit_message_text(chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(report), disable_web_page_preview=True, reply_markup=reply_markups) 
                     m.answer_callback_query(query.id, "File was removed successfully")
-                  
+                   
                 else:
                   m.edit_message_text(
             chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(nauth), disable_web_page_preview=True, reply_markup=reply_markups) 
@@ -205,10 +205,10 @@ def pyrogram_data(m, query):
           nauth = "\n**⚠️ 506 Unknown Error:**\n\n You are not authorised to delete this file because are not the owner\n\n Your uploaded file can be accessed using /files"
           try:
               tnews = str(q.decode('UTF-8'))
-              snews = fileid(tnews)
+              snews = db.fileid(tnews)
               ver = db.checkifexist(tnews, chat_id)
               ids = [chat_id, str(ver)]
-              user = ufil(tnews, str(chat_id))
+              user = db.ufil(tnews, str(chat_id))
               kbs = regs_keyboard(id=tnews, admin=False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)
               reply_markups = InlineKeyboardMarkup(kbs)
               if snews: 
@@ -221,7 +221,7 @@ def pyrogram_data(m, query):
                   m.edit_message_text(
             chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(nauth), disable_web_page_preview=True, reply_markup=reply_markups) 
                   m.answer_callback_query(query.id, "You can't delete this. Why not save it first", show_alert=True) 
-               
+                
                 
               else:
                 m.edit_message_text(

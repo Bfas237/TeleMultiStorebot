@@ -30,16 +30,18 @@ def my_handler(bot, m):
       g = h[4:]
     admin = False 
     try:
-      snews = fileid(g)
+      snews = db.fileid(g)
       if snews:
-        num, row, fid, dat, tim, siz, did = vfileid(g)
-        nums = checkd(str(user), g) 
+        num, row, fid, dat, tim, siz, did = db.vfileid(g)
+        nums = db.checkd(str(user), g) 
       else:
         row = None 
       if row:
-            user = ufil(did, str(user))
-            ids.append(user)
-            yr, mm, day, hr, mte, sec = cdate(did)
+            user = db.ufil(did, str(user))
+          
+            ids.append(user) 
+            
+            yr, mm, day, hr, mte, sec = db.cdate(did)
             ds = datetime(yr, mm, day, hr, mte, sec )
              
             if(user != 0):
@@ -79,3 +81,4 @@ def my_handler(bot, m):
     except:
         traceback.print_exc() 
 from utils.strings import * 
+ 

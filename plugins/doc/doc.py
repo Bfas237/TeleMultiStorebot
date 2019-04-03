@@ -79,8 +79,6 @@ def my_handler(bot, m):
     logger.info(extension)  
      
     message = m
-    #m.reply(tnews)
-    apk_string = "{}".format("apks")
     try: 
       
       chat_id = message.chat.id
@@ -89,11 +87,11 @@ def my_handler(bot, m):
       if file.photo:
           chk, ext = splitext(file_name) 
           logger.info(chk)
-      chk = doc(file_name)
+      chk = db.doc(file_name)
       
       if (chk != 0): 
         
-        num, row, fid, dat, tim, siz, did = vfileid(chk) 
+        num, row, fid, dat, tim, siz, did = db.vfileid(chk) 
         logger.info(fid)
         if row:
             item = (
@@ -133,9 +131,9 @@ def my_handler(bot, m):
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
         db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s)
-        LastReadNewsID = checkUserLastNews(chat_id)
+        LastReadNewsID = db.checkUserLastNews(chat_id)
           
-        TodayFirstNewsID = checkTodayFirstNewsID()
+        TodayFirstNewsID = db.checkTodayFirstNewsID()
         news = "No news" 
         tfiles = None 
         if(TodayFirstNewsID == 0):
@@ -143,7 +141,7 @@ def my_handler(bot, m):
         elif(LastReadNewsID < TodayFirstNewsID):
           LastReadNewsID = TodayFirstNewsID
         if(TodayFirstNewsID != 0):
-          news = getNews(LastReadNewsID, chat_id)
+          news = db.getNews(LastReadNewsID, chat_id)
                    
         message.reply(news)  
     except:

@@ -13,7 +13,7 @@ def my_handler(bot, m, *args, **kwargs):
       g = h[10:]
     else:
       g = h[4:]
-    tnews = fileid(g) 
+    tnews = db.fileid(g) 
     file =  tnews
     #m.reply(tnews)
     apk_string = "{}".format("apks")
@@ -102,8 +102,8 @@ def dl(client, message, **current):
                 required_file_name = os.path.basename(fnames) 
             sent = message.reply("**Checking:** `{}`\n\n if it exist on my server..".format(required_file_name), quote=True, reply_to_message_id=message.message_id)
             time.sleep(2)
-            lr = checkUserLastNews(message.from_user.id)
-            tr = checkTodayFirstNewsID()
+            lr = db.checkUserLastNews(message.from_user.id)
+            tr = db.checkTodayFirstNewsID()
             tnews = "No files so let me download it for you"
             ttfiles = "Could not send requested file"
             opp = "oh mine its gone"
@@ -115,7 +115,7 @@ def dl(client, message, **current):
             elif(lr < tr):
               lr = tr
             if(tr != 0):
-              tnews, size = sfileid(url) 
+              tnews, size = db.sfileid(url) 
             if(tnews != 0):
               time.sleep(2)
               client.send_document(message.chat.id, tnews, caption="Oh! i had this alread so it was faster")
@@ -149,8 +149,8 @@ def dl(client, message, **current):
                   times = datetime.now().strftime("%I:%M%p")
                   dates = datetime.now().strftime("%B %d, %Y")
                   fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url)
-                  LastReadNewsID = checkUserLastNews(chat_id)
-                  TodayFirstNewsID = checkTodayFirstNewsID()
+                  LastReadNewsID = db.checkUserLastNews(chat_id)
+                  TodayFirstNewsID = db.checkTodayFirstNewsID()
                   news = "No news"
                   
                   
@@ -160,7 +160,7 @@ def dl(client, message, **current):
                   elif(LastReadNewsID < TodayFirstNewsID):
                     LastReadNewsID = TodayFirstNewsID
                   if(TodayFirstNewsID != 0):
-                    news = getNews(LastReadNewsID, chat_id)
+                    news = db.getNews(LastReadNewsID, chat_id)
                    
                   message.reply(news) 
               else:

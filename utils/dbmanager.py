@@ -17,12 +17,17 @@ class DBHelper:
             self.dbname = dbname
             self.conn = sqlite3.connect(dbname, check_same_thread=False)
             self.c = self.conn.cursor()
+            self.conn.text_factory = str
             self.setup()
+    
+       
+       def __enter__(self):
+       
+            return self
       
-
        def setup(self):
           
-            self.conn.text_factory = str
+            
             self.c.executescript('''CREATE TABLE IF NOT EXISTS Users
     (
     id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
@@ -61,6 +66,7 @@ class DBHelper:
     )  
     
             self.conn.commit()
+      
        def checkifexist(self, item_text, owner):
             likeDate = "%" + str(item_text) + "%"
             self.c.execute("SELECT DownloadId, User FROM files WHERE User= (?) AND DownloadId LIKE ?", (owner, likeDate, )) 
@@ -100,8 +106,162 @@ class DBHelper:
             self.conn.commit()
     
             return LastReadNewsID 
+      
+       def checkTodayFirstNewsID(self):
+            now = datetime.now()
+            date = now.strftime("%B %d, %Y")
+            likeDate = "%" + date + "%"
+            self.c.execute('''SELECT ID FROM files WHERE Date LIKE ? ORDER BY ID ASC LIMIT 1''', (likeDate, ))
+            row = self.c.fetchone()
+            if row is None:
+                TodayFirstNewsID = 0
+                print ("\nToday First News :", "No news")
+            else: 
+                TodayFirstNewsID = row[0]
+                print ("\nToday First News :", TodayFirstNewsID)
+            return TodayFirstNewsID
+    
+    
+       def fileid(self, fid):
+            likeDate = "%" + fid + "%" 
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+    
+            row = self.c.fetchone()
+            if row is None:
+                news = 0
+            else: 
+                news = row[3]
+            return news
+       
+       def vfileid(self, fid):
+            likeDate = "%" + fid + "%"
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+            row = self.c.fetchone() 
+            if row is None:
+                news = 0
+            else: 
+                news = row[0], row[2], row[3], row[1], row[4], row[5], row[6]
+            return news  
+       
+       
 
+       def ufil(self, fid, user):
+            likeDate = "%" + fid + "%" 
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (user, likeDate, ))
+            row = self.c.fetchone()
+            if row is None: 
+                news = 0
+            else: 
+                news = row[7]  
+            return news  
+          
+       def checkd(self, id, q):
+            now = datetime.now()
+            date = now.strftime("%B %d, %Y")
+            likeDate = "%" + q + "%"
+            TodayFirstNewsID = ""
+            items = ""
+            self.c.execute("SELECT DownloadId from files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (id, likeDate, ))
+            row = self.c.fetchone()
+            if row is not None:
+                TodayFirstNewsID = row[0]
+            else: 
+                TodayFirstNewsID = None
+            return TodayFirstNewsID
+          
+       def cdate(self, fid):
+    
+            likeDate = "%" + fid + "%"  
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+    
+            row = self.c.fetchone()
+            if row is None:
+                news = 0
+            else: 
+                news = row[9], row[10], row[11], row[12], row[12], row[13]
+            return news   
+  
         
+          
+       def doc(fid):
+    
+            likeDate = "%" + fid + "%"  
+            self.c.execute("SELECT Fname, DownloadId FROM files WHERE Fname LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
+            row = self.c.fetchone()
+            if row is None: 
+                news = 0
+        
+            else: 
+                news = row[1]
+     
+            return news  
+    
+       
+       def cdate(self, fid):
+    
+            likeDate = "%" + fid + "%"  
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+    
+            row = self.c.fetchone()
+            if row is None:
+                news = 0
+            else: 
+                news = row[9], row[10], row[11], row[12], row[12], row[13]
+            return news   
+
+
+       def delid(self, fid): 
+            self.c.execute("DELETE FROM files WHERE DownloadId= (?) AND User= (?)", (tnews, chat_id, ))
+            row = self.c.fetchone()
+            if row is None:
+                news = 0
+            else: 
+                news = row[3]
+     
+            return news
+    
+       def filen(self, fid):
+    
+            likeDate = "%" + fid + "%"  
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE Fname LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+            row = self.c.fetchone()
+            if row is None:
+                news = 0
+            else: 
+                news = row[7]    
+     
+            return news
+    
+       def sfileid(self, fid):
+    
+            likeDate = "%" + fid + "%"  
+            self.c.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE Link LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+            row = self.c.fetchone()
+            if row is None:
+                tfid  = 0 
+                size = 0
+            else: 
+                tfid = row[3] 
+                size = row[5]
+     
+            return (tfid, size) 
+
+
+       def getNews(self, LastReadNewsID, chat_id):
+            self.c.execute("SELECT ID, Date, Fname, FileId, Size, Time, DownloadId, User, Link FROM files WHERE ID > ? ORDER BY ID ASC LIMIT 1", (LastReadNewsID, ))
+            row = self.c.fetchone()
+            if row is None:
+                news = "Saved for future use. You can see all your saved files using /files."
+            elif(row[0] > LastReadNewsID):
+        
+                news = "Ok I got it. Access your library using /files."
+            else:
+                news = ""
+                cursor = conn.execute("UPDATE Users SET `LastNewsID` = ? WHERE ChatID = ?", (row[0], chat_id))
+            self.conn.commit()
+     
+            return (news)       
+ 
        def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec):
             likeDate = "%" + dlid + "%"
             self.c.execute('SELECT Fname, FileId, Size, Link, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (dlid, ))
@@ -139,6 +299,14 @@ class DBHelper:
                     else:
                         print('add column {} to {}'.format(column_name, table_name))
                         self.c.execute('ALTER TABLE {} ADD COLUMN {} {} {} {}'.format(table_name, column_name, column_type, default, value))
+
+    
+       def __exit__(self, exc_class, exc, traceback):
+        
+            self.conn.commit()
+        
+            self.conn.close()
+
 db = DBHelper()
 now = datetime.now()
 y = int(now.strftime("%Y"))
@@ -156,164 +324,11 @@ s = int(now.strftime("%S"))
 #add_column_to_table(c, 'files', 'Day', 'INTEGER', 'DEFAULT', d)  
 #add_column_to_table(c, 'files', 'User', 'TEXT') 
   
-       
 
 
-def checkTodayFirstNewsID():
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    now = datetime.now()
-    date = now.strftime("%B %d, %Y")
-    likeDate = "%" + date + "%"
-    cur.execute('''SELECT ID FROM files WHERE Date LIKE ? ORDER BY ID ASC LIMIT 1''', (likeDate, ))
-    row = cur.fetchone()
-    if row is None:
-        TodayFirstNewsID = 0
-        print ("\nToday First News :", "No news")
-    else: 
-        TodayFirstNewsID = row[0]
-        print ("\nToday First News :", TodayFirstNewsID)
-    cur.close()
-    return TodayFirstNewsID
 
-def fileid(fid):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
-    row = cur.fetchone()
-    if row is None:
-        news = 0
-    else: 
-        news = row[3]
-    cur.close()  
-    return news
 
-def vfileid(fid):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
-    row = cur.fetchone()
-    if row is None:
-        news = 0
-    else: 
-        news = row[0], row[2], row[3], row[1], row[4], row[5], row[6]
-    cur.close()  
-    return news  
-def ufil(fid, user):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (user, likeDate, ))
-    row = cur.fetchone()
-    if row is None: 
-        news = 0
-    else: 
-        news = row[7]  
-    cur.close()  
-    return news   
 
-def checkd(id, q):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    now = datetime.now()
-    date = now.strftime("%B %d, %Y")
-    likeDate = "%" + q + "%"
-    TodayFirstNewsID = ""
-    items = ""
-    cur.execute("SELECT DownloadId from files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (id, likeDate, ))
-    row = cur.fetchone()
-    if row is not None:
-        TodayFirstNewsID = row[0]
-        print ("\nUploader :", TodayFirstNewsID)
-    else: 
-        TodayFirstNewsID = None
-        print ("\nGuest :", "Not the uploader")
-        
-    cur.close()
-    return TodayFirstNewsID
   
-def cdate(fid):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
-    row = cur.fetchone()
-    if row is None:
-        news = 0
-    else: 
-        news = row[9], row[10], row[11], row[12], row[12], row[13]
-    cur.close()  
-    return news   
-  
-def doc(fid):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT Fname, DownloadId FROM files WHERE Fname LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
-    row = cur.fetchone()
-    if row is None: 
-        news = 0
-        
-    else: 
-        news = row[1]
-    cur.close()  
-    return news  
-def delid(fid): 
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    cur.execute("DELETE FROM files WHERE DownloadId= (?) AND User= (?)", (tnews, chat_id, ))
-    row = cur.fetchone()
-    if row is None:
-        news = 0
-    else: 
-        news = row[3]
-    cur.close()  
-    return news
 
-def filen(fid):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE Fname LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
-    row = cur.fetchone()
-    if row is None:
-        news = 0
-    else: 
-        news = row[7]    
-    cur.close()  
-    return news
-def sfileid(fid):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor() 
-    likeDate = "%" + fid + "%"  
-    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, Time, DownloadId, User, Link FROM files WHERE Link LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
-    row = cur.fetchone()
-    if row is None:
-        tfid  = 0 
-        size = 0
-    else: 
-        tfid = row[3] 
-        size = row[5]
-    cur.close()  
-    return (tfid, size) 
-def getNews(LastReadNewsID, chat_id):
-    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
-    cur = conn.cursor()
-    print (LastReadNewsID)
-    cur.execute("SELECT ID, Date, Fname, FileId, Size, Time, DownloadId, User, Link FROM files WHERE ID > ? ORDER BY ID ASC LIMIT 1", (LastReadNewsID, ))
-    row = cur.fetchone()
-    if row is None:
-        news = "Saved for future use. You can see all your saved files using /files."
-    elif(row[0] > LastReadNewsID):
-        
-        news = "Ok I got it. Access your library using /files."
-    else:
-        news = ""
-        cursor = conn.execute("UPDATE Users SET `LastNewsID` = ? WHERE ChatID = ?", (row[0], chat_id))
-    conn.commit()
-    cur.close()  
-    return (news)
-  
 
