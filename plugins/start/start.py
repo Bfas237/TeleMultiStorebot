@@ -4,7 +4,7 @@ import time, datetime, os, re, sys, sqlite3, json, io
 import requests
 from pyrogram import Client, Filters, ReplyKeyboardRemove
 from utils.broadcast import *
-db = DBHelper()
+dbs = DBHelper()
 sms = "Hello! [{}](tg://user?id={})! I can or may be able to download any downloadable file link you send to me and upload for you if and only if its a valid link. \n\n Send /faq to learn more about the usage and other useful tips"
 @Client.on_message(Filters.command("start")) 
 def start(bot, m):

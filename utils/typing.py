@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING) 
 from uuid import uuid4 
-from pyrogram.api.errors import Error, UserIsBlocked, FloodWait, FileIdInvalid
+
+from pyrogram.api.errors import Error, UserIsBlocked, FloodWait, FileIdInvalid, BadRequest, Flood, InternalServerError, SeeOther, Unauthorized, UnknownError
+
 from pyrogram.api.types import UserProfilePhoto, ChatPhoto, MessageMediaPhoto, MessageMediaDocument 
 import random as r
 from requests import get
@@ -34,8 +36,6 @@ def random_with_N_digits(n):
     range_end = (10**n)-1
     return randint(range_start, range_end)
   
-  
-
 from urllib.request import urlopen
 
 from clint.textui import progress

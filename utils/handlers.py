@@ -4,15 +4,9 @@ import mimetypes, magic, math
 
 import time
 download_path = "{}/Downloads".format(os.getcwd())
-if not os.path.isdir(download_path):
+"""if not os.path.isdir(download_path):
   os.makedirs(download_path)
-print(download_path)   
-
-def timedates(dat, df, ff): 
-    import timeago, datetime
-    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
-    date = datetime.datetime.now() 
-    return timeago.format(datetime.date(dat, df, ff), now)  
+print(download_path)  """ 
 
 def timedate(dat): 
     import timeago, datetime
@@ -512,22 +506,9 @@ def dosomething(buf):
     pass
 from requests.exceptions import RequestException
 
-def prog(client, current, total, message_id, chat_id, required_file_name):
- if round(current/total*100, 0) % 5 == 0:
-  try:
-   file_size = os.stat(required_file_name).st_size
-   client.send_chat_action(chat_id,'UPLOAD_DOCUMENT')
-   message_id.edit("**⬆️ Uploading:** {}% of {}".format(round(current/total*100, 0), str(pretty_size(file_size)))
-   )
- 
-  except:
-   pass
          
 
-from pyrogram.api.errors import (
-    BadRequest, Flood, InternalServerError,
-    SeeOther, Unauthorized, UnknownError
-)      
+ 
 def get_filename_from_cd(cd):
     """
     Get filename from content-disposition
