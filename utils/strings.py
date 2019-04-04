@@ -1,12 +1,6 @@
 from utils.typing import *
+    
 
-                 
-db= DBHelper()
-  
-
-            
- 
- 
 @Client.on_callback_query()
 def pyrogram_data(m, query):
     global state  
@@ -31,11 +25,13 @@ def pyrogram_data(m, query):
     adm = ''
     inv = "😔 `404` **Invalid FILE_ID**.\n\n Send /files to see your saved files"
     hide = False
-    disabled_attachments = set()
+    auth = set()
     confirmed = False
-    show_download = False
+    private = 0
+    show_download = False 
+    admin = False
     for elem in data:
-        name, *args = elem.split(b'=')
+        name, *args = elem.split(b'=') 
 
         if name == b'act':
             action = args[0]
@@ -43,12 +39,18 @@ def pyrogram_data(m, query):
             end = args[0]
         elif name == b'off':
             offset = int(args[0])
-        elif name == b'noatt':
-            disabled_attachments = set(int(arg) for arg in args if arg != '')
+        elif name == b'auth':
+            auth = set(int(arg) for arg in args if arg != b'')
         elif name == b'adm':
             adm = int(args[0])
         elif name == b'cnf':
             confirmed = bool(int(args[0]))
+        elif name == b'prv':
+            private = bool(int(args[0]))
+        elif name == b'dl':
+            show_download = bool(int(args[0]))
+        elif name == b'owner':
+            admin = bool(int(args[0]))
         elif name == b'qry':
             q = b'='.join(args)
         elif name == b'hide':
@@ -122,6 +124,8 @@ def pyrogram_data(m, query):
         if not confirmed:
           report = "**❗Report:**\n\n✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
           err = "\n**❌ Invalid file token:**\n\nUse /help to learn more about me"
+          unc = "\n**⚠️ 309 Uncaught Error:**\n\nThe file you are trying to save was deleted by the original uploader. You need to resend the file to save it again"
+          savetwice = "\n**⚠️ 603 NotProcessed Error:**\n\nWhy would you want to save the same file more than once? 🙄 If you wish to continue, feel free its your choice"
           nauth = "\n**⚠️ 506 Unknown Error:**\n\n You are not authorised to delete this file because are not the owner\n\n Your uploaded file can be accessed using /files"
           user = db.ufil(str(q), str(chat_id))
           ids = [chat_id, str(user)]
@@ -143,12 +147,24 @@ def pyrogram_data(m, query):
           try:
               tnews = str(q.decode('UTF-8'))
               snews = db.fileid(tnews)
+              df = db.returnfid(tnews, chat_id)
+              if df is not None:
+                chkfid = db.checkfileid(df, chat_id)
+                if chkfid is not None:
+                  m.edit_message_text(chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(savetwice), disable_web_page_preview=True, parse_mode="markdown", reply_markup=reply_markups) 
+                  m.answer_callback_query(query.id, "The file you are trying to save is not available")
+                  return
+                else:
+                  pass
+              else:
+                pass
               #(dlid, times, dates, user, year, month, day, h, m, s)
               fids = db.copy(tnews, str(download_id+"b"), times, dates, chat_id, year, month, day, hr, mins, sec)
               if fids is not None:
                 fidse = fids
               else:
-                m.answer_callback_query(query.id, "There was an error")
+                m.edit_message_text(chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(unc), disable_web_page_preview=True, parse_mode="markdown", reply_markup=reply_markups) 
+                m.answer_callback_query(query.id, "The file you are trying to save is not available")
                 return
               logger.warning(fids)
               ver = db.checkifexist(fidse, chat_id)
@@ -166,7 +182,7 @@ def pyrogram_data(m, query):
                   ds = datetime(yr, mm, day, hr, mte, sec )
                   user = db.ufil(did, str(chat_id))
                   ids = [chat_id, str(user)]
-                  kbs =  reg_keyboard(id=did, admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
+                  kbs =  reg_keyboard(id=did, admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=1, auth=[])  
                   reply_markups = InlineKeyboardMarkup(kbs) 
                   
                   logger.warning(user)
@@ -181,24 +197,24 @@ def pyrogram_data(m, query):
                     
                       
                       m.edit_message_text(chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(item), disable_web_page_preview=True, parse_mode="html", reply_markup=reply_markups) 
-                      m.answer_callback_query(query.id, "File was removed successfully")
+                      m.answer_callback_query(query.id, "Wao! You just saved this to your storage. Have fun 😊")
                       
                   else:
                     
                     m.edit_message_text(chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(report), disable_web_page_preview=True, reply_markup=reply_markups) 
-                    m.answer_callback_query(query.id, "File was removed successfully")
+                    m.answer_callback_query(query.id, "You appear to be an alien. Why not check yur storage first", show_alert=True)
                    
                 else:
                   m.edit_message_text(
             chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(nauth), disable_web_page_preview=True, reply_markup=reply_markups) 
-                  m.answer_callback_query(query.id, "You can't delete this. Why not save it first", show_alert=True) 
+                  m.answer_callback_query(query.id, "The file ID is invalid. Kindly refresh your files list", show_alert=True) 
               else:
                 m.edit_message_text(
             chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(err), disable_web_page_preview=True, reply_markup=reply_markups) 
-                m.answer_callback_query(query.id, "The token is invalid", show_alert=True)
+                m.answer_callback_query(query.id, "🙄​ Just stop the madness. The required file is missen / deleted / or may be private", show_alert=True)
           except AttributeError:
               m.answer_callback_query(query.id, "The action can't be performed kindly try again", show_alert=True)
-              return
+              return 
         else:
           report = "**❗Report:**\n\n✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
           err = "\n**❌ Invalid file token:**\n\nUse /help to learn more about me"
@@ -227,27 +243,88 @@ def pyrogram_data(m, query):
                 m.edit_message_text(
             chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(err), disable_web_page_preview=True, reply_markup=reply_markups) 
                 m.answer_callback_query(query.id, "The token is invalid", show_alert=True)
-          except (TypeError, ValueError, AttributeError):
-               m.answer_callback_query(query.id, "The action can't be performed kindly try again", show_alert=True)
-          except: 
-              traceback.print_exc() 
+          except TypeError as e:
+              logger.debug(e)
+              m.answer_callback_query(query.id, "The action can't be performed kindly try again", show_alert=True)
+          except ValueError as e: 
+              logger.debug(e)
+              m.answer_callback_query(query.id, "308 Unidentified error... My master has been notified", show_alert=True)
+              return
+          except AttributeError as e: 
+              logger.debug(e)
+              m.answer_callback_query(query.id, "307 System error... My master has been notified", show_alert=True)
+              return
         
         show_download = not confirmed
         return
 
 
+    elif action == b'auth': 
+        if not admin:
+            did = str(q.decode('UTF-8'))
+            user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+            ids = [chat_id, str(user)]
+            pr = db.make_private(did, str(chat_id))
+            usr = db.getuser(did, str(chat_id))
+            if (usr != chat_id):
+              m.answer_callback_query(query.id, "😏 Stop dreaming please i can't perform that action", show_alert=True)
+              return 
+            else:
+              idss = [chat_id, usr]
+              kbs = reg_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=auth)  
+              reply_markups = InlineKeyboardMarkup(kbs)
+              rep = "Your file is now Private. Only you can download this file"
+              m.edit_message_text(
+            chat_id=update.message.chat.id, message_id=update.message.message_id, text=rep, reply_markup=reply_markups, disable_web_page_preview=True)
+              m.answer_callback_query(query.id, "Only you can download this file", show_alert=True)
+            auth.add(user)
+            logger.debug(auth)
+            return 
+            
+        else:
+            did = str(q.decode('UTF-8'))
+            user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+            ids = [chat_id, str(user)]
+            pr = db.make_public(did, str(chat_id))
+            usr = db.getuser(did, str(chat_id))
+            if (usr != chat_id):
+              m.answer_callback_query(query.id, "🙄 Only {} Can unlock this file. Just get home and stop fooling around".format(chat_id), show_alert=True)
+              return 
+            else:
+              idss = [chat_id, usr]
+              rep = "Your file is now public. Anyone with your file token can use it"
+            
+              kbs = reg_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=auth)  
+              reply_markups = InlineKeyboardMarkup(kbs)
+              m.edit_message_text(
+            chat_id=update.message.chat.id, message_id=update.message.message_id, text=rep, reply_markup=reply_markups, disable_web_page_preview=True) 
+              m.answer_callback_query(query.id, "Your file is now public.", show_alert=True)
+              return
+        auth.add(admin)
+        logger.debug(auth)
+        admin = not admin
+        return
+      
+      
     elif action == b'dl':
-        user = ufil(str(q.decode('UTF-8')), str(chat_id))
+        user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
         ids = [chat_id, str(user)]
-        
+        did = str(q.decode('UTF-8'))
+        user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+        ids = [chat_id, str(user)]
+        pr = db.make_private(did, str(chat_id))
+        usr = db.getuser(did, str(chat_id))
+        if (admin == 1):
+          m.answer_callback_query(query.id, "⚠️ You are not authorized to download this file. Sorry", show_alert=True)
+          return 
         kbs =  regs_keyboard(id=str(q.decode('UTF-8')), admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
         reply_markups = InlineKeyboardMarkup(kbs)
         try:
             g = str(q.decode('UTF-8'))
-            snews = fileid(g)
+            snews = db.fileid(g)
             if snews:
-                num, row, fid, dat, tim, siz, did = vfileid(g)
-                nums = checkd(str(user), g) 
+                num, row, fid, dat, tim, siz, did = db.vfileid(g)
+                nums = db.checkd(str(user), g) 
             else:
                 fid = None 
             if fid:
@@ -270,6 +347,10 @@ def pyrogram_data(m, query):
         except FileIdInvalid:
                 m.answer_callback_query(query.id, "The was a problem sending this file. Thats all i know", show_alert=True)
                 return 
+    else:
+      m.answer_callback_query(query.id, text="😔 Action currently Unavailable. Kindly try again after sometime")
+      offset = offset - 4
+      return
     
     #mm =  state.get(update.message.chat.id).get('msgid')
     kb = search_keyboard(offset=offset, rows=rowcount, last=last, show_download=show_download)
@@ -287,40 +368,65 @@ def pyrogram_data(m, query):
             reply_markup=reply_markup
         ) 
          
-        except AttributeError as e:
+        except AttributeError as e: 
           logger.debug(e)
           m.answer_callback_query(query.id, "Hold on! {}, Your session has expired 🙄:(".format(query.from_user.first_name), show_alert=True)
+          return
+        except MessageNotModified as e:
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than {}\n\n\n🗳 Total Uploads: {}".format(offset+4, rowcount), show_alert=True)
+          return
     else:
-        m.edit_message_reply_markup(update.message.chat.id, 
+        try:
+            m.edit_message_reply_markup(update.message.chat.id, 
              update.message.message_id,reply_markup) 
-        
+        except AttributeError as e: 
+          logger.debug(e)
+          m.answer_callback_query(query.id, "Hold on! {}, Your session has expired 🙄:(".format(query.from_user.first_name), show_alert=True)
+          return
+        except MessageNotModified as e:
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than {}\n\n\n🗳 Total Uploads: {}".format(offset+4, rowcount), show_alert=True)
+          return
         
           
   
-        
-def reg_keyboard(id, admin, confirmed, ids, chat_id):  
+         
+def reg_keyboard(id, admin, confirmed, ids, chat_id, private, auth):  
     data = list()
     data.append('cnf=' + str(int(confirmed)))
+    data.append('auth=' + '='.join(str(da) for da in auth))
     data.append('hide=' + str(int(ids)))
+    data.append('prv=' + str(int(private)))
+    data.append('owner=' + str(int(admin)))
     data.append('qry=' + str(id))
-    data.append('adm=' + str(ids))
     data = '%'.join(data)
     logger.warning(data)
-    
     kb = [[
-        InlineKeyboardButton( text=('💾' + ' Save this file') if not confirmed else ('🗑' + ' Remove from Storage'), callback_data=b'act=copy%' + data.encode('UTF-8') ),
-        
-        InlineKeyboardButton(
-                text=('🗳' + ' View all Saved Files') if not confirmed else ('📦' + ' Access Your File Storage'), callback_data=b'act=first%' + data.encode('UTF-8'))
-    ],
+            InlineKeyboardButton(
+                text=('💾' + ' Save this file') if not confirmed else ('🗑' + ' Remove from Storage'),
+                callback_data=b'act=copy%' + data.encode('UTF-8')
+            )
+        ], [
+            InlineKeyboardButton(
+                text=('🗳' + ' View all Saved Files') if not confirmed else ('📦' + ' Access Your File Storage'),
+                callback_data=b'act=first%' + data.encode('UTF-8')
+            )
+        ],
       [InlineKeyboardButton(
                 text='📥 Download',
                 callback_data=b'act=dl%' + data.encode('UTF-8')
             )], list()]
+    if (private == 1):
+        kb[1].append(
+            InlineKeyboardButton(
+                text= ('🔐' + ' Make this file private') if not admin else ('🔓' + ' Unlock this file '),
+                callback_data=b'act=auth%' + data.encode('UTF-8')
+            )
+        )
+    return kb  
     
-     
-    return kb 
-
+ 
 def search_keyboard(offset, rows, last, show_download):  
     data = list()
     
@@ -371,9 +477,37 @@ def search_keyboard(offset, rows, last, show_download):
     ], list()]
     return kb
   
-  
-    
 
+def doc_keyboard(id, admin, confirmed, ids, chat_id, private, auth):  
+    data = list()
+    data.append('cnf=' + str(int(confirmed)))
+    data.append('auth=' + '='.join(str(da) for da in auth))
+    data.append('hide=' + str(int(ids)))
+    data.append('prv=' + str(int(private)))
+    data.append('owner=' + str(int(admin)))
+    data.append('qry=' + str(id))
+    data = '%'.join(data)
+    logger.warning(data)
+    kb = [[
+            InlineKeyboardButton(
+                text=('💾' + ' Save this file') if not confirmed else ('🗑' + ' Remove from Storage'),
+                callback_data=b'act=copy%' + data.encode('UTF-8')
+            )
+        ], [
+            InlineKeyboardButton(
+                text=('🗳' + ' View all Saved Files') if not confirmed else ('📦' + ' Access Your File Storage'),
+                callback_data=b'act=first%' + data.encode('UTF-8')
+            )
+        ], list()]
+    if (private == 1):
+        kb[1].append(
+            InlineKeyboardButton(
+                text= ('🔐' + ' Make this file private') if not admin else ('🔓' + ' Unlock this file '),
+                callback_data=b'act=auth%' + data.encode('UTF-8')
+            )
+        )
+    return kb  
+    
  
 def dl_keyboard(id, admin, confirmed, ids, chat_id):  
     data = list()
@@ -394,10 +528,7 @@ def dl_keyboard(id, admin, confirmed, ids, chat_id):
             )
         ]]
     return kb        
-  
-  
-  
-  
+
   
 def regs_keyboard(id, admin, confirmed, ids, chat_id):  
     data = list()
@@ -415,10 +546,27 @@ def regs_keyboard(id, admin, confirmed, ids, chat_id):
     return kb
   
 
-def copy_keyboard(id, admin, confirmed, ids, chat_id):  
+def private_keyboard(id, admin, confirmed, ids, chat_id):  
     data = list()
     data.append('cnf=' + str(int(confirmed)))
     data.append('hide=' + str(int(ids)))
+    data.append('qry=' + str(id))
+    data = '%'.join(data)
+    logger.warning(data)
+    kb = [[
+            InlineKeyboardButton(
+                text=('🗳' + ' View all Saved Files') if not confirmed else ('📦' + ' Access Your Storage'),
+                callback_data=b'act=first%' + data.encode('UTF-8')
+            )
+        ]]
+    return kb
+
+def copy_keyboard(id, admin, confirmed, ids, chat_id, private, auth):  
+    data = list()
+    data.append('cnf=' + str(int(confirmed)))
+    data.append('auth=' + '='.join(str(da) for da in auth))
+    data.append('hide=' + str(int(ids)))
+    data.append('prv=' + str(int(private)))
     data.append('qry=' + str(id))
     data = '%'.join(data)
     logger.warning(data)
@@ -432,6 +580,14 @@ def copy_keyboard(id, admin, confirmed, ids, chat_id):
                 text='📥 Download',
                 callback_data=b'act=dl%' + data.encode('UTF-8')
             )], list()]
+    
+    if (private == 1):
+        kb[1].append(
+            InlineKeyboardButton(
+                text=('🔓' + ' Unlock this file ') if not admin else ('🔐' + ' Make this file private'),
+                callback_data=b'act=auth%' + data.encode('UTF-8')
+            )
+        )
     return kb
   
   

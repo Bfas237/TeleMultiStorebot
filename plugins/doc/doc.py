@@ -46,14 +46,18 @@ def get_extension(media):
 telegram_bot = Telegram(bot_token,user_id)
 @Client.on_message(Filters.media & Filters.incoming)
 def my_handler(bot, m):
+    data = list()
+
+    ids = []
     chat_id = m.chat.id
     user = m.from_user.id
+    ids.append(user)
     file = m
     file_name = ""
     file_size = ""
-    file_id = ""
-    #logger.info(file) 
-    
+    extension = "" 
+    download_id = generate_uuid()
+    nauth = "\n**⚠️ 541 Unknown Media Type:**\n\n Media type not allowed\n\n To see supported media types, send /media_types"
     if file.document:
       file_size = file.document.file_size
       file_name = file.document.file_name
@@ -61,7 +65,7 @@ def my_handler(bot, m):
       extension = guess_extension(file.document.mime_type)
     elif file.video:
       file_size = file.video.file_size
-      file_name = file.video.file_name 
+      file_name = file.video.file_name
       file_id = file.video.file_id
       extension = guess_extension(file.video.mime_type)
     elif file.audio:
@@ -70,53 +74,87 @@ def my_handler(bot, m):
       file_id = file.audio.file_id
       extension = guess_extension(file.audio.mime_type)
     elif file.photo:
-      file_size = file.photo.sizes[2]["file_size"]
-      file_id = file.photo.sizes[2]["file_id"]
-      
+      file_size = file.photo.sizes[-1]["file_size"]
+      file_id = file.photo.sizes[-1]["file_id"]
+      download_id = generate_uuid()
       file_name = file.photo.id + ".jpg" 
       extension = get_extension(file)
+    elif file.sticker:
+      if m.chat.type == 'private':
+        m.reply(nauth)
+      return
+    elif file.voice:
+      if m.chat.type == 'private':
+        m.reply(nauth)
+      return
+    elif file.animation:
+      if m.chat.type == 'private':
+        m.reply(nauth)
+      return
+    elif file.videonote:
+      if m.chat.type == 'private':
+        m.reply(nauth)
+      return
+    elif file.voice:
+      if m.chat.type == 'private':
+        m.reply(nauth)
+      return
+    else:
+      logger.info(file) 
+      return
       
-    logger.info(extension)  
-     
+      
+    admin = ''
     message = m
     try: 
       
-      chat_id = message.chat.id
+      chat_id = message.chat.id 
       uploader = user
       url = "https://t.me/jhbjh14514jjhbot"
       if file.photo:
           chk, ext = splitext(file_name) 
           logger.info(chk)
       chk = db.doc(file_name)
-      
+      item = ""
+      private = 0
       if (chk != 0): 
-        
         num, row, fid, dat, tim, siz, did = db.vfileid(chk) 
-        logger.info(fid)
         if row:
-            item = (
+            user = db.ufil(did, str(uploader))
+            ids.append(user)
+            usr = db.getuser(did, chat_id)
+            idss = [chat_id, usr]
+            d, df, ff, h, m, s = db.cdate(did)
+           
+            ds = datetime(d, df, ff, h, m, s)
+            
+            logger.info(ids)
+            if(user != 0):
+                item = (
               "🆔 :  #{} \n\n" 
               "ℹ️ :  <b>{}</b>\n\n" 
-              "🔄 :  /dl_{}    |    ❌  /rem_{}\n\n"
               "⌛️ :  <i>{}</i>    |    🕰  <i>{}</i>\n\n"
               "⚖️ <i>{}</i>\n"
-              "------------------------------""".format(str(num), str(row[:50]), did, did, dat, tim, pretty_size(int(siz))))
+              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz)))) 
                         
-            bot.send_chat_action(chat_id,'TYPING')
-            time.sleep(1)
-            reply_markup = InlineKeyboardMarkup(
-            [
-                [  # First row
-
-                    InlineKeyboardButton(  # Generates a callback query when pressed
-                        "💾 Copy this file",
-                        callback_data=b"copy"
-                    )
-                ]
-                ]
-            
-        )
-            message.reply("{}\n\nPowered with ❤️ - @Bfas2327Bots".format(item), parse_mode="html", reply_markup=reply_markup)
+                bot.send_chat_action(chat_id,'TYPING')
+                time.sleep(1)
+                private = 1
+            else:
+                item = (
+              "🆔 :  #{} \n\n" 
+              "ℹ️ :  <b>{}</b>\n\n" 
+              "⌛️ :  <i>{}</i>    |    🕰  <i>{}</i>\n\n"
+              "⚖️ <i>{}</i>\n"
+              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))  
+                
+                bot.send_chat_action(chat_id,'TYPING')
+                time.sleep(1) 
+                
+            kb = doc_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])  
+            reply_markup = InlineKeyboardMarkup(kb)
+               
+            message.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup) 
       
        
       else:
@@ -130,7 +168,7 @@ def my_handler(bot, m):
         s = int(now.strftime("%S"))
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
-        db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s)
+        db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s, 0)
         LastReadNewsID = db.checkUserLastNews(chat_id)
           
         TodayFirstNewsID = db.checkTodayFirstNewsID()
@@ -144,7 +182,15 @@ def my_handler(bot, m):
           news = db.getNews(LastReadNewsID, chat_id)
                    
         message.reply(news)  
-    except:
-        traceback.print_exc()   
+    except AttributeError as e: 
+          logger.debug(e)
+          message.reply("Hold on! {}, Your session has expired 🙄:(".format(message.from_user.first_name)) 
+          return
+    except FileIdInvalid as e:
+          logger.debug(e)
+          
+          message.reply("⚠️ **401 Fatal Error:** \n\nI have notifed my master. He should be fixing it by now") 
+          
+          return 
          
 from utils.strings import * 

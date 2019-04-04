@@ -93,20 +93,6 @@ def my_handler(bot, m):
     c.execute("SELECT ID, Fname, DownloadId, Size FROM files WHERE User = ? ORDER BY ID DESC LIMIT 5 OFFSET ?", (chat_id, off, ))
     con.execute("SELECT COUNT (*) FROM files WHERE User = ?", (chat_id, ))
     last = 0
-    try:
-      cf.execute("SELECT DISTINCT * FROM files WHERE User = ? ORDER BY ID DESC LIMIT 1", (chat_id, )) 
-      l = cf.fetchone()
-      if l is not None:
-        last = l[0]
-      else:
-        last = 0
-    except TypeError:
-      m.reply("Unidentified error has been encountered")
-      return
-    except AttributeError:
-      m.reply("There was an error. My master has been notified")
-      return 
-      
     rowcount = con.fetchone()[0]
     rows = c.fetchall() 
     conn.close() 

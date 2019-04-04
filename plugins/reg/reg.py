@@ -1,21 +1,10 @@
 from utils.typing import *
-class DBHelper:
-       def __init__(self,dbname="inshorts.db"):
-                self.dbname=dbname
-                self.conn=sqlite3.connect(dbname)
-                
-                
-       def delete_item(self, item_text,owner):
-                stmt="DELETE FROM files WHERE DownloadId= (?) AND User= (?)"
-                args=(item_text,owner )
-                self.conn.execute(stmt,args)
-                self.conn.commit() 
+
                 
 
 state = {}
 
  
-      
 @Client.on_message(Filters.regex("de_"))
 def my_handler(bot, m):
     chat_id = m.chat.id
@@ -28,7 +17,9 @@ def my_handler(bot, m):
       g = h[10:]
     else:
       g = h[4:]
-    admin = False 
+    row = ""
+    admin = False
+    private = 0
     try:
       snews = db.fileid(g)
       if snews:
@@ -38,12 +29,11 @@ def my_handler(bot, m):
         row = None 
       if row:
             user = db.ufil(did, str(user))
-          
-            ids.append(user) 
-            
+            ids.append(user)
             yr, mm, day, hr, mte, sec = db.cdate(did)
             ds = datetime(yr, mm, day, hr, mte, sec )
-             
+            usr = db.getuser(did, chat_id)
+            idss = [chat_id, usr]
             if(user != 0):
                 item = (
               "🆔 :             #{} \n\n" 
@@ -55,6 +45,7 @@ def my_handler(bot, m):
                 bot.send_chat_action(chat_id,'TYPING')
                 time.sleep(1)
                 admin = True 
+                private = 1
             else:
                 item = (
               "🆔 :             #{} \n\n" 
@@ -66,8 +57,9 @@ def my_handler(bot, m):
                 bot.send_chat_action(chat_id,'TYPING')
                 time.sleep(1) 
                 admin = False
-                
-            kb = reg_keyboard(id=did, admin=admin, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
+                private = 0
+                 
+            kb = reg_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])  
             reply_markup = InlineKeyboardMarkup(kb) 
                
             m.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup) 
@@ -81,4 +73,5 @@ def my_handler(bot, m):
     except:
         traceback.print_exc() 
 from utils.strings import * 
- 
+
+  

@@ -17,7 +17,6 @@ class DBHelper:
             self.dbname = dbname
             self.conn = sqlite3.connect(dbname, check_same_thread=False)
             self.c = self.conn.cursor()
-            self.conn.text_factory = str
             self.setup()
     
        
@@ -26,8 +25,7 @@ class DBHelper:
             return self
       
        def setup(self):
-          
-            
+            self.conn.text_factory = str
             self.c.executescript('''CREATE TABLE IF NOT EXISTS Users
     (
     id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
@@ -35,22 +33,7 @@ class DBHelper:
     LastNewsID INTEGER,
     UserID TEXT);''' 
     )
-    #cur.executescript('''DROP TABLE IF EXISTS files;''') 
-    
-    
-            self.c.executescript('''CREATE TABLE IF NOT EXISTS Ytube
-    (
-    id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-    ChatID INTEGER,
-    Title TEXT NOT NULL,
-    Thumb TEXT NOT NULL,
-    FileId TEXT NOT NULL,
-    Date TEXT,
-    Time TEXT,
-    Link TEXT
-    Link_id TEXT);'''
-    )
-    
+            #self.c.executescript('''DROP TABLE IF EXISTS files;''') 
     
             self.c.executescript('''CREATE TABLE IF NOT EXISTS files
     (
@@ -62,7 +45,14 @@ class DBHelper:
     Time TEXT,
     DownloadId TEXT,
     Link TEXT,
-    User TEXT);'''
+    User TEXT,
+    Private INTEGER,
+    Year INTEGER,
+    Month INTEGER,
+    Day INTEGER,
+    Hour INTEGER,
+    Minute INTEGER,
+    Seconds INTEGER);'''
     )  
     
             self.conn.commit()
@@ -75,9 +65,26 @@ class DBHelper:
                 return user[1]
             else: 
                 return None
+      
+       def returnfid(self, item_text, owner):
+            likeDate = "%" + str(item_text) + "%"
+            self.c.execute("SELECT FileId FROM files WHERE User= (?) AND DownloadId LIKE ?", (owner, likeDate, )) 
+            user = self.c.fetchone()
+            if user is not None:
+                return user[0]
+            else: 
+                return None
         
+       def checkfileid(self, item_text, owner):
+            likeDate = "%" + str(item_text) + "%"
+            self.c.execute("SELECT FileId, User FROM files WHERE User= (?) AND FileId LIKE ?", (owner, likeDate, )) 
+            user = self.c.fetchone()
+            if user is not None:
+                return user[0]
+            else: 
+                return None
         
-       def fetchNews(self, fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s):
+       def fetchNews(self, fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s, priv):
             title = fn
             content = fid
             fsize = fs 
@@ -86,7 +93,7 @@ class DBHelper:
             self.c.execute('''SELECT Fname FROM files WHERE Fname = ? OR FileId = ?''', (title, content))
             row = self.c.fetchone()
             if row is None:
-                self.c.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s ))
+                self.c.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s, priv ))
                 count += 1 
             self.conn.commit()
 
@@ -183,7 +190,7 @@ class DBHelper:
   
         
           
-       def doc(fid):
+       def doc(self, fid):
     
             likeDate = "%" + fid + "%"  
             self.c.execute("SELECT Fname, DownloadId FROM files WHERE Fname LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
@@ -257,11 +264,48 @@ class DBHelper:
                 news = "Ok I got it. Access your library using /files."
             else:
                 news = ""
-                cursor = conn.execute("UPDATE Users SET `LastNewsID` = ? WHERE ChatID = ?", (row[0], chat_id))
+                cursor = self.conn.execute("UPDATE Users SET `LastNewsID` = ? WHERE ChatID = ?", (row[0], chat_id))
             self.conn.commit()
      
-            return (news)       
+            return (news)      
  
+       def make_public(self, dlid, chat_id):
+            likeDate = "%" + dlid + "%" 
+            self.c.execute('SELECT Private, User FROM files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (chat_id, dlid, ))
+            row = self.c.fetchone() 
+            ok = 0
+            if row is not None: 
+              LastReadNewsID = row[0]
+                
+              self.conn.execute("UPDATE OR IGNORE files SET `Private` = ? WHERE Private = 1 AND DownloadId = ?", (ok, dlid))
+            else:
+              LastReadNewsID = 1
+            self.conn.commit()
+            return LastReadNewsID  
+ 
+       def make_private(self, dlid, chat_id):
+            likeDate = "%" + dlid + "%" 
+            self.c.execute('SELECT Private, User FROM files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (chat_id, dlid, ))
+            row = self.c.fetchone() 
+            ok = 1 
+            if row is not None: 
+              LastReadNewsID = row[0]
+                
+              self.conn.execute("UPDATE OR IGNORE files SET `Private` = ? WHERE Private = 0 AND DownloadId = ?", (ok, dlid))
+            else:
+              LastReadNewsID = 0
+            self.conn.commit()
+            return LastReadNewsID 
+          
+       def getuser(self, fid, owner):
+            likeDate = "%" + fid + "%" 
+            self.c.execute('''SELECT DISTINCT User FROM files WHERE User = ? AND Private = 1 AND DownloadId LIKE ? limit 1''', (owner, likeDate, ))
+            user = self.c.fetchone()
+            if user is not None:   
+                return user[0]
+            else:
+                return 0
+        
        def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec):
             likeDate = "%" + dlid + "%"
             self.c.execute('SELECT Fname, FileId, Size, Link, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (dlid, ))
@@ -295,7 +339,7 @@ class DBHelper:
                 for row in self.c.execute('PRAGMA table_info({})'.format(table_name)):
                     if row[1] == column_name:
                         print('column {} already exists in {}'.format(column_name, table_name))
-                        break
+                        return
                     else:
                         print('add column {} to {}'.format(column_name, table_name))
                         self.c.execute('ALTER TABLE {} ADD COLUMN {} {} {} {}'.format(table_name, column_name, column_type, default, value))
@@ -322,7 +366,7 @@ s = int(now.strftime("%S"))
 #add_column_to_table(c, 'files', 'Year', 'INTEGER', 'DEFAULT', y)   
 #add_column_to_table(c, 'files', 'Month', 'INTEGER', 'DEFAULT', mm) 
 #add_column_to_table(c, 'files', 'Day', 'INTEGER', 'DEFAULT', d)  
-#add_column_to_table(c, 'files', 'User', 'TEXT') 
+#db.add_column_to_table('files', 'Private', 'BOOL', 'DEFAULT', 0)  
   
 
 

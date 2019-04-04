@@ -17,12 +17,12 @@ def start(bot, m):
     else:
       smsg = "start_msg"
       id=m.chat.id
-    cc = db.checkifexist(id)
+    cc = dbs.checkifexist(id)
     
     if cc:
       sent = m.reply(smsg.format(user, id), quote=True)
     else:
-      db.add_tlgrm_user(0, id)
+      dbs.add_tlgrm_user(0, id)
       sent = m.reply(smsg.format(user, id), quote=True)
     if m.chat.type == 'supergroup':
       bot.send_message(id, "hello mother faker i am testing ")  

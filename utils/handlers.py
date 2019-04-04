@@ -10,7 +10,7 @@ print(download_path)  """
 
 def timedate(dat): 
     import timeago, datetime
-    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 1)
     date = datetime.datetime.now() 
     return timeago.format(dat, now)   
   

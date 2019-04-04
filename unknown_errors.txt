@@ -1,0 +1,6 @@
+400	BUTTON_DATA_INVALID	<class 'pyrogram.api.functions.messages.edit_message.EditMessage'>
+400	BUTTON_DATA_INVALID	<class 'pyrogram.api.functions.messages.edit_message.EditMessage'>
+400	BUTTON_DATA_INVALID	<class 'pyrogram.api.functions.messages.edit_message.EditMessage'>
+400	BUTTON_DATA_INVALID	<class 'pyrogram.api.functions.messages.edit_message.EditMessage'>
+400	BUTTON_DATA_INVALID	<class 'pyrogram.api.functions.messages.edit_message.EditMessage'>
+400	BUTTON_DATA_INVALID	<class 'pyrogram.api.functions.messages.edit_message.EditMessage'>
