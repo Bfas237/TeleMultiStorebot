@@ -27,9 +27,9 @@ Dependencies
 
 ## Features to be Added:
 
-- [ ] Cancel a particular Download
-- [ ] Alert whether Download was started or not
-- [ ] Show the available download speed of the server
+- [x] Cancel a particular Download
+- [x] Alert whether Download was started or not
+- [x] Show the available download speed of the server
 - [ ] Decrypt and encrypt files with passwords
 - [ ] Unarchive archivable files
 - [ ] Download torrens
@@ -47,7 +47,7 @@ Dependencies
 
 
 
-[![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://github.com/Bfaschat/TeleMultiStorebot)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/Bfaschat/TeleMultiStorebot)
+[![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://github.com/Bfaschat/TeleMultiStorebot)
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://github.com/Bfaschat/TeleMultiStorebot) 
 
