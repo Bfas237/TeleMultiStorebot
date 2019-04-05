@@ -93,7 +93,7 @@ def pyrogram_data(m, query):
               items +=  (
               "<code>#{}</code> " 
               " <b>{}</b>"     
-              "\n<a href='https://telegram.me/jhbjh14514jjhbot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/jhbjh14514jjhbot?start=de_{}'>📍 Details</a>\n"       
+              "\n<a href='https://telegram.me/TeleMultiStoreBot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/TeleMultiStoreBot?start=de_{}'>📍 Details</a>\n"       
               "<i>{}</i>\n"  
               "------\n" 
               "".format(str(row[0]), row[1][:50], row[2], row[2], pretty_size(int(row[3]))))
