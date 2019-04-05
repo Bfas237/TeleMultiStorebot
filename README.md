@@ -32,7 +32,7 @@ There are two possible was of running this bot.
 
 ##### 1. Using the ini file
 
-* Rename `config.ini.example` to `config.ini` then replace the values as specified [HERE](https://docs.pyrogram.ml/start/Setup#api-keys).
+* Replace the values as specified [HERE](https://docs.pyrogram.ml/start/Setup#api-keys).
 
 Your final ini file should look like this
 
@@ -92,7 +92,7 @@ Easy Installation and Deploy
 
 If you don't want to go through all those hard process then just click the button below and fill the fields as specified.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Bfaschat/TeleMultiStorebot/tree/glitch)
 
 
 
