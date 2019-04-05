@@ -69,7 +69,6 @@ The Hard Way (Advanced users only)
 ```sh
 virtualenv -p python3 VENV
 . ./VENV/bin/activate
-cp .requirements.txt requirements.txt
 pip3 install -r requirements.txt
 ```
 
