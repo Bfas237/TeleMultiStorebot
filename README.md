@@ -27,9 +27,9 @@ Dependencies
 
 ## Features to be Added:
 
-- ☑️ Cancel a particular Download
-- ☑️ Alert whether Download was started or not
-- ☑️ Show the available download speed of the server
+- [ ] Cancel a particular Download
+- [ ] Alert whether Download was started or not
+- [ ] Show the available download speed of the server
 - [ ] Decrypt and encrypt files with passwords
 - [ ] Unarchive archivable files
 - [ ] Download torrens
