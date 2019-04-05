@@ -1,0 +1,41 @@
+{
+  "name": "Tele MultiStore Bot",
+  "description": "Telegram's advanced media sharing platform. Create your Fork now.",
+  "keywords": [
+    "telegram",
+    "advanced",
+    "media",
+    "downloader",
+    "3"
+  ],
+  "repository": "https://github.com/Bfaschat/TeleMultiStorebot",
+  "env": {
+    "WEBHOOK": {
+      "description": "Setting this to ANYTHING will enable webhooks when in env mode",
+      "value": "ANYTHING"
+    },
+    "TOKEN": {
+      "description": "Your bot token, as a string.",
+      "value": "",
+      "required": true
+    },
+    "APP_ID": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": "",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+    },
+    "AUTH_USERS": {
+      "description": "allow only pre-defined users to use this bot",
+      "value": "7351948 20516707 23122162 500346573"
+    },
+    "CHUNK_SIZE": {
+      "description": "chunk size that should be used with requests",
+      "value": "",
+      "required": false
+    }
+  }
+}
