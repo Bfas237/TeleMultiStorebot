@@ -122,8 +122,8 @@ def my_handler(bot, m):
         if row:
             user = db.ufil(did, str(uploader))
             ids.append(user)
-            usr = db.getuser(did, chat_id)
-            idss = [chat_id, usr]
+            usr = db.getuser(did, str(uploader))
+            idss = [str(uploader), usr]
             d, df, ff, h, m, s = db.cdate(did)
            
             ds = datetime(d, df, ff, h, m, s)

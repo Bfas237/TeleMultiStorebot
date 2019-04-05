@@ -7,7 +7,9 @@ def pyrogram_data(m, query):
     off = 0
     update = query 
     cb = query.data
+    uploader = query.message.from_user.id
     chat_id = query.from_user.id
+    logger.warning(chat_id)
     data = query.data
     dataid = query.id
     
@@ -83,7 +85,7 @@ def pyrogram_data(m, query):
     
     rows = c.fetchall() 
     conn.close() 
-    items = ""
+    items = "" 
     try:
         if len(rows) > 0: 
           lens = len(rows)
@@ -287,11 +289,13 @@ def pyrogram_data(m, query):
             ids = [chat_id, str(user)]
             pr = db.make_public(did, str(chat_id))
             usr = db.getuser(did, str(chat_id))
-            if (usr != chat_id):
+            idss = [chat_id, usr]
+            iss = [usr]
+            if usr not in iss:
               m.answer_callback_query(query.id, "🙄 Only {} Can unlock this file. Just get home and stop fooling around".format(chat_id), show_alert=True)
               return 
             else:
-              idss = [chat_id, usr]
+              
               rep = "Your file is now public. Anyone with your file token can use it"
             
               kbs = reg_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=auth)  
@@ -388,6 +392,10 @@ def pyrogram_data(m, query):
           logger.debug(e)
           m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than {}\n\n\n🗳 Total Uploads: {}".format(offset+4, rowcount), show_alert=True)
           return
+        except UnboundLocalError as e:
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Try by uploading more files first before you can navaigate", show_alert=True)
+          return
         
           
   
@@ -412,21 +420,22 @@ def reg_keyboard(id, admin, confirmed, ids, chat_id, private, auth):
                 text=('🗳' + ' View all Saved Files') if not confirmed else ('📦' + ' Access Your File Storage'),
                 callback_data=b'act=first%' + data.encode('UTF-8')
             )
-        ],
-      [InlineKeyboardButton(
-                text='📥 Download',
-                callback_data=b'act=dl%' + data.encode('UTF-8')
-            )], list()]
+        ], list()]
     if (private == 1):
-        kb[1].append(
+        kb[1].append( 
             InlineKeyboardButton(
                 text= ('🔐' + ' Make this file private') if not admin else ('🔓' + ' Unlock this file '),
                 callback_data=b'act=auth%' + data.encode('UTF-8')
             )
         )
+        kb[2].append( 
+            InlineKeyboardButton(
+                text='📥 Download',
+                callback_data=b'act=dl%' + data.encode('UTF-8')
+            ) 
+        )
     return kb  
     
- 
 def search_keyboard(offset, rows, last, show_download):  
     data = list()
     
@@ -452,7 +461,7 @@ def search_keyboard(offset, rows, last, show_download):
         ),
     ], list()]
     elif (offset == new_offset):
-      kb = [[
+      kb[1].append( 
         InlineKeyboardButton(
             text='⬅️ Newer',
             callback_data=b'act=new%' + data.encode('UTF-8')
@@ -460,12 +469,11 @@ def search_keyboard(offset, rows, last, show_download):
             InlineKeyboardButton(
                 text='⬆️' + ' Goto First Page',
                 callback_data=b'act=first%' + data.encode('UTF-8')
-            )
-    ], list()] 
+            ))
       
     
     elif offset > 0 and not rows < 0:
-      kb = [[
+      kb[1].append(
         InlineKeyboardButton(
             text='⬅️ Newer',
             callback_data=b'act=new%' + data.encode('UTF-8')
@@ -473,8 +481,7 @@ def search_keyboard(offset, rows, last, show_download):
         InlineKeyboardButton(
             text='Older ➡️',
             callback_data=b'act=old%' + data.encode('UTF-8')
-        ),
-    ], list()]
+        )) 
     return kb
   
 

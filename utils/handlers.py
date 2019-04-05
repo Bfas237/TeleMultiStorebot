@@ -14,132 +14,6 @@ def timedate(dat):
     date = datetime.datetime.now() 
     return timeago.format(dat, now)   
   
-def Search(query): 
-    session = requests.Session()
-    opt={}
-    data = {'details': {}, 'download':{}}
-    base = {
-        'User-Agent':  'Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36',
-        'Accept-Encoding': 'gzip, deflate, sdch, ',
-        'Accept-Language': 'zh-CN,zh,en-US,en,fr,fr-FR;q=0.8,ta;q=0.6',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Connection': 'keep-alive' 
-    }
-    heads = dict(base, **opt)
-    response = session.get('https://www.filehorse.com/search?q={}'.format(quote_plus(query)), headers=heads).text  
-    soup = BeautifulSoup(response, "html.parser")
-    g = [] 
-    result = []
-    nu = []
-    seen = set()
-    seens = set()
-    links = []
-    go = []
-    gos = [] 
-    f = []
-    gu = []
-    s = []
-    for j in soup.findAll('ul', {'class':'software_list'}):
-      for li in j.findAll('li'):  
-        
-        try:
-          for h3 in li.findAll('h3'):   
-            for href in li.findAll('a'):
-              title = h3.text 
-              link = href['href']   
-              
-              g.append((title, link))  
-            for item in g:
-              if item not in seen:
-                seen.add(item)
-                result.append(item)
-            if len(result) > 0:
-              items = ""
-              for idx, app in enumerate(result):  
-                items = "{}|{}".format(idx, app)  
-                links.append(app[1])
-                nu.append(items)
-              for url in links:
-                response = session.get(url, headers=headers).text
-                
-                det = BeautifulSoup(response, "html.parser") 
-                i = det.find('div', attrs={'class':'main_down_link'})
-                href = i.find('a')['href']
-                ty = i.find('a').text
-                data['download'][ty]=href 
-                data['title'] = h3.text
-                data['link'] = url
-                for j in det.findAll('ul', {'class':'software_facts'}):
-                  for li in j.findAll('li'):
-                    children = li.findChildren("p" , recursive=False) 
-                    for child in children: 
-                      gu.append(child.text)
-                  data['details'] = gu
-              
-              f.append(data) 
-                    
-        except AttributeError: 
-            pass
-    return data           
-#d = Search("whatsapp")
-"""for i, (k, v) in enumerate(d.items()):
-    print(list(enumerate(d.items()))) 
-    print(d['link'])"""   
-     
- 
-  
-def ApkDownload(link, client, message_id, chat_id, *current, **total):
-    base_headers = {
-        'User-Agent':  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.5',
-        'Accept-Encoding': 'gzip, deflate, sdch, ',
-        'Accept-Language': 'zh-CN,zh,en-US,en,fr,fr-FR;q=0.8,ta;q=0.6',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Connection': 'keep-alive'
-    } 
-        
-    headers = dict(base_headers, **options)
-    res = requests.get(link + '/download?from=details', headers=headers).text
-    soup = BeautifulSoup(res, "html.parser").find('a', {'id':'download_link'})
-    valid = False
-    if soup['href']:
-        r = requests.get(soup['href'], stream=True, allow_redirects=True, headers=headers)
-        required_file_nam = get_filename_from_cd(r.headers.get('content-disposition'))
-        required_file_name = required_file_nam.strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-        title, ext = splitext(basename(required_file_name))
-        title = title.replace('_',' ').replace('-','').replace('@',' ').replace("#", " ").strip("\ apkpure.com").replace("\ apkpure.com", "")
-        with open(required_file_name, 'wb') as file:
-          total_length = int(r.headers.get('content-length', 0)) or None
-          downloaded_size = 0
-          chunk_size=8192*1024
-          if total_length is None:  # no content length header
-            file.write(r.content)
-          else:
-            dl = 0
-            total_length = int(total_length)
-            for chunk in r.iter_content(chunk_size=chunk_size):
-              if chunk:
-                  dl += len(chunk)
-                  done = int(100 * dl / total_length)
-                  file.write(chunk)
-                  file.flush()
-                  os.fsync(file.fileno())
-                  downloaded_size += chunk_size
-                  if ((total_length // downloaded_size) % 5) == 0:
-                    try:
-                      file_size = os.stat(file_name).st_size
-                      client.send_chat_action(chat_id,'UPLOAD_DOCUMENT') 
-                      message_id.edit("**⬇️ Downloading:** {}% of {}".format(humanbytes(downloaded_size),
-                                humanbytes(total_length)))
-                      
-                    except: 
-                      pass
-        
-    else:
-        message_id.edit("No valid Download link was found.\n\n The server terminated all request. Kindly try again")
-        
-        
-        
-    return required_file_nam, title, total_length
                         
                         
 def SizeFormatter(b: int,
@@ -203,6 +77,8 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(seconds) + "s, ") if seconds else "") + \
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
+  
+  
 
 def DFromUToTelegramProgress(client,
                              current,
@@ -312,6 +188,9 @@ def mime_content_type(url, content_type, name):
     if ent in common_types or ent in types_map: 
         print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
     return ext
+  
+  
+  
 def is_downloadable(url):
     """
     Does the url contain a downloadable resource
@@ -324,12 +203,16 @@ def is_downloadable(url):
     if 'html' in content_type.lower():
         return False
     return True
+  
+  
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
 
+  
+  
 def get_filename(url):
     """
     Does the url contain a downloadable resource
@@ -351,6 +234,10 @@ def get_filename(url):
          ext = None
         
     return filename, ext
+  
+  
+  
+  
 def dynamic_data(data):
     return Filters.create(
         name="DynamicData",
@@ -457,6 +344,10 @@ def get_filename(url):
         content_type = headers['content-type']
         ext = mime_content_type(url, content_type, name)
     return filenam, ext
+  
+  
+  
+  
 def generate_uuid():
         random_string = ''
         random_str_seq = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -467,6 +358,11 @@ def generate_uuid():
             if n != 8:
                 random_string += '-' 
         return random_string.strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
+      
+      
+      
+      
+      
 def human_readable_bytes(bytes):
         KB = 1024
         MB = 1024 * 1024
@@ -493,6 +389,8 @@ def human_readable_bytes(bytes):
         )
 
         return results
+      
+      
 def pretty_size(sizes):
     units = ['B', 'KB', 'MB', 'GB']
     unit = 0
@@ -519,6 +417,9 @@ def get_filename_from_cd(cd):
     if len(fname) == 0:
         return None
     return fname[0]
+  
+  
+  
 options={}
 base_headers = {   
         'User-Agent':  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.5',
@@ -545,6 +446,9 @@ def DownL(url):
             file.write(chunk)
             file.flush()
             os.fsync(file.fileno())
+            
+            
+            
 
 def DownLoadFile(url, file_name, client, message_id, chat_id):
     r = requests.get(url, stream=True, allow_redirects=True, headers=headers)

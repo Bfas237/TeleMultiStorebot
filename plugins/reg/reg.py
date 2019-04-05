@@ -8,10 +8,10 @@ state = {}
 @Client.on_message(Filters.regex("de_"))
 def my_handler(bot, m):
     chat_id = m.chat.id
-    user = m.from_user.id  
+    userd = m.from_user.id  
     ids = []
      
-    ids.append(user)
+    ids.append(userd)
     h = m.text
     if "/start" in h:
       g = h[10:]
@@ -24,16 +24,16 @@ def my_handler(bot, m):
       snews = db.fileid(g)
       if snews:
         num, row, fid, dat, tim, siz, did = db.vfileid(g)
-        nums = db.checkd(str(user), g) 
+        nums = db.checkd(str(userd), g) 
       else:
         row = None 
       if row:
-            user = db.ufil(did, str(user))
+            user = db.ufil(did, str(userd))
             ids.append(user)
             yr, mm, day, hr, mte, sec = db.cdate(did)
             ds = datetime(yr, mm, day, hr, mte, sec )
-            usr = db.getuser(did, chat_id)
-            idss = [chat_id, usr]
+            usr = db.getuser(did, str(userd))
+            idss = [str(userd), usr] 
             if(user != 0):
                 item = (
               "🆔 :             #{} \n\n" 

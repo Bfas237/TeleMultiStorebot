@@ -197,10 +197,8 @@ class DBHelper:
             row = self.c.fetchone()
             if row is None: 
                 news = 0
-        
             else: 
                 news = row[1]
-     
             return news  
     
        
@@ -224,7 +222,8 @@ class DBHelper:
                 news = 0
             else: 
                 news = row[3]
-     
+                
+            self.conn.commit()
             return news
     
        def filen(self, fid):
