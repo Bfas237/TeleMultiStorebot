@@ -1,37 +1,123 @@
-## Welcome to GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/Bfas237/TeleMultiStorebot/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+# Tele MultiStore Bot
+[![LIBRARY](https://img.shields.io/badge/Telegram%20MTProto%20API%20Framework%20for%20Python-April%2005%2C%202019-36ade1.svg)](https://docs.pyrogram.ml)
+![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.4-8892bf.svg)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+> An advanced [Telegram Bot](http://t.me/TeleMultiStoreBot) for uploading and sharing mdeia files across chats.    
+> (Almost) Complete but for now its still in BETA stage.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Requirements
+---------
 
-```markdown
-Syntax highlighted code block
+* Python >=3.5
+* Telegram account.
+* Telegram API key, you can get one simply with [@BotFather](https://core.telegram.org/bots#botfather) with simple commands right after creating your bot.
 
-# Header 1
-## Header 2
-### Header 3
+Dependencies
+---------
+- Pyrogram 
+- requests
+- TgCrypto
+- bs4
+- clint
+- python-magic
+- timeago
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+Normal Installation
+---------
 
-**Bold** and _Italic_ and `Code` text
+There are two possible was of running this bot.
 
-[Link](url) and ![Image](src)
+##### 1. Using the ini file
+
+* Replace the values as specified [HERE](https://docs.pyrogram.ml/start/Setup#api-keys).
+
+Your final ini file should look like this
+
+```
+[pyrogram]
+api_id = 12345
+api_hash = 0123456789abcdef0123456789abcdef
+
+[plugins]
+root = plugins
+
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+##### 2. ENV variables
 
-### Jekyll Themes
+To achieve this, you will do as follows. 
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Bfas237/TeleMultiStorebot/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+> If you use Heroku then this will be very easy to understand
 
-### Support or Contact
+create env variables as the one below
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+```
+TOKEN="123456789:hdhdhdbhfjfkrp889g8g889"
+APP_ID=12345
+API_HASH="0123456789abcdef0123456789abcdef"
+
+```
+* Learn more about how to create and [deploy apps to Heroku](https://devcenter.heroku.com/articles/git#for-a-new-heroku-app)
+
+
+The Hard Way (Advanced users only)
+---------
+
+```sh
+virtualenv -p python3 VENV
+. ./VENV/bin/activate
+pip3 install -r requirements.txt
+```
+
+
+### Run Bot
+
+```
+python3 bot.py
+
+```
+
+
+Easy Installation and Deploy
+---------
+
+> This section covers the case where someone is unfamiliar with python in deeper sense. If you are that type then this section has been made purposely for you.
+
+> We are not spoonfeeding you but just making things easier. Read this carefully
+
+
+If you don't want to go through all those hard process then just click the button below and fill the fields as specified.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Bfaschat/TeleMultiStorebot/tree/glitch)
+
+
+
+## Features to be Added:
+
+- [x] Cancel a particular Download
+- [x] Alert whether Download was started or not
+- [x] Show the available download speed of the server
+- [ ] Decrypt and encrypt files with passwords
+- [ ] Unarchive archivable files
+- [ ] Download torrens
+
+
+
+## Screenshots
+
+> To be updated.....
+
+
+Contact me
+------------
+You can contact me [via Telegram](https://telegram.me/bfaschat) but if you have an issue please [open](https://github.com/Bfaschat/TeleMultiStorebot/issues) one.
+
+
+
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/Bfaschat/TeleMultiStorebot)
+[![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://github.com/Bfaschat/TeleMultiStorebot)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://github.com/Bfaschat/TeleMultiStorebot) 
+
