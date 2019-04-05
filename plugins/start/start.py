@@ -3,7 +3,6 @@ import random
 import time, datetime, os, re, sys, sqlite3, json, io 
 import requests
 from pyrogram import Client, Filters, ReplyKeyboardRemove
-from utils.broadcast import *
 dbs = DBHelper()
 sms = "Hello! [{}](tg://user?id={})! I can or may be able to download any downloadable file link you send to me and upload for you if and only if its a valid link. \n\n Send /faq to learn more about the usage and other useful tips"
 @Client.on_message(Filters.command("start")) 
@@ -19,10 +18,4 @@ def start(bot, m):
       id=m.chat.id
     cc = dbs.checkifexist(id)
     
-    if cc:
-      sent = m.reply(smsg.format(user, id), quote=True)
-    else:
-      dbs.add_tlgrm_user(0, id)
-      sent = m.reply(smsg.format(user, id), quote=True)
-    if m.chat.type == 'supergroup':
-      bot.send_message(id, "hello mother faker i am testing ")  
+    sent = m.reply(smsg.format(user, id), quote=True)
