@@ -1,5 +1,5 @@
 {
-  "name": "Tele MultiStore Bot",
+  "name": "TeleMultiStoreBot",
   "description": "Telegram's advanced media sharing platform. Create your Fork now.",
   "keywords": [
     "telegram",
@@ -26,7 +26,8 @@
     },
     "API_HASH": {
       "description": "Get this value from https://my.telegram.org",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "AUTH_USERS": {
       "description": "allow only pre-defined users to use this bot",
@@ -37,5 +38,10 @@
       "value": "",
       "required": false
     }
-  }
+  },
+  "addons": [
+  ],
+  "buildpacks": [{
+    "url": "heroku/python"
+  }]
 }
