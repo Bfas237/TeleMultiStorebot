@@ -1,8 +1,7 @@
 /DOWNLOADS
 /Downloads
-config.ini
 *.session
-*.db
-procfile
-runtime.txt
-/.data
+shrinkwrap.yaml
+installReqsAndStart.sh
+package.json
+watch.json
