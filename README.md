@@ -63,21 +63,8 @@ API_HASH="0123456789abcdef0123456789abcdef"
 * Learn more about how to create and [deploy apps to Heroku](https://devcenter.heroku.com/articles/git#for-a-new-heroku-app)
 
 
-Easy Installation and Deploy
+The Hard Way (Advanced users only)
 ---------
-
-> This section covers the case where someone is unfamiliar with python in deeper sense. If you are that type then this section has been made purposely for you.
-
-> We are not spoonfeeding you but just making things easier. Read this carefully
-
-
-If you don't want to go through all those hard process then just click the button below and fill the fields as specified.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-
-#### The Hard Way (Advanced users only)
-
 
 ```sh
 virtualenv -p python3 VENV
@@ -93,6 +80,20 @@ pip3 install -r requirements.txt
 python3 bot.py
 
 ```
+
+
+Easy Installation and Deploy
+---------
+
+> This section covers the case where someone is unfamiliar with python in deeper sense. If you are that type then this section has been made purposely for you.
+
+> We are not spoonfeeding you but just making things easier. Read this carefully
+
+
+If you don't want to go through all those hard process then just click the button below and fill the fields as specified.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 
 
 ## Features to be Added:

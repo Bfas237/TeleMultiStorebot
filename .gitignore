@@ -1,2 +1,8 @@
 /DOWNLOADS
 /Downloads
+config.ini
+*.session
+*.db
+procfile
+runtime.txt
+/.data
