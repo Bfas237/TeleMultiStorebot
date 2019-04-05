@@ -1,5 +1,8 @@
 
-![HEADER](screenshots/header.png)
+# Tele MultiiStore Bot
+[![LIBRARY](https://img.shields.io/badge/Pyrogram%20MtProto%20Library-Dec%2019%2C%202017-36ade1.svg)](https://docs.pyrogram.ml)
+![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.7-8892bf.svg)
+
 
 To be updated.....
 
