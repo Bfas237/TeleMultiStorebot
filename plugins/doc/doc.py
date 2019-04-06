@@ -3,28 +3,6 @@ import utils.menus
 import traceback
 DOWNLOAD_LOCATION = "./DOWNLOADS"
 
-class Telegram:
-    def __init__(self,token,user_id):
-        self.both_auth_token = token
-        self.user_id = user_id
-
-    def sendServerStartedMessage(self, fid):
-        token = self.both_auth_token
-        user_id = self.user_id
-
-
-        try:
-            gi = requests.get("https://api.telegram.org/bot" + token + "/getFile?file_id={}".format(fid)).json()
-
-            logger.info(gi)# your code here
-
-
-        except Exception as e:
-            logger.info(e)
-
-bot_token = "770345593:AAFMv-pgqjvlaHQYBK71QdoktZDnARYYRuY"
-
-user_id = -1001139726492 # put your id here
 def get_extension(media):
     """Gets the corresponding extension for any Telegram media"""
 
