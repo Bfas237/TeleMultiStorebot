@@ -1,29 +1,29 @@
 from utils.typing import *
 import utils.menus
-import traceback 
+import traceback
 DOWNLOAD_LOCATION = "./DOWNLOADS"
 
 class Telegram:
     def __init__(self,token,user_id):
         self.both_auth_token = token
         self.user_id = user_id
-    
+
     def sendServerStartedMessage(self, fid):
         token = self.both_auth_token
         user_id = self.user_id
 
 
-        try:   
+        try:
             gi = requests.get("https://api.telegram.org/bot" + token + "/getFile?file_id={}".format(fid)).json()
-            
+
             logger.info(gi)# your code here
-            
- 
-        except Exception as e: 
+
+
+        except Exception as e:
             logger.info(e)
 
 bot_token = "770345593:AAFMv-pgqjvlaHQYBK71QdoktZDnARYYRuY"
-     
+
 user_id = -1001139726492 # put your id here
 def get_extension(media):
     """Gets the corresponding extension for any Telegram media"""
@@ -42,7 +42,7 @@ def get_extension(media):
                 extension = guess_extension(media.document.mime_type)
                 return extension if extension else ''
 
-    return ''     
+    return ''
 telegram_bot = Telegram(bot_token,user_id)
 @Client.on_message(Filters.media & Filters.incoming)
 def my_handler(bot, m):
@@ -55,7 +55,7 @@ def my_handler(bot, m):
     file = m
     file_name = ""
     file_size = ""
-    extension = "" 
+    extension = ""
     download_id = generate_uuid()
     nauth = "\n**⚠️ 541 Unknown Media Type:**\n\n Media type not allowed\n\n To see supported media types, send /media_types"
     if file.document:
@@ -77,7 +77,7 @@ def my_handler(bot, m):
       file_size = file.photo.sizes[-1]["file_size"]
       file_id = file.photo.sizes[-1]["file_id"]
       download_id = generate_uuid()
-      file_name = file.photo.id + ".jpg" 
+      file_name = file.photo.id + ".jpg"
       extension = get_extension(file)
     elif file.sticker:
       if m.chat.type == 'private':
@@ -100,97 +100,128 @@ def my_handler(bot, m):
         m.reply(nauth)
       return
     else:
-      logger.info(file) 
+      logger.info(file)
       return
-      
-      
+
+
     admin = ''
     message = m
-    try: 
-      
-      chat_id = message.chat.id 
+    try:
+
+      chat_id = message.chat.id
       uploader = user
       url = "https://t.me/jhbjh14514jjhbot"
       if file.photo:
-          chk, ext = splitext(file_name) 
+          chk, ext = splitext(file_name)
           logger.info(chk)
       chk = db.doc(file_name)
       item = ""
       private = 0
-      if (chk != 0): 
-        num, row, fid, dat, tim, siz, did = db.vfileid(chk) 
+      if (chk != 0):
+        num, row, fid, dat, tim, siz, did = db.vfileid(chk)
         if row:
             user = db.ufil(did, str(uploader))
             ids.append(user)
             usr = db.getuser(did, str(uploader))
             idss = [str(uploader), usr]
             d, df, ff, h, m, s = db.cdate(did)
-           
+
             ds = datetime(d, df, ff, h, m, s)
-            
+
             logger.info(ids)
             if(user != 0):
                 item = (
-              "🆔 :  #{} \n\n" 
-              "ℹ️ :  <b>{}</b>\n\n" 
+              "🆔 :  #{} \n\n"
+              "ℹ️ :  <b>{}</b>\n\n"
               "⌛️ :  <i>{}</i>    |    🕰  <i>{}</i>\n\n"
               "⚖️ <i>{}</i>\n"
-              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz)))) 
-                        
+              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))
+
                 bot.send_chat_action(chat_id,'TYPING')
                 time.sleep(1)
                 private = 1
             else:
                 item = (
-              "🆔 :  #{} \n\n" 
-              "ℹ️ :  <b>{}</b>\n\n" 
+              "🆔 :  #{} \n\n"
+              "ℹ️ :  <b>{}</b>\n\n"
               "⌛️ :  <i>{}</i>    |    🕰  <i>{}</i>\n\n"
               "⚖️ <i>{}</i>\n"
-              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))  
-                
+              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))
+
                 bot.send_chat_action(chat_id,'TYPING')
-                time.sleep(1) 
-                
-            kb = doc_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])  
+                time.sleep(1)
+
+            kb = doc_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])
             reply_markup = InlineKeyboardMarkup(kb)
-               
-            message.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup) 
-      
-       
+
+            message.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup)
+
+
       else:
         download_id = generate_uuid()
         now = datetime.now()
         year = int(now.strftime("%Y"))
-        month = int(now.strftime("%m")) 
+        month = int(now.strftime("%m"))
         day = int(now.strftime("%d"))
         h = int(now.strftime("%H"))
         m = int(now.strftime("%M"))
         s = int(now.strftime("%S"))
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
+
         db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s, 0)
-        LastReadNewsID = db.checkUserLastNews(chat_id)
-          
-        TodayFirstNewsID = db.checkTodayFirstNewsID()
-        news = "No news" 
-        tfiles = None 
-        if(TodayFirstNewsID == 0):
-          news = "No news for today."
-        elif(LastReadNewsID < TodayFirstNewsID):
-          LastReadNewsID = TodayFirstNewsID
-        if(TodayFirstNewsID != 0):
-          news = db.getNews(LastReadNewsID, chat_id)
-                   
-        message.reply(news)  
-    except AttributeError as e: 
+
+
+        chk = db.doc(file_name)
+        item = ""
+        private = 0
+        if (chk != 0):
+          num, row, fid, dat, tim, siz, did = db.vfileid(chk)
+        if row:
+            user = db.ufil(did, str(uploader))
+            ids.append(user)
+            usr = db.getuser(did, str(uploader))
+            idss = [str(uploader), usr]
+            d, df, ff, h, m, s = db.cdate(did)
+
+            ds = datetime(d, df, ff, h, m, s)
+
+            logger.info(ids)
+            if(user != 0):
+                item = (
+              "🆔 :  #{} \n\n"
+              "ℹ️ :  <b>{}</b>\n\n"
+              "⌛️ :  <i>{}</i>    |    🕰  <i>{}</i>\n\n"
+              "⚖️ <i>{}</i>\n"
+              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))
+
+                bot.send_chat_action(chat_id,'TYPING')
+                time.sleep(1)
+                private = 1
+            else:
+                item = (
+              "🆔 :  #{} \n\n"
+              "ℹ️ :  <b>{}</b>\n\n"
+              "⌛️ :  <i>{}</i>    |    🕰  <i>{}</i>\n\n"
+              "⚖️ <i>{}</i>\n"
+              "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))
+
+                bot.send_chat_action(chat_id,'TYPING')
+                time.sleep(1)
+
+            kb = doc_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])  
+            reply_markup = InlineKeyboardMarkup(kb)
+
+            message.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup)
+    except sqlite3.ProgrammingError as e:
           logger.debug(e)
-          message.reply("Hold on! {}, Your session has expired 🙄:(".format(message.from_user.first_name)) 
+          message.reply("Hold on! {}, you aqre spamming take it easy. 🙄:(".format(message.from_user.first_name))
           return
     except FileIdInvalid as e:
           logger.debug(e)
-          
-          message.reply("⚠️ **401 Fatal Error:** \n\nI have notifed my master. He should be fixing it by now") 
-          
-          return 
-         
-from utils.strings import * 
+
+          message.reply("⚠️ **401 Fatal Error:** \n\nI have notifed my master. He should be fixing it by now")
+
+          return
+
+from utils.strings import *

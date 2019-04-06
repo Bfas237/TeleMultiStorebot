@@ -6,16 +6,16 @@ import time
 download_path = "{}/Downloads".format(os.getcwd())
 """if not os.path.isdir(download_path):
   os.makedirs(download_path)
-print(download_path)  """ 
+print(download_path)  """
 
-def timedate(dat): 
+def timedate(dat):
     import timeago, datetime
     now = datetime.datetime.now() + datetime.timedelta(seconds = 1)
-    date = datetime.datetime.now() 
-    return timeago.format(dat, now)   
-  
-                        
-                        
+    date = datetime.datetime.now()
+    return timeago.format(dat, now)
+
+
+
 def SizeFormatter(b: int,
                   human_readable: bool = False) -> str:
     """
@@ -77,8 +77,8 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(seconds) + "s, ") if seconds else "") + \
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
-  
-  
+
+
 
 def DFromUToTelegramProgress(client,
                              current,
@@ -146,9 +146,9 @@ def mime_content_type(url, content_type, name):
     :type filename: str
     :rtype: str
     """
-    
+
     filenam = basename(name)
-    
+
     exts = os.path.splitext(filenam)[1][1:].lower()
     if exts:
       exts = "."+exts
@@ -157,40 +157,40 @@ def mime_content_type(url, content_type, name):
       logger.warning("No filetype could be determined for '%s', skipping.",
             filenam
         )
-      
-    
-    if exts in common_types or exts in types_map: 
+
+
+    if exts in common_types or exts in types_map:
         ext = '{}'.format(exts)
         mime_typ = '{}'.format(types_map[exts])
-        print(ext) 
+        print(ext)
         print(mime_typ)
-      
+
     elif content_type == 'image/jpeg' or content_type == 'image/jpg' or content_type == 'image/jpe':
             ext = '.jpeg'
-        
+
     elif content_type == 'image/x-icon' or content_type == 'image/vnd.microsoft.icon':
             ext = '.ico'
-        
+
     elif content_type == 'application/x-7z-compressed':
             ext = '.7z'
     elif content_type == 'image/png':
             ext = '.png'
-        
+
     elif None == exts:
         ext = mimetypes.guess_extension(content_type)
         logger.warning("No extension for '%s', guessed '%s'.",
         filenam, ext
                   )
-        
+
         print(ext)
     ent = ext
 
-    if ent in common_types or ent in types_map: 
+    if ent in common_types or ent in types_map:
         print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
     return ext
-  
-  
-  
+
+
+
 def is_downloadable(url):
     """
     Does the url contain a downloadable resource
@@ -203,16 +203,16 @@ def is_downloadable(url):
     if 'html' in content_type.lower():
         return False
     return True
-  
-  
+
+
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
 
-  
-  
+
+
 def get_filename(url):
     """
     Does the url contain a downloadable resource
@@ -228,16 +228,17 @@ def get_filename(url):
        if(filenam != None):
          filename = unquote(filenam).strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
          ext = file_ext
-         
+
        else:
-         filename = None
-         ext = None
-        
+          filename = url.split("/")[-1]
+          filename = unquote(filenam).strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
+          required_file_name = os.path.basename(filename)
+          filename, ext = splitext(required_file_name)
     return filename, ext
-  
-  
-  
-  
+
+
+
+
 def dynamic_data(data):
     return Filters.create(
         name="DynamicData",
@@ -248,7 +249,7 @@ def dynamic_data(data):
 def fileExt(url):
     """
     Check if file extention exist then
-    
+
     """
     # compile regular expressions
     reQuery = re.compile(r'\?.*$', re.IGNORECASE)
@@ -270,7 +271,7 @@ def get_filename(url):
     """
     Get an authentique filename from content-dispostion
     """
-    
+
 # content-disposition = "Content-Disposition" ":"
 #                        disposition-type *( ";" disposition-parm )
 # disposition-type    = "inline" | "attachment" | disp-ext-type
@@ -334,9 +335,9 @@ def get_filename(url):
 
         else:
           name = path.basename(unquote(urlparse(url).path))
-          
+
         name = unquote(name).strip('\n').strip('\*').replace('UTF-8', "").strip('\=').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-      
+
       filenam, ext = splitext(basename(name))
       if ext:
         ext = fileExt(url)
@@ -344,10 +345,10 @@ def get_filename(url):
         content_type = headers['content-type']
         ext = mime_content_type(url, content_type, name)
     return filenam, ext
-  
-  
-  
-  
+
+
+
+
 def generate_uuid():
         random_string = ''
         random_str_seq = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -356,13 +357,13 @@ def generate_uuid():
             for i in range(0,n):
                 random_string += str(random_str_seq[r.randint(0, len(random_str_seq) - 1)])
             if n != 8:
-                random_string += '-' 
+                random_string += '-'
         return random_string.strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-      
-      
-      
-      
-      
+
+
+
+
+
 def human_readable_bytes(bytes):
         KB = 1024
         MB = 1024 * 1024
@@ -389,8 +390,8 @@ def human_readable_bytes(bytes):
         )
 
         return results
-      
-      
+
+
 def pretty_size(sizes):
     units = ['B', 'KB', 'MB', 'GB']
     unit = 0
@@ -404,29 +405,29 @@ def dosomething(buf):
     pass
 from requests.exceptions import RequestException
 
-         
 
- 
+
+
 def get_filename_from_cd(cd):
     """
     Get filename from content-disposition
     """
-    if not cd: 
+    if not cd:
         return None
     fname = re.findall('filename=(.+)', cd)
     if len(fname) == 0:
         return None
     return fname[0]
-  
-  
-  
+
+
+
 options={}
-base_headers = {   
+base_headers = {
         'User-Agent':  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.5',
         'Accept-Encoding': 'gzip, deflate, sdch',
         'Accept-Language': 'zh-CN,zh;q=0.8'
     }
-headers = dict(base_headers, **options) 
+headers = dict(base_headers, **options)
 
 def DownL(url):
     fname, ext = get_filename(url)
@@ -446,15 +447,15 @@ def DownL(url):
             file.write(chunk)
             file.flush()
             os.fsync(file.fileno())
-            
-            
-            
+
+
+
 
 def DownLoadFile(url, file_name, client, message_id, chat_id):
     r = requests.get(url, stream=True, allow_redirects=True, headers=headers)
     fname, ext = get_filename(url)
     file_name = fname+ext
-    
+
     with open(download_path+"/"+file_name, 'wb') as file:
       total_length = int(r.headers.get('content-length', 0)) or None
       downloaded_size = 0
@@ -465,9 +466,6 @@ def DownLoadFile(url, file_name, client, message_id, chat_id):
         start = time.time()
         dl = 0
         total_length = int(total_length)
-        if total_length > 10000000:
-          file_name = 0
-          return file_name
         for chunk in progress.bar(r.iter_content(chunk_size=chunk_size), expected_size=(total_length / 1024) + 1):
           if chunk:
             dl += len(chunk)
@@ -478,7 +476,7 @@ def DownLoadFile(url, file_name, client, message_id, chat_id):
             file.flush()
             os.fsync(file.fileno())
     return file_name
-  
-  
-  
+
+
+
   
