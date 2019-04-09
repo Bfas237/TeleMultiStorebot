@@ -21,7 +21,7 @@ def get_extension(media):
                 return extension if extension else ''
 
     return ''
-telegram_bot = Telegram(bot_token,user_id)
+
 @Client.on_message(Filters.media & Filters.incoming)
 def my_handler(bot, m):
     data = list()
