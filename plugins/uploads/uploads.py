@@ -3,38 +3,7 @@ from utils.menus import *
 import traceback
 DOWNLOAD_LOCATION = "./DOWNLOADS"
 
-def get_extension(media):
-    """Gets the corresponding extension for any Telegram media"""
 
-    # Photos are always compressed as .jpg by Telegram
-    if isinstance(media, (UserProfilePhoto, ChatPhoto, MessageMediaPhoto)):
-        return '.jpg'
-
-    # Documents will come with a mime type
-    if isinstance(media, MessageMediaDocument):
-        if isinstance(media.document, Document):
-            if media.document.mime_type == 'application/octet-stream':
-                # Octet stream are just bytes, which have no default extension
-                return ''
-            else:
-                extension = guess_extension(media.document.mime_type)
-                return extension if extension else ''
-
-    return ''
-import re
-
-exe = ['.exe', '.msi','.Exe','.Msi']
-mp3 = ['.mp3', '.AAC','.M4A']
-doc = ['.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls']
-rc = ['.zip', '.rar','.7z','.gz']
-def checkext(fname):   
-    if re.search('\.mp3$',fname,flags=re.IGNORECASE):
-        media = "Music"
-        return media
-    else:
-      return
-for f in mp3:
-  print ("{} ==> {}".format(f,checkext(f)))
 @Client.on_message(Filters.media & Filters.incoming)
 def my_handler(bot, m):
     data = list()
@@ -47,32 +16,16 @@ def my_handler(bot, m):
     file_name = ""
     file_size = ""
     extension = ""
-    media = ""
-      
     
     download_id = generate_uuid()
     nauth = "\n**⚠️ 541 Unknown Media Type:**\n\n Media type not allowed\n\n To see supported media types, send /media_types"
+    invalid_media_type = "\n**⚠️ 614 Unsupported Media Type:**\n\n Media type not Supported\n\n To see supported media types, send /media_types"
     if file.document:
       file_size = file.document.file_size
       file_name = file.document.file_name
       file_id = file.document.file_id
       extension = guess_extension(file.document.mime_type)
-      chk, ext = splitext(file_name)
-      if ext == ".apk":
-        media = ".apk"
-      elif ext == ".zip":
-        media = ".zip"
-      elif ext == ".rar":
-        media = ".rar"
-      elif ext == ".txt":
-        media = ".txt"
-      elif ext == ".exe":
-        media = ".exe"
-      elif ext == ".msi":
-        media = ".msi"
-      else:
-        media = extension
-      logger.warning('You just uploaded an:  "%s"', media)
+      
     elif file.video:
       file_size = file.video.file_size
       file_name = file.video.file_name
@@ -110,8 +63,12 @@ def my_handler(bot, m):
         m.reply(nauth)
       return
     else:
-      
       return
+    media = check_media(file_name)
+    if not media:
+      m.reply(invalid_media_type)
+      return
+    logger.warning('You just uploaded an:  "%s"', media)
     admin = ''
     message = m
     try:
@@ -178,7 +135,7 @@ def my_handler(bot, m):
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
 
-        db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s, 0)
+        db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s, 0, media)
 
 
         chk = db.doc(file_name)

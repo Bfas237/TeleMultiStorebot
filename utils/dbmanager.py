@@ -38,7 +38,7 @@ class DBHelper:
             self.c.executescript('''CREATE TABLE IF NOT EXISTS files
     (
     ID INTEGER NOT NULL PRIMARY KEY UNIQUE,
-    Type TEXT DEFAULT "Misc", 
+    Media TEXT DEFAULT "Misc", 
     Fname TEXT, 
     Size TEXT,
     FileId INTEGER,
@@ -85,7 +85,7 @@ class DBHelper:
             else: 
                 return None
         
-       def fetchNews(self, fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s, priv):
+       def fetchNews(self, fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s, priv, media):
             title = fn
             content = fid
             fsize = fs 
@@ -94,7 +94,7 @@ class DBHelper:
             self.c.execute('''SELECT Fname FROM files WHERE Fname = ? OR FileId = ?''', (title, content))
             row = self.c.fetchone()
             if row is None:
-                self.c.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s, priv ))
+                self.c.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private, Media) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s, priv, media ))
                 count += 1 
             self.conn.commit()
 
@@ -305,13 +305,13 @@ class DBHelper:
                 return user[0]
             else:
                 return 0
-        
-       def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec):
+       
+       def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec, priv, media):
             likeDate = "%" + dlid + "%"
             self.c.execute('SELECT Fname, FileId, Size, Link, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (dlid, ))
             row = self.c.fetchone() 
             if row is not None: 
-                self.c.execute('INSERT OR IGNORE INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], dates, times, tnews, chat_id, row[3], year, month, day, hr, mins, sec, ))
+                self.c.execute('INSERT OR IGNORE INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private, Media) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], dates, times, tnews, chat_id, row[3], year, month, day, hr, mins, sec, priv, media ))
                 LastReadNewsID = tnews
                 print ("\nnNew file token :", dlid, "\nLast Read News ID =", LastReadNewsID)
             else:

@@ -16,6 +16,50 @@ def timedate(dat):
 
 
 
+def get_extension(media):
+    """Gets the corresponding extension for any Telegram media"""
+
+    # Photos are always compressed as .jpg by Telegram
+    if isinstance(media, (UserProfilePhoto, ChatPhoto, MessageMediaPhoto)):
+        return '.jpg'
+
+    # Documents will come with a mime type
+    if isinstance(media, MessageMediaDocument):
+        if isinstance(media.document, Document):
+            if media.document.mime_type == 'application/octet-stream':
+                # Octet stream are just bytes, which have no default extension
+                return ''
+            else:
+                extension = guess_extension(media.document.mime_type)
+                return extension if extension else ''
+
+    return ''
+def check_media(chk):   
+    extensionsToCheck  = ['.exe', '.msi', '.Exe','.Msi', '.mp3', '.AAC','.M4A', '.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls', '.zip', '.rar','.7z','.gz', '.avi', '.mkv','.webm', '.mp4', '.m1v', '.movie', '.mpeg', '.mov']
+    hou = [extension for extension in extensionsToCheck if(extension in chk.lower())]
+    media = ""
+    if hou is not None:
+      if chk.lower().endswith(('.png', '.jpg', '.jpeg', '.jpe')):
+        media = "Pictures"
+      if chk.lower().endswith(('.apk', '.xapk', '.jar', '.jav')):
+        media = "Apps"
+      elif chk.lower().endswith(('.exe', '.msi')):
+        media = "Software"
+      elif chk.lower().endswith(('.mp3', '.AAC','.M4A')):
+        media = "Music"
+      elif chk.lower().endswith(('.avi', '.mkv','.webm', '.mp4', '.m1v', '.movie', '.mpeg', '.mov')):
+        media = "Video"
+      elif chk.lower().endswith(('.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls')):
+        media = "Document"
+      elif chk.lower().endswith(('.zip', '.rar','.7z','.gz')):
+        media = "Achives"
+      else:
+        media = "Misc"
+      return media
+    
+    else:
+      return False
+    
 def SizeFormatter(b: int,
                   human_readable: bool = False) -> str:
     """
