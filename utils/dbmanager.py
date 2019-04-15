@@ -23,7 +23,7 @@ class DBHelper:
        def __enter__(self):
        
             return self
-      
+       
        def setup(self):
             self.conn.text_factory = str
             self.c.executescript('''CREATE TABLE IF NOT EXISTS Users
@@ -38,6 +38,7 @@ class DBHelper:
             self.c.executescript('''CREATE TABLE IF NOT EXISTS files
     (
     ID INTEGER NOT NULL PRIMARY KEY UNIQUE,
+    Type TEXT DEFAULT "Misc", 
     Fname TEXT, 
     Size TEXT,
     FileId INTEGER,

@@ -1,5 +1,5 @@
 from utils.typing import *
-import utils.menus
+from utils.menus import *
 import traceback
 DOWNLOAD_LOCATION = "./DOWNLOADS"
 
@@ -21,7 +21,20 @@ def get_extension(media):
                 return extension if extension else ''
 
     return ''
+import re
 
+exe = ['.exe', '.msi','.Exe','.Msi']
+mp3 = ['.mp3', '.AAC','.M4A']
+doc = ['.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls']
+rc = ['.zip', '.rar','.7z','.gz']
+def checkext(fname):   
+    if re.search('\.mp3$',fname,flags=re.IGNORECASE):
+        media = "Music"
+        return media
+    else:
+      return
+for f in mp3:
+  print ("{} ==> {}".format(f,checkext(f)))
 @Client.on_message(Filters.media & Filters.incoming)
 def my_handler(bot, m):
     data = list()
@@ -34,6 +47,9 @@ def my_handler(bot, m):
     file_name = ""
     file_size = ""
     extension = ""
+    media = ""
+      
+    
     download_id = generate_uuid()
     nauth = "\n**⚠️ 541 Unknown Media Type:**\n\n Media type not allowed\n\n To see supported media types, send /media_types"
     if file.document:
@@ -41,6 +57,22 @@ def my_handler(bot, m):
       file_name = file.document.file_name
       file_id = file.document.file_id
       extension = guess_extension(file.document.mime_type)
+      chk, ext = splitext(file_name)
+      if ext == ".apk":
+        media = ".apk"
+      elif ext == ".zip":
+        media = ".zip"
+      elif ext == ".rar":
+        media = ".rar"
+      elif ext == ".txt":
+        media = ".txt"
+      elif ext == ".exe":
+        media = ".exe"
+      elif ext == ".msi":
+        media = ".msi"
+      else:
+        media = extension
+      logger.warning('You just uploaded an:  "%s"', media)
     elif file.video:
       file_size = file.video.file_size
       file_name = file.video.file_name
@@ -78,10 +110,8 @@ def my_handler(bot, m):
         m.reply(nauth)
       return
     else:
-      logger.info(file)
+      
       return
-
-
     admin = ''
     message = m
     try:
@@ -92,6 +122,7 @@ def my_handler(bot, m):
       if file.photo:
           chk, ext = splitext(file_name)
           logger.info(chk)
+          
       chk = db.doc(file_name)
       item = ""
       private = 0
@@ -202,4 +233,3 @@ def my_handler(bot, m):
 
           return
 
-from utils.strings import *
