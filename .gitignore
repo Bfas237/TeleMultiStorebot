@@ -1,9 +1,0 @@
-/DOWNLOADS
-/Downloads
-*.session
-shrinkwrap.yaml
-installReqsAndStart.sh
-package.json
-watch.json
-plugins/cool-file.js
-plugins/speed/speed.p
