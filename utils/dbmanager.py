@@ -306,12 +306,12 @@ class DBHelper:
             else:
                 return 0
        
-       def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec, priv, media):
+       def copy(self, dlid, tnews, times, dates, chat_id, year, month, day, hr, mins, sec):
             likeDate = "%" + dlid + "%"
-            self.c.execute('SELECT Fname, FileId, Size, Link, DownloadId FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (dlid, ))
+            self.c.execute('SELECT Fname, FileId, Size, Link, DownloadId, Private, media FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1', (dlid, ))
             row = self.c.fetchone() 
             if row is not None: 
-                self.c.execute('INSERT OR IGNORE INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private, Media) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], dates, times, tnews, chat_id, row[3], year, month, day, hr, mins, sec, priv, media ))
+                self.c.execute('INSERT OR IGNORE INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private, Media) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], dates, times, tnews, chat_id, row[3], year, month, day, hr, mins, sec, row[6], row[7] ))
                 LastReadNewsID = tnews
                 print ("\nnNew file token :", dlid, "\nLast Read News ID =", LastReadNewsID)
             else:

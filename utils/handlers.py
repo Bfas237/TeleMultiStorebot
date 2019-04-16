@@ -35,14 +35,14 @@ def get_extension(media):
 
     return ''
 def check_media(chk):   
-    extensionsToCheck  = ['.exe', '.msi', '.Exe','.Msi', '.mp3', '.AAC','.M4A', '.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls', '.zip', '.rar','.7z','.gz', '.avi', '.mkv','.webm', '.mp4', '.m1v', '.movie', '.mpeg', '.mov']
+    extensionsToCheck  = ['.exe', '.msi', '.Exe','.Msi', '.mp3', '.AAC','.M4A', '.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls', '.zip', '.rar','.7z','.gz', '.avi', '.mkv','.webm', '.mp4', '.m1v', '.movie', '.mpeg', '.mov', '.png']
     hou = [extension for extension in extensionsToCheck if(extension in chk.lower())]
     media = ""
     if hou is not None:
-      if chk.lower().endswith(('.png', '.jpg', '.jpeg', '.jpe')):
-        media = "Pictures"
       if chk.lower().endswith(('.apk', '.xapk', '.jar', '.jav')):
         media = "Apps"
+      elif chk.lower().endswith(('.png', '.jpg', '.jpeg', '.jpe')):
+        media = "Pictures"
       elif chk.lower().endswith(('.exe', '.msi')):
         media = "Software"
       elif chk.lower().endswith(('.mp3', '.AAC','.M4A')):
@@ -51,7 +51,7 @@ def check_media(chk):
         media = "Video"
       elif chk.lower().endswith(('.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls')):
         media = "Document"
-      elif chk.lower().endswith(('.zip', '.rar','.7z','.gz')):
+      elif chk.lower().endswith(('.zip', '.rar','.7z','.gz','.bin')):
         media = "Achives"
       else:
         media = "Misc"
@@ -59,6 +59,13 @@ def check_media(chk):
     
     else:
       return False
+from base64 import b64decode
+from struct import unpack
+
+def parse_inline_message_id(inline_message_id):
+    inline_message_id += "=" * ((4 - len(inline_message_id) % 4) % 4) 
+    dc_id, _id, access_hash = unpack("<iqq",b64decode(inline_message_id,"-_"))
+    return api.types.InputBotInlineMessageID(dc_id=dc_id,id=_id,access_hash=access_hash)
     
 def SizeFormatter(b: int,
                   human_readable: bool = False) -> str:

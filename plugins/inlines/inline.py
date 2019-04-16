@@ -9,16 +9,24 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 NEXT_OFFSET = 25
 CACHE_TIME = 5
 
-FIRE_THUMB = "https://i.imgur.com/9lQUnXj.png"
-GLOBAL_THUMB = "https://i.imgur.com/HQs8dvW.png"
-APK_THUMB = "https://i.imgur.com/N6iUS0U.png"
-OPEN_BOOK_THUMB = "https://i.imgur.com/v1XSJ1D.png"
+DOC_THUMB = "https://i.imgur.com/AggHpo9.png"
+SOFTWARE_THUMB = "https://i.imgur.com/6YVH0cr.png"
+IMG_THUMB = "https://i.imgur.com/fSSxJkv.png"
+APK_THUMB = "https://i.imgur.com/hOcYDWZ.png"
 MEDIA_THUMB = "https://i.imgur.com/BduvHoV.png"
+GLOBAL_THUMB = "https://i.imgur.com/HQs8dvW.png"
 FILES_THUMB = "https://i.imgur.com/zL4AJqh.png"
+MP3_THUMB = "https://i.imgur.com/D7ILLy6.png"
+
+
+APK_SEARCH_THUMB = "https://i.imgur.com/HYX5seP.png"
+MISC_SEARCH_THUMB = "https://i.imgur.com/UVoYOYm.png"
+GLOBAL_SEARCH_THUMB = "https://i.imgur.com/8FJuWCr.png"
+
 OTHER_THUMB = "https://i.imgur.com/d1tf976.png"
 NOT_FOUND = "https://i.imgur.com/nMQD6QN.png"
 ABOUT_BOT_THUMB = "https://i.imgur.com/zRglRz3.png"
-SEARCH_THUMB = "https://i.imgur.com/8FJuWCr.png"
+
 HELP = (
     "{} **TELE MULTISTORE BOT**\n\n"
     "Use this bot inline to search for Uploaded, files, videos, games, apps and other misc files\n\n"
@@ -37,13 +45,6 @@ HELP = (
     "`@jhbjh14514jjhbot !r` – Rar Files\n"
     "`@jhbjh14514jjhbot !ms` – Misc Files\n\n".format(Emoji.ROBOT_FACE)
 )
-from base64 import b64decode
-from struct import unpack
-
-def parse_inline_message_id(inline_message_id):
-    inline_message_id += "=" * ((4 - len(inline_message_id) % 4) % 4) 
-    dc_id, _id, access_hash = unpack("<iqq",b64decode(inline_message_id,"-_"))
-    return api.types.InputBotInlineMessageID(dc_id=dc_id,id=_id,access_hash=access_hash)
 
 
 @Client.on_inline_query() 
@@ -96,34 +97,36 @@ def answer(client, inline_query):
 
         return
     offset = int(inline_query.offset or 0)
-    
-    if query.startswith('!f'):
-      likeDate = "%" + str(query[3:]) + "%"
+    su = []
+    if query.startswith('!pic'):
+      likeDate = "%" + str(query[5:]) + "%"
+      media = "Pictures"
       logger.warning(likeDate) 
-      c.execute('SELECT DownloadId, Fname, FileId FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, offset ))
+      c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
       result = c.fetchall() 
-      con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE User = ?", (chat_id, ))  
-    
+      con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
       rowcount = con.fetchone()[0]
       things = [list(i) for i in result]
-      logger.warning('Query "%s"', things)  
+      logger.warning('Query "%s"', things) 
+      for ft in things:
+        su.append(str(ft[3]))
       if offset == 0:
             articles.append(
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title="Media",
+                    title=str(su[0]),
                     description="Your can search for any media",
                     input_message_content=InputTextMessageContent(
                         "🖼 **Media Finder**\n\n"
                         "`This section deals with all medias in your storage`"
                     ),
-                    thumb_url=FIRE_THUMB,
+                    thumb_url=MISC_SEARCH_THUMB,
                 )
             )
       switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
       if things:
         s = 's'
-        all = 'Media'
+        all = str(su[0])
         
         for num, th in enumerate(things):
           sw.append(str(th[0]))
@@ -139,8 +142,14 @@ def answer(client, inline_query):
                     ]  
                 ))) 
         count = len(articles) - 1
+        res = ""
+        ress = ""
+        if len(str(string[5:])) == 0:
+          res = "Items in category" if count > 1 else "Item in category"
+        if len(str(string[5:])) >= 1:
+          ress = "Results for" if count > 1 else "Result for"
         
-        switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if string == "!f" else str(query[3:]))
+        switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(string[5:]))
       elif not things:  
         s = 's'
         all = 'Media'
@@ -152,7 +161,7 @@ def answer(client, inline_query):
                 ))] 
         count = len(articles) - 1
         
-        switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if string == "!f" else str(query[3:]))
+        switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if string == "!f" else str(query[5:]))
       
       count = len(articles) - 1
       if articles:
@@ -172,17 +181,679 @@ def answer(client, inline_query):
                 switch_pm_parameter="start",
                 next_offset="",
             )
-            
-        string = " ".join(string)
-        logger.warning(string)
-        if string == "":
-          inline_query.answer(
+        elif query.startswith('!ms'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
                     switch_pm_parameter="start",
                 )
           
+      
+          likeDate = "%" + str(string[3:]) + "%"
+          media = "Misc"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+            if offset == 0:
+              articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+            
+          except IndexError as e:
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Nothing has been uploaded so far", thumb_url=NOT_FOUND,
+                    description="Try by uploading something first",
+                    input_message_content=InputTextMessageContent(
+                    "Try uploading something first"
+                ))] 
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+      
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=IMG_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[3:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[3:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[3:])) == 0 else ress, all if len(str(string[3:])) < 1 else str(query[3:]))
+          elif not things:  
+            s = 's'
+            all = 'Misc'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[3:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+        elif query.startswith('!apk'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          likeDate = "%" + str(string[5:]) + "%"
+          media = "Apps"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+            if offset == 0:
+              articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+            
+          except IndexError as e:
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Nothing has been uploaded so far", thumb_url=NOT_FOUND,
+                    description="Try by uploading something first",
+                    input_message_content=InputTextMessageContent(
+                    "Try uploading something first"
+                ))] 
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+      
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=APK_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[5:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[5:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(query[5:]))
+          elif not things:  
+            s = 's'
+            all = 'Apps'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+        
+        
+        elif query.startswith('!exe'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          likeDate = "%" + str(string[5:]) + "%"
+          media = "Software"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+            if offset == 0:
+              articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+            
+          except IndexError as e:
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Nothing has been uploaded so far", thumb_url=NOT_FOUND,
+                    description="Try by uploading something first",
+                    input_message_content=InputTextMessageContent(
+                    "Try uploading something first"
+                ))] 
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+      
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=SOFTWARE_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[5:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[5:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(query[5:]))
+          elif not things:  
+            s = 's'
+            all = 'Software'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+        
+        elif query.startswith('!doc'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          likeDate = "%" + str(string[5:]) + "%"
+          media = "Document"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things) 
+          for ft in things:
+            su.append(str(ft[3]))
+          if (len(str(su)) == 0):
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            return
+          if offset == 0:
+            articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+      
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=DOC_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[5:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[5:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(query[5:]))
+          elif not things:  
+            s = 's'
+            all = 'Document'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+        elif query.startswith('!mp3'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          likeDate = "%" + str(string[5:]) + "%"
+          media = "Music"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things) 
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+            if offset == 0:
+              articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+            
+          except IndexError as e:
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Nothing has been uploaded so far", thumb_url=NOT_FOUND,
+                    description="Try by uploading something first",
+                    input_message_content=InputTextMessageContent(
+                    "Try uploading something first"
+                ))] 
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MP3_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[5:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[5:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(query[5:]))
+          elif not things:  
+            s = 's'
+            all = 'Music'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+        elif query.startswith('!vid'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          likeDate = "%" + str(string[5:]) + "%"
+          media = "Videos"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+            if offset == 0:
+              articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+            
+          except IndexError as e:
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Nothing has been uploaded so far", thumb_url=NOT_FOUND,
+                    description="Try by uploading something first",
+                    input_message_content=InputTextMessageContent(
+                    "Try uploading something first"
+                ))] 
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+      
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=IMG_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[5:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[5:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(query[5:]))
+          elif not things:  
+            s = 's'
+            all = 'Videos'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+        elif query.startswith('!zip'): 
+          logger.warning(string)
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          likeDate = "%" + str(string[5:]) + "%"
+          media = "Archives"
+          logger.warning(likeDate) 
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+          result = c.fetchall() 
+          con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE Media = ?", (media, ))  
+          rowcount = con.fetchone()[0]
+          things = [list(i) for i in result]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+            if offset == 0:
+              articles.append(
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title=str(su[0]),
+                    description="Your onestop mobile app search",
+                    input_message_content=InputTextMessageContent(
+                        "🖼 **Mobile Apps finder**\n\n"
+                        "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
+                    ),
+                    thumb_url=APK_SEARCH_THUMB,
+                )
+            )
+            
+          except IndexError as e:
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Nothing has been uploaded so far", thumb_url=NOT_FOUND,
+                    description="Try by uploading something first",
+                    input_message_content=InputTextMessageContent(
+                    "Try uploading something first"
+                ))] 
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+      
+          switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
+          if things:
+            s = 's'
+            all = str(su[0])
+        
+            for num, th in enumerate(things):
+              sw.append(str(th[0]))
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=IMG_THUMB,
+                    description="Click to view the details",
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                    ]  
+                ))) 
+            count = len(articles) - 1
+            res = ""
+            ress = ""
+            if len(str(string[5:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[5:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+        
+            switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[5:])) == 0 else ress, all if len(str(string[5:])) < 1 else str(query[5:]))
+          elif not things:  
+            s = 's'
+            all = 'Achives'
+            articles = [InlineQueryResultArticle(
+                    id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
+                    description="Try Searching for ("+str(rowcount)+")",
+                    input_message_content=InputTextMessageContent(
+                    "Here's how to install **Pyrogram**"
+                ))] 
+            count = len(articles) - 1
+            strings = (string[:8] + '..') if len(string) > 10 else string
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
+      
+          count = len(articles) - 1
+        
+        
+        
+            
         elif len(string) > 0:
           articles.append(
                 InlineQueryResultArticle(
@@ -193,20 +864,22 @@ def answer(client, inline_query):
                         "{} **Global Search**\n\n"
                         "`You can search globally for any uploaded file, media that has been uploaded to my storage. It doesn't matter if you are the uploader`".format(Emoji.MAGNIFYING_GLASS_TILTED_LEFT)
                     ),
-                    thumb_url=SEARCH_THUMB,
+                    thumb_url=GLOBAL_SEARCH_THUMB,
                 )
             )
           likeDate = "%" + str(query) + "%"
            
-          c.execute('SELECT DownloadId, Fname, FileId FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, offset ))
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, offset ))
           result = c.fetchall() 
           con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE User = ?", (chat_id, ))  
-    
+          
           rowcount = con.fetchone()[0]
           things = [list(i) for i in result]
+          for ft in things:
+            su.append(str(ft[3]))
           if things:
             s = 's'
-            all = 'Media'
+            all = str(su[0])
             for num, th in enumerate(things):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultArticle(
@@ -222,9 +895,16 @@ def answer(client, inline_query):
                 ))) 
                 
             count = len(articles) - 1
-        
-                
-            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if string == "!f" else str(query))
+            res = ""
+            ress = ""
+            nu = ""
+            if len(str(string[3:])) == 0:
+              res = "Items in category" if count > 1 else "Item in category"
+            if len(str(string[3:])) >= 1:
+              ress = "Results for" if count > 1 else "Result for"
+            if len(str(string[3:])) == 0:
+              nu = "and "+str(len(all))+" Others" if count > 1 else ""
+            switch_pm_text = "{} Found {} {} \"{} {}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[3:])) == 0 else ress, all if len(str(string[3:])) < 1 else str(query[3:]), nu)
           elif not things:  
             s = 's'
             all = 'Media'
@@ -236,7 +916,7 @@ def answer(client, inline_query):
                 ))] 
             count = len(articles) * 0
             strings = (string[:8] + '..') if len(string) > 10 else string
-            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.CROSS_MARK, str(count), s if count > 1 else '', strings if count <= 1 else str(query))
+            switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.CROSS_MARK, str(count), s if count > 1 else '', strings if count <= 1 else str(string))
         if articles:
           inline_query.answer(
             results=articles,
