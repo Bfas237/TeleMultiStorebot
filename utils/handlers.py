@@ -1,13 +1,23 @@
 from utils.typing import *
 import mimetypes
 import mimetypes, magic, math
-
+from utils.guess import *
 import time
-download_path = "{}/Downloads".format(os.getcwd())
-"""if not os.path.isdir(download_path):
-  os.makedirs(download_path)
-print(download_path)  """
+requests = requests.Session()
 
+
+
+download_path = "{}/Downloads".format(os.getcwd())
+if not os.path.isdir(download_path):
+  os.makedirs(download_path)
+options={}
+base_headers = {
+        'User-Agent':  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.5',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'zh-CN,zh;q=0.8'
+    }
+headers = dict(base_headers, **options)
+known_sessions_file = os.path.join(os.path.dirname(__file__), 'known_sessions')
 def timedate(dat):
     import timeago, datetime
     now = datetime.datetime.now() + datetime.timedelta(seconds = 1)
@@ -16,6 +26,15 @@ def timedate(dat):
 
 
 
+def read_known_sessions():
+    if not os.path.isfile(known_sessions_file):
+        return set()
+    with open(known_sessions_file, 'rb') as f:
+        return set(int(s.strip()) for s in f.readlines())
+
+def write_known_sessions(data):
+    with open(known_sessions_file, 'wb') as f:
+        f.write('\n'.join(str(s) for s in sorted(data)))
 def get_extension(media):
     """Gets the corresponding extension for any Telegram media"""
 
@@ -137,27 +156,7 @@ def DFromUToTelegramProgress(client,
                              msg,
                              chat_id,
                              start) -> None:
-    """
-    Use this method to update the progress of a download from/an upload to Telegram, this method is called every 512KB.
-    Update message every ~4 seconds.
-
-    client (:class:`Client <pyrogram.Client>`): The Client itself.
-
-    current (``int``): Currently downloaded/uploaded bytes.
-
-    total (``int``): File size in bytes.
-
-    msg (:class:`Message <pyrogram.Message>`): The Message to update while downloading/uploading the file.
-
-    chat_id (``int`` | ``str``): Unique identifier (int) or username (str) of the target chat. For your personal cloud (Saved Messages) you can simply use "me" or "self". For a contact that exists in your Telegram address book you can use his phone number (str). For a private channel/supergroup you can use its *t.me/joinchat/* link.
-
-    text (``str``): Text to put into the update.
-
-    start (``str``): Time when the operation started.
-
-
-    Returns ``None``.
-    """
+   
     # 1048576 is 1 MB in bytes
     text = "**⌛️ Uploading:**"
     now = time.time()
@@ -187,58 +186,15 @@ def DFromUToTelegramProgress(client,
                                                            estimated_total_time if estimated_total_time != '' else "0 s")
 
         msg.edit(text=text + tmp)
+        
+        
+        
+        
 common_words = frozenset(("if", "but", "and", "the", "when", "use", "to", "for"))
 title = "When to use Python for web applications"
 title_words = set(title.lower().split())
 keywords = title_words.difference(common_words)
-def mime_content_type(url, content_type, name):
-    """Get mime type
-    :param filename: str
-    :type filename: str
-    :rtype: str
-    """
 
-    filenam = basename(name)
-
-    exts = os.path.splitext(filenam)[1][1:].lower()
-    if exts:
-      exts = "."+exts
-    else:
-      exts = None
-      logger.warning("No filetype could be determined for '%s', skipping.",
-            filenam
-        )
-
-
-    if exts in common_types or exts in types_map:
-        ext = '{}'.format(exts)
-        mime_typ = '{}'.format(types_map[exts])
-        print(ext)
-        print(mime_typ)
-
-    elif content_type == 'image/jpeg' or content_type == 'image/jpg' or content_type == 'image/jpe':
-            ext = '.jpeg'
-
-    elif content_type == 'image/x-icon' or content_type == 'image/vnd.microsoft.icon':
-            ext = '.ico'
-
-    elif content_type == 'application/x-7z-compressed':
-            ext = '.7z'
-    elif content_type == 'image/png':
-            ext = '.png'
-
-    elif None == exts:
-        ext = mimetypes.guess_extension(content_type)
-        logger.warning("No extension for '%s', guessed '%s'.",
-        filenam, ext
-                  )
-
-        print(ext)
-    ent = ext
-
-    if ent in common_types or ent in types_map:
-        print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
-    return ext
 
 
 
@@ -261,33 +217,6 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
-
-
-
-def get_filename(url):
-    """
-    Does the url contain a downloadable resource
-    """
-    request = urllib.request.Request(url, headers=req_headers)
-    opener = urllib.request.build_opener()
-    response = opener.open(request)
-    code = response.code
-    headers = response.headers
-    if code < 400:
-       disassembled = urlparse(url)
-       filenam, file_ext = splitext(basename(disassembled.path))
-       if(filenam != None):
-         filename = unquote(filenam).strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-         ext = file_ext
-
-       else:
-          filename = url.split("/")[-1]
-          filename = unquote(filenam).strip('\n').replace('\"','').replace('\'','').replace('?','').replace(" ", "_")
-          required_file_name = os.path.basename(filename)
-          filename, ext = splitext(required_file_name)
-    return filename, ext
-
-
 
 
 def dynamic_data(data):
@@ -318,25 +247,42 @@ def fileExt(url):
     if None != matches:
         return matches.group(1)
     return None
+
 def get_filename(url):
     """
     Get an authentique filename from content-dispostion
     """
+    cookies = requests.cookies.get_dict()
+    cookies=cookies
+    result = requests.get(url, allow_redirects=True, stream=True, timeout=60.0, cookies=cookies)
+    cookies = dict(result.cookies)
+    cookies.update(result.cookies)
+    
+    #print sessions https://github.com/ibiBgOR/centr/blob/master/modules/m_runtastic.py
+    # known_sessions = read_known_sessions()
+    # for s in sessions:
+    #    if s['id'] in known_sessions:
+    #        continue
+    #    if check_download_session(urlparse.urljoin(r4.url, s['page_url']) + '.tcx', download_dir, cookies):
+    #        known_sessions.add(s['id'])
+    # write_known_sessions(known_sessions)
 
-# content-disposition = "Content-Disposition" ":"
-#                        disposition-type *( ";" disposition-parm )
-# disposition-type    = "inline" | "attachment" | disp-ext-type
-#                     ; case-insensitive
-# disp-ext-type       = token
-# disposition-parm    = filename-parm | disp-ext-parm
-# filename-parm       = "filename" "=" value
-#                     | "filename*" "=" ext-value
-# disp-ext-parm       = token "=" value
-#                     | ext-token "=" ext-value
-# ext-token           = <the characters in token, followed by "*">
-    result = requests.get(url, allow_redirects=True)
+    fname = None
+    cd = result.headers.get("content-disposition")
+    if cd:
+        value, params = cgi.parse_header(cd)
+        fname = params.get("filename")
+    content_type = ""
+    su = []
     code = result.status_code
     headers = result.headers
+    content_type = headers['content-type'] 
+    if 'text' in content_type.lower():
+        return False
+    if 'html' in content_type.lower():
+        return False
+    else:
+      pass
     if code < 400:
       token = '[-!#-\'*+.\dA-Z^-z|~]+'
       qdtext='[]-~\t !#-[]'
@@ -392,14 +338,46 @@ def get_filename(url):
       filenam, ext = splitext(basename(name))
       if ext:
         ext = fileExt(url)
-      else:
-        content_type = headers['content-type']
-        ext = mime_content_type(url, content_type, name)
-    return filenam, ext
+      if ext == None:
+        logger.warning("No filetype could be determined for '%s', skipping.",
+            filenam
+        )
+      if ext in common_types.keys() or ext in types_map.keys():
+        ext = '{}'.format(exts)
+        mime_typ = '{}'.format(types_map[exts])
+        print(ext)
+        print(mime_typ)
+
+      elif content_type == 'image/jpeg' or content_type == 'image/jpg' or content_type == 'image/jpe':
+            ext = '.jpeg'
+
+      elif content_type == 'image/x-icon' or content_type == 'image/vnd.microsoft.icon':
+            ext = '.ico'
+
+      elif content_type == 'application/x-7z-compressed':
+            ext = '.7z'
+      elif content_type == 'image/png':
+            ext = '.png'
+
+      elif None == ext:
+        ext = mimetypes.guess_extension(content_type)
+        logger.warning("No extension for '%s', guessed '%s'.",
+        filenam, ext
+                  )
+
+      ent = ext
+      if ent in common_types or ent in types_map:
+        print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
+      for k, v in types_map.items():
+        if content_type in v:
+          su.append(k)
+        
+    return[filenam, content_type, su, fname]
 
 
+#print(get_filename("https://codeload.github.com/pyrogram/pyrogram/zip/develop")) 
 
-
+  
 def generate_uuid():
         random_string = ''
         random_str_seq = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -472,13 +450,6 @@ def get_filename_from_cd(cd):
 
 
 
-options={}
-base_headers = {
-        'User-Agent':  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.5',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'zh-CN,zh;q=0.8'
-    }
-headers = dict(base_headers, **options)
 
 def DownL(url):
     fname, ext = get_filename(url)

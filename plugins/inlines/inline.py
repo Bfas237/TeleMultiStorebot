@@ -333,13 +333,13 @@ def answer(client, inline_query):
             "\n"
             "**Supported Syntax:**  `@jhbjh14514jjhbot <cmd> <terms>`"
             "\n\n"
-            "**Example:**    `@jhbjh14514jjhbot !apk telegram x`",
+            "**Example:**    `@jhbjh14514jjhbot !apk telegram`",
                 ),
         reply_markup=InlineKeyboardMarkup([[
            
             InlineKeyboardButton(
                 "Give it a try",
-                switch_inline_query_current_chat="!apk telegram x"
+                switch_inline_query_current_chat="!apk telegram"
             )]]),
                 description="Learn how to search for software",
                 thumb_url=INLINE_HELP_MOBILE_THUMB 
@@ -963,7 +963,7 @@ def answer(client, inline_query):
             )
           likeDate = "%" + str(query) + "%"
            
-          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, offset ))
+          c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, likeDate, offset ))
           result = c.fetchall() 
           con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE User = ?", (chat_id, ))  
           

@@ -26,7 +26,7 @@ def default_mime_types():
     global common_types
 
     suffix_map = {
-        '.svgz': '.svg.gz',
+        '.svgz': '. izahzjkghbb n  bnbb  .gz',
         '.tgz': '.tar.gz',
         '.taz': '.tar.gz',
         '.tz': '.tar.gz',
@@ -199,6 +199,5 @@ def default_mime_types():
         '.rtf' : 'application/rtf',
         '.xul' : 'text/xul'
         }
+    
 default_mime_types()
-
-
