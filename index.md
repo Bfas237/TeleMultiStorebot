@@ -1,6 +1,6 @@
 
 # Tele MultiStore Bot
-[![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.02-36ade1.svg)](https://docs.pyrogram.ml)
+[![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.04-36ade1.svg)](https://docs.pyrogram.ml)
 ![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.5-8892bf.svg)
 
 
@@ -11,7 +11,7 @@
 Requirements
 ---------
 
-* Python >=3.3
+* Python >=3.5
 * Telegram account.
 * Telegram API key, you can get one simply with [@BotFather](https://core.telegram.org/bots#botfather) with simple commands right after creating your bot.
 * Your own `API_ID` and `API_HASH` [HOW TO GET MY API CREDENTIALS](https://docs.pyrogram.ml/start/Setup.html#api-keys)
