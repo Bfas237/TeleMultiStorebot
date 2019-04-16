@@ -17,7 +17,7 @@ MEDIA_THUMB = "https://i.imgur.com/BduvHoV.png"
 GLOBAL_THUMB = "https://i.imgur.com/HQs8dvW.png"
 FILES_THUMB = "https://i.imgur.com/zL4AJqh.png"
 MP3_THUMB = "https://i.imgur.com/D7ILLy6.png"
-
+HELP_THUMB = "https://i.imgur.com/6jZsMYG.png"
 
 APK_SEARCH_THUMB = "https://i.imgur.com/HYX5seP.png"
 MISC_SEARCH_THUMB = "https://i.imgur.com/UVoYOYm.png"
@@ -26,6 +26,9 @@ GLOBAL_SEARCH_THUMB = "https://i.imgur.com/8FJuWCr.png"
 OTHER_THUMB = "https://i.imgur.com/d1tf976.png"
 NOT_FOUND = "https://i.imgur.com/nMQD6QN.png"
 ABOUT_BOT_THUMB = "https://i.imgur.com/zRglRz3.png"
+
+INLINE_HELP_SOFTWARE_THUMB = "https://i.imgur.com/lOZy5Db.png"
+INLINE_HELP_MOBILE_THUMB = "https://i.imgur.com/gq3baOK.png"
 
 HELP = (
     "{} **TELE MULTISTORE BOT**\n\n"
@@ -44,6 +47,10 @@ HELP = (
     "`@jhbjh14514jjhbot !v` – Videos\n"
     "`@jhbjh14514jjhbot !r` – Rar Files\n"
     "`@jhbjh14514jjhbot !ms` – Misc Files\n\n".format(Emoji.ROBOT_FACE)
+)
+HELP_INLINE = (
+    "{} **TELE MULTISTORE BOT**\n\n"
+    "To better understand how it works, lets go inline\n\n".format(Emoji.ROBOT_FACE)
 )
 
 
@@ -69,9 +76,6 @@ def answer(client, inline_query):
             "your uploaded files either through forwading, uploading "
             "or downloading from the web.".format(Emoji.CARD_INDEX_DIVIDERS),
                 ),
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton('Click me!',callback_data=b'inline_click')]]
-                ),
                 description="How to use Tele MultiStore",
                 thumb_url=ABOUT_BOT_THUMB 
             ),
@@ -81,9 +85,22 @@ def answer(client, inline_query):
                 input_message_content=InputTextMessageContent(HELP),
                 description="How to use Tele MultiStore Bot",
                 thumb_url=FILES_THUMB
+            ),
+            InlineQueryResultArticle(
+                id=uuid4(),
+                title="Help and Faqs",
+                input_message_content=InputTextMessageContent(HELP_INLINE),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [InlineKeyboardButton("⏏️ Inline Help 🆘", switch_inline_query_current_chat="!h")]
+                    ]  
+                ),
+                description="Useful faqs on how it works",
+                thumb_url=HELP_THUMB
             )
             
         ]
+    
     string = inline_query.query.lower()
     
     if string == "":
@@ -278,6 +295,86 @@ def answer(client, inline_query):
         
         
         
+            
+        elif query.startswith('!h'): 
+          logger.warning(string)
+          INLINE_HELP = [
+            InlineQueryResultArticle(
+                id=uuid4(),
+                title="💻 Software Search",
+                input_message_content=InputTextMessageContent(
+            "🖥️ **Software Search**\n\n"
+            "`Don't hassle any longer for you have it all. Search for your desired software "
+            "by typing either the full or just part of the name "
+            "or by extension. It works like magic.`\n"
+            "\n"
+            "**Supported Syntax:**  `@jhbjh14514jjhbot <cmd> <terms>`"
+            "\n\n"
+            "**Example:**    `@jhbjh14514jjhbot !exe idm`",
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Give it a try",
+                switch_inline_query_current_chat="!exe idm"
+            )]]),
+                description="Learn how to search for software",
+                thumb_url=INLINE_HELP_SOFTWARE_THUMB 
+            ),
+            
+            InlineQueryResultArticle(
+                id=uuid4(),
+                title="📱 Mobile Apps Search",
+                input_message_content=InputTextMessageContent(
+            "📱 **Mobile Apps Search**\n\n"
+            "`You can perform instantaneous app search using any "
+            " regex pattern either using the full app name "
+            "or by extension. It works like magic.`\n"
+            "\n"
+            "**Supported Syntax:**  `@jhbjh14514jjhbot <cmd> <terms>`"
+            "\n\n"
+            "**Example:**    `@jhbjh14514jjhbot !apk telegram x`",
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Give it a try",
+                switch_inline_query_current_chat="!apk telegram x"
+            )]]),
+                description="Learn how to search for software",
+                thumb_url=INLINE_HELP_MOBILE_THUMB 
+            )
+            
+            
+        ]
+          switch_pm_text = "🆘 TELE MULTISTORE HELP"
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+      
+          things = ["ok"]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[3]))
+          except IndexError as e:
+            articles = INLINE_HELP
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
+      
+        
+        
         elif query.startswith('!apk'): 
           logger.warning(string)
           if string == "":
@@ -308,7 +405,7 @@ def answer(client, inline_query):
                     title=str(su[0]),
                     description="Your onestop mobile app search",
                     input_message_content=InputTextMessageContent(
-                        "🖼 **Mobile Apps finder**\n\n"
+                        "📱 **Mobile Apps finder**\n\n"
                         "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
                     ),
                     thumb_url=APK_SEARCH_THUMB,
@@ -372,9 +469,6 @@ def answer(client, inline_query):
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
       
           count = len(articles) - 1
-        
-        
-        
         
         
         elif query.startswith('!exe'): 
