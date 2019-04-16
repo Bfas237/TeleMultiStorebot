@@ -16,7 +16,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 from uuid import uuid4 
 
 from pyrogram.errors import UserIsBlocked, FloodWait, FileIdInvalid, BadRequest, Flood, InternalServerError, SeeOther, Unauthorized, UnknownError
-from pyrogram.api.types import UserProfilePhoto, ChatPhoto, MessageMediaPhoto, MessageMediaDocument 
+from pyrogram.api.types import UserProfilePhoto, ChatPhoto, MessageMediaPhoto, MessageMediaDocument, InputBotInlineMessageID
 import random as r
 from requests import get
 import sqlite3 as lite

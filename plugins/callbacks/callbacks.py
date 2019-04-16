@@ -1,10 +1,29 @@
 from utils.typing import *
 from utils.menus import *    
-      
+from pyrogram import (
+    api, Emoji, Client, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaDocument 
+)
+from base64 import b64decode
+from struct import unpack
+
+def parse_inline_message_id(inline_message_id):
+    inline_message_id += "=" * ((4 - len(inline_message_id) % 4) % 4) 
+    dc_id, _id, access_hash = unpack("<iqq",b64decode(inline_message_id,"-_"))
+    return api.types.InputBotInlineMessageID(dc_id=dc_id,id=_id,access_hash=access_hash)
+
 @Client.on_callback_query()
 def pyrogram_data(m, query):
     global state  
     off = 0
+    if query.inline_message_id:
+      m.send(
+      api.functions.messages.EditInlineBotMessage(
+            id=parse_inline_message_id(query.inline_message_id),
+            message='Button clicked!'
+        )
+    )
+      m.answer_callback_query(query.id, "it works!")  
+  
     update = query 
     cb = query.data
     uploader = query.from_user.id
@@ -12,7 +31,6 @@ def pyrogram_data(m, query):
     logger.warning('%s and %s just pressed the keyboard button', uploader, chat_id)
     data = query.data
     dataid = query.id
-    
     data = data.split(b'%')
     
      
@@ -93,7 +111,7 @@ def pyrogram_data(m, query):
               items +=  (
               "<code>#{}</code> " 
               " <b>{}</b>"     
-              "\n<a href='https://telegram.me/TeleMultiStoreBot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/TeleMultiStoreBot?start=de_{}'>📍 Details</a>\n"       
+              "\n<a href='https://telegram.me/jhbjh14514jjhbot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/jhbjh14514jjhbot?start=de_{}'>📍 Details</a>\n"       
               "<i>{}</i>\n"  
               "------\n" 
               "".format(str(row[0]), row[1][:50], row[2], row[2], pretty_size(int(row[3]))))
@@ -111,7 +129,6 @@ def pyrogram_data(m, query):
         elif (offset < 0):
             m.answer_callback_query(query.id, "WTF! {}, 🙄 I can't go back to the future 😏".format(query.from_user.first_name), show_alert=True)
             offset = offset + 4
-            return
         elif (offset > rowcount):
             m.answer_callback_query(query.id, "Hold on! {}, That was it i have nothing more to show you 🚶🏼‍♂️🚶🏼‍♂️🚶🏼‍♂️".format(query.from_user.first_name), show_alert=True)
             offset = offset - 4
@@ -357,13 +374,14 @@ def pyrogram_data(m, query):
       return
     
     #mm =  state.get(update.message.chat.id).get('msgid')
-    kb = search_keyboard(offset=offset, rows=rowcount, last=last, show_download=show_download)
-    username = query.from_user.first_name
-    reply_markup = InlineKeyboardMarkup(kb)
+    
     
     if reply:
         try:
-           m.edit_message_text(
+            kb = search_keyboard(offset=offset, rows=rowcount, last=last, show_download=show_download)
+            username = query.from_user.first_name
+            reply_markup = InlineKeyboardMarkup(kb)
+            m.edit_message_text(
             chat_id=update.message.chat.id, 
              message_id=update.message.message_id,
             text="📄 <b>{}</b>'s files Library:   <b>{} out of {}</b> \n\n {}".format(username, offset, rowcount, reply),
@@ -371,17 +389,26 @@ def pyrogram_data(m, query):
             disable_web_page_preview=True,
             reply_markup=reply_markup
         ) 
+        
+        except UnboundLocalError as e:
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than 5\n\n\n🗳 Total Uploads: {}".format(rowcount), show_alert=True)
+          return
          
         except AttributeError as e: 
           logger.debug(e)
           m.answer_callback_query(query.id, "Hold on! {}, Your session has expired 🙄:(".format(query.from_user.first_name), show_alert=True)
           return
+        
         except MessageNotModified as e:
           logger.debug(e)
-          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than {}\n\n\n🗳 Total Uploads: {}".format(offset+4, rowcount), show_alert=True)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than 5\n\n\n🗳 Total Uploads: {}".format(rowcount), show_alert=True)
           return
     else:
         try:
+            kb = search_keyboard(offset=offset, rows=rowcount, last=last, show_download=show_download)
+            username = query.from_user.first_name
+            reply_markup = InlineKeyboardMarkup(kb)
             m.edit_message_reply_markup(update.message.chat.id, 
              update.message.message_id,reply_markup) 
         except AttributeError as e: 

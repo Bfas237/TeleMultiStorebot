@@ -1,6 +1,6 @@
 from utils.typing import *
 from pyrogram import (
-    Emoji, Client, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaDocument 
+    api, Emoji, Client, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaDocument 
 )
 data = {'details': {}, 'download':{}} 
 state = {}
@@ -37,6 +37,14 @@ HELP = (
     "`@jhbjh14514jjhbot !r` – Rar Files\n"
     "`@jhbjh14514jjhbot !ms` – Misc Files\n\n".format(Emoji.ROBOT_FACE)
 )
+from base64 import b64decode
+from struct import unpack
+
+def parse_inline_message_id(inline_message_id):
+    inline_message_id += "=" * ((4 - len(inline_message_id) % 4) % 4) 
+    dc_id, _id, access_hash = unpack("<iqq",b64decode(inline_message_id,"-_"))
+    return api.types.InputBotInlineMessageID(dc_id=dc_id,id=_id,access_hash=access_hash)
+
 
 @Client.on_inline_query() 
 def answer(client, inline_query):
@@ -59,6 +67,9 @@ def answer(client, inline_query):
             "Tele MultiStore is an advanced, easy-to-use Telegram bot that replaces keeps track of all "
             "your uploaded files either through forwading, uploading "
             "or downloading from the web.".format(Emoji.CARD_INDEX_DIVIDERS),
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton('Click me!',callback_data=b'inline_click')]]
                 ),
                 description="How to use Tele MultiStore",
                 thumb_url=ABOUT_BOT_THUMB 

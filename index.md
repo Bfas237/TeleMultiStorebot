@@ -103,10 +103,10 @@ If you don't want to go through all those hard process then just click the butto
 - [x] Asynchronous File Storage
 - [x] Lock and unlock Files
 - [x] Download and upload with progress bar
+- [x] Sort Files according to Media Types
 
 ## Features to be Added:
 
-- [ ] Sort Files according to Media Types
 - [ ] Cancel a particular Download
 - [ ] Decrypt and encrypt files with passwords
 - [ ] Unarchive archivable files
