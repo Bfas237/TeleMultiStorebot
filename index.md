@@ -1,11 +1,7 @@
 
 # Tele MultiStore Bot
 [![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.05-red.svg)](https://docs.pyrogram.ml)
-![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.5-8892bf.svg)
-
-[![LIBRARY](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://telegram.me/bfas237botdevs)
-
-[![LIBRARY](https://img.shields.io/badge/IRC-Channel-36ade1.svg)](https://telegram.me/https://webchat.freenode.net/?channels=##bfas237bots)
+![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.5-8892bf.svg) [![LIBRARY](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://telegram.me/bfas237botdevs) [![LIBRARY](https://img.shields.io/badge/IRC-Channel-36ade1.svg)](https://telegram.me/https://webchat.freenode.net/?channels=##bfas237bots)
 
 
 

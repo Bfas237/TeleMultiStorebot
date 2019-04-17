@@ -8,3 +8,8 @@ watch.json
 plugins/cool-file.js
 plugins/speed/speed.p
 unknown_errors.txt
+ignore
+trigger
+welcome
+logfile.txt
+plugins/welcome/welcome.py
