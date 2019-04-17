@@ -1,7 +1,12 @@
 
 # Tele MultiStore Bot
-[![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.04-36ade1.svg)](https://docs.pyrogram.ml)
+[![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.05-red.svg)](https://docs.pyrogram.ml)
 ![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.5-8892bf.svg)
+
+[![LIBRARY](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://telegram.me/bfas237botdevs)
+
+[![LIBRARY](https://img.shields.io/badge/IRC-Channel-36ade1.svg)](https://telegram.me/https://webchat.freenode.net/?channels=##bfas237bots)
+
 
 
 > An advanced Multipurpose [Telegram Bot](http://t.me/TeleMultiStoreBot) for uploading and sharing mdeia files across chats. 
@@ -15,6 +20,8 @@ Requirements
 * Telegram account.
 * Telegram API key, you can get one simply with [@BotFather](https://core.telegram.org/bots#botfather) with simple commands right after creating your bot.
 * Your own `API_ID` and `API_HASH` [HOW TO GET MY API CREDENTIALS](https://docs.pyrogram.ml/start/Setup.html#api-keys)
+
+
 Dependencies
 ---------
 - Pyrogram 
@@ -24,36 +31,19 @@ Dependencies
 - clint
 - python-magic
 - timeago
+- `Python-telegram-bot` For current inline support
 
 
 Normal Installation
 ---------
 
-There are two possible was of running this bot.
+Create env variables as the one below.
 
-##### 1. Using the ini file
+##### ENV Configuration
 
 * Replace the values as specified [HERE](https://docs.pyrogram.ml/start/Setup#api-keys).
 
-Your final ini file should look like this
-
-```
-[pyrogram]
-api_id = 12345
-api_hash = 0123456789abcdef0123456789abcdef
-
-[plugins]
-root = plugins
-
-```
-
-##### 2. ENV variables
-
-To achieve this, you will do as follows. 
-
 > If you use Heroku then this will be very easy to understand
-
-create env variables as the one below
 
 ```
 TOKEN="123456789:hdhdhdbhfjfkrp889g8g889"
@@ -61,6 +51,7 @@ APP_ID=12345
 API_HASH="0123456789abcdef0123456789abcdef"
 
 ```
+
 * Learn more about how to create and [deploy apps to Heroku](https://devcenter.heroku.com/articles/git#for-a-new-heroku-app)
 
 

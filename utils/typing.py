@@ -12,14 +12,15 @@ import shutil
 import sys
 from six.moves.urllib.parse import urlparse, urljoin
 
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+
 import atexit
-
-
-
 
 import warnings, random
 from random import randint 
-from pyrogram import Client, Filters, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove, ForceReply, ContinuePropagation
+from pyrogram import Client, Filters, ContinuePropagation, api, Emoji
 
 logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -29,7 +30,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 from uuid import uuid4 
 
 from pyrogram.errors import UserIsBlocked, FloodWait, FileIdInvalid, BadRequest, Flood, InternalServerError, SeeOther, Unauthorized, UnknownError
-from pyrogram.api.types import UserProfilePhoto, ChatPhoto, MessageMediaPhoto, MessageMediaDocument, InputBotInlineMessageID
+from pyrogram.api.types import UserProfilePhoto, ChatPhoto, MessageMediaPhoto, MessageMediaDocument, InputBotInlineMessageID, InputBotInlineMessageMediaAuto
 import random as r
 from requests import get
 import sqlite3 as lite

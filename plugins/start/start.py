@@ -18,3 +18,23 @@ def start(bot, m):
       smsg = "start_msg"
       id=m.chat.id 
     sent = m.reply(smsg.format(user, id), quote=True)
+BASE = "https://haste.thevillage.chat"
+
+logger.info('Plugin haste was imported')
+
+
+@Client.on_message(Filters.command("haste", '#'))
+def haste(client, message):
+    ok = message.reply('`ok`')
+    reply = message.reply_to_message
+    if reply:
+        text = reply.text
+    else:
+        text = message.text.replace('#haste ', '')
+
+    if not text:
+        return
+
+    result = requests.post("{}/documents".format(BASE), data=text.encode("UTF-8")).json()
+    print(result)
+    ok.edit("{}/{}".format(BASE, result["key"]))

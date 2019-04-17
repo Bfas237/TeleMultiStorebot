@@ -1,0 +1,511 @@
+2019-04-17 13:41:38,074 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7fe486e5ff28>
+2019-04-17 13:41:38,082 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:41:38,082 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:41:38,082 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:41:38,083 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:41:38,083 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:41:38,083 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:41:38,083 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:41:38,084 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:41:38,098 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:41:38,100 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:41:38,428 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:41:38,429 - telegram.bot - DEBUG - True
+2019-04-17 13:41:38,429 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:41:38,430 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:41:38,430 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:41:38,430 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:41:45,799 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 226
+2019-04-17 13:41:45,800 - telegram.bot - DEBUG - Getting updates: [343156655]
+2019-04-17 13:41:45,800 - telegram.bot - DEBUG - [<telegram.update.Update object at 0x7fe476dd9c18>]
+2019-04-17 13:41:45,800 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:41:45,800 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:41:45,800 - telegram.ext.dispatcher - DEBUG - Processing Update: {'update_id': 343156655, 'inline_query': {'from': {'first_name': 'Account Banned', 'id': 197005208, 'is_bot': False, 'language_code': 'fr', 'username': 'BFASCHAT'}, 'query': 'l', 'offset': '', 'id': '846130927023800336'}}
+2019-04-17 13:41:45,801 - __main__ - INFO - l
+2019-04-17 13:41:45,802 - telegram.bot - DEBUG - Entering: answer_inline_query
+2019-04-17 13:41:45,802 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (2): api.telegram.org
+2019-04-17 13:41:46,163 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/answerInlineQuery HTTP/1.1" 200 25
+2019-04-17 13:41:46,164 - telegram.bot - DEBUG - True
+2019-04-17 13:41:46,164 - telegram.bot - DEBUG - Exiting: answer_inline_query
+2019-04-17 13:41:55,883 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:41:55,884 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:41:55,884 - telegram.bot - DEBUG - []
+2019-04-17 13:41:55,884 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:41:55,884 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:05,967 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:42:05,967 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:42:05,968 - telegram.bot - DEBUG - []
+2019-04-17 13:42:05,968 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:42:05,968 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:16,052 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:42:16,053 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:42:16,053 - telegram.bot - DEBUG - []
+2019-04-17 13:42:16,053 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:42:16,053 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:26,136 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:42:26,137 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:42:26,137 - telegram.bot - DEBUG - []
+2019-04-17 13:42:26,137 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:42:26,137 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:28,117 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7ff88e4fdf28>
+2019-04-17 13:42:28,118 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:42:28,119 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:42:28,119 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:42:28,120 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:42:28,120 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:42:28,120 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:42:28,120 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:42:28,122 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:42:28,136 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:42:28,138 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:42:28,476 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:42:28,477 - telegram.bot - DEBUG - True
+2019-04-17 13:42:28,477 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:42:28,477 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:42:28,477 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:42:28,477 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:38,563 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:42:38,563 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:42:38,563 - telegram.bot - DEBUG - []
+2019-04-17 13:42:38,563 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:42:38,563 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:47,293 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7fad91381f28>
+2019-04-17 13:42:47,295 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:42:47,296 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:42:47,296 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:42:47,296 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:42:47,297 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:42:47,297 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:42:47,297 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:42:47,299 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:42:47,327 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:42:47,330 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:42:47,646 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:42:47,647 - telegram.bot - DEBUG - True
+2019-04-17 13:42:47,647 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:42:47,647 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:42:47,647 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:42:47,647 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:42:57,730 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:42:57,731 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:42:57,731 - telegram.bot - DEBUG - []
+2019-04-17 13:42:57,731 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:42:57,731 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:43:07,818 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:43:07,819 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:43:07,819 - telegram.bot - DEBUG - []
+2019-04-17 13:43:07,819 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:43:07,819 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:43:17,910 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:43:17,910 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:43:17,911 - telegram.bot - DEBUG - []
+2019-04-17 13:43:17,911 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:43:17,911 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:43:27,996 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:43:27,996 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:43:27,996 - telegram.bot - DEBUG - []
+2019-04-17 13:43:27,997 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:43:27,997 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:43:38,080 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:43:38,080 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:43:38,080 - telegram.bot - DEBUG - []
+2019-04-17 13:43:38,080 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:43:38,080 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:43:48,164 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:43:48,164 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:43:48,165 - telegram.bot - DEBUG - []
+2019-04-17 13:43:48,165 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:43:48,165 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:44:03,483 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f63327e1ef0>
+2019-04-17 13:44:03,485 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:44:03,485 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:44:03,486 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:44:03,488 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:44:03,488 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:44:03,488 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:44:03,488 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:44:03,488 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:44:03,501 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:44:03,502 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:44:03,837 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:44:03,838 - telegram.bot - DEBUG - True
+2019-04-17 13:44:03,838 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:44:03,838 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:44:03,838 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:44:03,838 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:44:40,578 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f207eb40128>
+2019-04-17 13:44:40,579 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:44:40,580 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:44:40,581 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:44:40,583 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:44:40,583 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:44:40,583 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:44:40,583 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:44:40,583 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:44:40,600 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:44:40,602 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:44:40,932 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:44:40,933 - telegram.bot - DEBUG - True
+2019-04-17 13:44:40,933 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:44:40,933 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:44:40,934 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:44:40,934 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:45:47,653 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7fc0dc74c128>
+2019-04-17 13:45:47,654 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:45:47,655 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:45:47,655 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:45:47,655 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:45:47,655 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:45:47,655 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:45:47,656 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:45:47,657 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:45:47,667 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:45:47,669 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:45:47,994 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:45:47,994 - telegram.bot - DEBUG - True
+2019-04-17 13:45:47,995 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:45:47,995 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:45:47,995 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:45:47,995 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:45:58,078 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:45:58,078 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:45:58,079 - telegram.bot - DEBUG - []
+2019-04-17 13:45:58,079 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:45:58,079 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:46:15,193 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7fb8e2c87128>
+2019-04-17 13:46:15,195 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:46:15,195 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:46:15,195 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:46:15,196 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:46:15,196 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:46:15,196 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:46:15,196 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:46:15,197 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:46:15,206 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:46:15,208 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:46:15,537 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:46:15,538 - telegram.bot - DEBUG - True
+2019-04-17 13:46:15,538 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:46:15,538 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:46:15,538 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:46:15,539 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:46:25,621 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:46:25,622 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:46:25,622 - telegram.bot - DEBUG - []
+2019-04-17 13:46:25,622 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:46:25,622 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:46:35,707 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:46:35,707 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:46:35,707 - telegram.bot - DEBUG - []
+2019-04-17 13:46:35,708 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:46:35,708 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:46:41,137 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7fafd70360f0>
+2019-04-17 13:46:41,142 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:46:41,144 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:46:41,144 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:46:41,144 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:46:41,145 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:46:41,145 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:46:41,146 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:46:41,148 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:46:41,166 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:46:41,169 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:46:42,403 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f51fef650f0>
+2019-04-17 13:46:42,405 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:46:42,406 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:46:42,406 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:46:42,406 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:46:42,406 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:46:42,406 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:46:42,407 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:46:42,408 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:46:42,420 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:46:42,422 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:46:42,743 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:46:42,744 - telegram.bot - DEBUG - True
+2019-04-17 13:46:42,745 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:46:42,745 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:46:42,745 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:46:42,745 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:46:52,828 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:46:52,829 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:46:52,829 - telegram.bot - DEBUG - []
+2019-04-17 13:46:52,829 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:46:52,829 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:46:54,167 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7ff21109b128>
+2019-04-17 13:46:54,171 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:46:54,174 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:46:54,174 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:46:54,176 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:46:54,176 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:46:54,176 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:46:54,176 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:46:54,177 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:46:54,216 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:46:54,235 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:46:54,612 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:46:54,613 - telegram.bot - DEBUG - True
+2019-04-17 13:46:54,613 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:46:54,613 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:46:54,613 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:46:54,614 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:04,709 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:47:04,709 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:47:04,709 - telegram.bot - DEBUG - []
+2019-04-17 13:47:04,709 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:04,709 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:14,800 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:47:14,801 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:47:14,801 - telegram.bot - DEBUG - []
+2019-04-17 13:47:14,801 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:14,801 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:17,045 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f752d74b0f0>
+2019-04-17 13:47:17,047 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:47:17,048 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:47:17,049 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:47:17,049 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:47:17,049 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:47:17,049 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:47:17,050 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:47:17,051 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:47:17,066 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:47:17,069 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:47:17,394 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:47:17,395 - telegram.bot - DEBUG - True
+2019-04-17 13:47:17,395 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:47:17,395 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:47:17,395 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:47:17,395 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:17,477 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 227
+2019-04-17 13:47:17,478 - telegram.bot - DEBUG - Getting updates: [343156656]
+2019-04-17 13:47:17,478 - telegram.bot - DEBUG - [<telegram.update.Update object at 0x7f752c0e00b8>]
+2019-04-17 13:47:17,478 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:17,478 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:17,479 - telegram.ext.dispatcher - DEBUG - Processing Update: {'inline_query': {'id': '846130929273310783', 'offset': '', 'query': 'lj', 'from': {'username': 'BFASCHAT', 'id': 197005208, 'language_code': 'fr', 'is_bot': False, 'first_name': 'Account Banned'}}, 'update_id': 343156656}
+2019-04-17 13:47:17,479 - __main__ - INFO - lj
+2019-04-17 13:47:17,479 - telegram.ext.dispatcher - ERROR - An uncaught error was raised while processing the update
+Traceback (most recent call last):
+  File "/app/.data/6193a291f30f888a15758094388052f6-site-packages/telegram/ext/dispatcher.py", line 333, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/app/.data/6193a291f30f888a15758094388052f6-site-packages/telegram/ext/handler.py", line 117, in handle_update
+    return self.callback(update, context)
+  File "bot.py", line 78, in inlinequery
+    c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, likeDate, offset ))
+NameError: name 'offset' is not defined
+2019-04-17 13:47:25,375 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 311
+2019-04-17 13:47:25,375 - telegram.bot - DEBUG - Getting updates: [343156657]
+2019-04-17 13:47:25,376 - telegram.bot - DEBUG - [<telegram.update.Update object at 0x7f752c0e0908>]
+2019-04-17 13:47:25,376 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:25,376 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:25,377 - telegram.ext.dispatcher - DEBUG - Processing Update: {'update_id': 343156657, 'message': {'new_chat_members': [], 'caption_entities': [], 'chat': {'username': 'BFASCHAT', 'id': 197005208, 'type': 'private', 'first_name': 'Account Banned'}, 'group_chat_created': False, 'delete_chat_photo': False, 'supergroup_chat_created': False, 'message_id': 8972, 'photo': [], 'date': 1555508845, 'text': 'L', 'new_chat_photo': [], 'entities': [], 'from': {'username': 'BFASCHAT', 'id': 197005208, 'language_code': 'fr', 'is_bot': False, 'first_name': 'Account Banned'}, 'channel_chat_created': False}}
+2019-04-17 13:47:28,104 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 225
+2019-04-17 13:47:28,105 - telegram.bot - DEBUG - Getting updates: [343156658]
+2019-04-17 13:47:28,105 - telegram.bot - DEBUG - [<telegram.update.Update object at 0x7f752c094588>]
+2019-04-17 13:47:28,105 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:28,105 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:28,105 - telegram.ext.dispatcher - DEBUG - Processing Update: {'inline_query': {'id': '846130928237813347', 'offset': '', 'query': '', 'from': {'username': 'BFASCHAT', 'id': 197005208, 'language_code': 'fr', 'is_bot': False, 'first_name': 'Account Banned'}}, 'update_id': 343156658}
+2019-04-17 13:47:28,106 - __main__ - INFO - 
+2019-04-17 13:47:28,106 - telegram.bot - DEBUG - Entering: answer_inline_query
+2019-04-17 13:47:28,106 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (2): api.telegram.org
+2019-04-17 13:47:28,773 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/answerInlineQuery HTTP/1.1" 200 25
+2019-04-17 13:47:28,773 - telegram.bot - DEBUG - True
+2019-04-17 13:47:28,773 - telegram.bot - DEBUG - Exiting: answer_inline_query
+2019-04-17 13:47:38,189 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:47:38,189 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:47:38,190 - telegram.bot - DEBUG - []
+2019-04-17 13:47:38,190 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:38,190 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:41,116 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 227
+2019-04-17 13:47:41,117 - telegram.bot - DEBUG - Getting updates: [343156659]
+2019-04-17 13:47:41,117 - telegram.bot - DEBUG - [<telegram.update.Update object at 0x7f752c094d30>]
+2019-04-17 13:47:41,117 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:41,117 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:47:41,118 - telegram.ext.dispatcher - DEBUG - Processing Update: {'inline_query': {'id': '846130926705896752', 'offset': '', 'query': 'mp', 'from': {'username': 'BFASCHAT', 'id': 197005208, 'language_code': 'fr', 'is_bot': False, 'first_name': 'Account Banned'}}, 'update_id': 343156659}
+2019-04-17 13:47:41,118 - __main__ - INFO - mp
+2019-04-17 13:47:41,118 - telegram.ext.dispatcher - ERROR - An uncaught error was raised while processing the update
+Traceback (most recent call last):
+  File "/app/.data/6193a291f30f888a15758094388052f6-site-packages/telegram/ext/dispatcher.py", line 333, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/app/.data/6193a291f30f888a15758094388052f6-site-packages/telegram/ext/handler.py", line 117, in handle_update
+    return self.callback(update, context)
+  File "bot.py", line 78, in inlinequery
+    c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, likeDate, offset ))
+NameError: name 'offset' is not defined
+2019-04-17 13:47:51,200 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:47:51,201 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:47:51,201 - telegram.bot - DEBUG - []
+2019-04-17 13:47:51,201 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:47:51,201 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:01,284 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:48:01,284 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:48:01,285 - telegram.bot - DEBUG - []
+2019-04-17 13:48:01,285 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:48:01,285 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:11,369 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:48:11,369 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:48:11,369 - telegram.bot - DEBUG - []
+2019-04-17 13:48:11,370 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:48:11,370 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:18,081 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f0a8a5a90b8>
+2019-04-17 13:48:18,082 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:48:18,083 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:48:18,083 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:48:18,083 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:48:18,083 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:48:18,083 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:48:18,084 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:48:18,085 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:48:18,094 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:48:18,095 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:48:18,422 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:48:18,423 - telegram.bot - DEBUG - True
+2019-04-17 13:48:18,424 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:48:18,424 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:48:18,424 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:48:18,424 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:28,507 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:48:28,508 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:48:28,508 - telegram.bot - DEBUG - []
+2019-04-17 13:48:28,508 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:48:28,508 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:38,591 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:48:38,591 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:48:38,591 - telegram.bot - DEBUG - []
+2019-04-17 13:48:38,591 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:48:38,591 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:48,674 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:48:48,675 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:48:48,675 - telegram.bot - DEBUG - []
+2019-04-17 13:48:48,675 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:48:48,675 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:48:58,758 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:48:58,758 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:48:58,758 - telegram.bot - DEBUG - []
+2019-04-17 13:48:58,758 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:48:58,759 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:49:08,843 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:49:08,843 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:49:08,843 - telegram.bot - DEBUG - []
+2019-04-17 13:49:08,843 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:49:08,843 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:49:18,929 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:49:18,930 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:49:18,930 - telegram.bot - DEBUG - []
+2019-04-17 13:49:18,930 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:49:18,930 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:49:29,014 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:49:29,015 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:49:29,015 - telegram.bot - DEBUG - []
+2019-04-17 13:49:29,015 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:49:29,015 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:49:33,993 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7fedd17890f0>
+2019-04-17 13:49:33,994 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:49:33,995 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:49:33,995 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:49:33,995 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:49:33,995 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:49:33,996 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:49:33,996 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:49:33,998 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:49:34,009 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:49:34,010 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:49:34,341 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:49:34,342 - telegram.bot - DEBUG - True
+2019-04-17 13:49:34,343 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:49:34,343 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:49:34,343 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:49:34,343 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:49:43,008 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7ff95b96a0b8>
+2019-04-17 13:49:43,010 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:49:43,011 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:49:43,011 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:49:43,012 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:49:43,012 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:49:43,012 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:49:43,012 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:49:43,014 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:49:43,029 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:49:43,031 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:49:43,371 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:49:43,372 - telegram.bot - DEBUG - True
+2019-04-17 13:49:43,372 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:49:43,373 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:49:43,373 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:49:43,373 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:49:53,197 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7faa8adb30f0>
+2019-04-17 13:49:53,198 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:49:53,199 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:49:53,199 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:49:53,199 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:49:53,199 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:49:53,199 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:49:53,200 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:49:53,201 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:49:53,211 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:49:53,213 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:49:53,568 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:49:53,569 - telegram.bot - DEBUG - True
+2019-04-17 13:49:53,569 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:49:53,570 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:49:53,570 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:49:53,570 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:50:02,077 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f00013160f0>
+2019-04-17 13:50:02,082 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:50:02,085 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:50:02,086 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:50:02,086 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:50:02,086 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:50:02,086 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:50:02,086 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:50:02,092 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:50:02,106 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:50:02,108 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"
+2019-04-17 13:50:02,459 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/deleteWebhook HTTP/1.1" 200 68
+2019-04-17 13:50:02,460 - telegram.bot - DEBUG - True
+2019-04-17 13:50:02,460 - telegram.bot - DEBUG - Exiting: delete_webhook
+2019-04-17 13:50:02,461 - telegram.ext.updater - DEBUG - Bootstrap done
+2019-04-17 13:50:02,461 - telegram.ext.updater - DEBUG - Start network loop retry getting Updates
+2019-04-17 13:50:02,461 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:50:12,551 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:50:12,552 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:50:12,552 - telegram.bot - DEBUG - []
+2019-04-17 13:50:12,552 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:50:12,552 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:50:16,168 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 229
+2019-04-17 13:50:16,169 - telegram.bot - DEBUG - Getting updates: [343156660]
+2019-04-17 13:50:16,169 - telegram.bot - DEBUG - [<telegram.update.Update object at 0x7f00000dcfd0>]
+2019-04-17 13:50:16,169 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:50:16,169 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:50:16,169 - telegram.ext.dispatcher - DEBUG - Processing Update: {'inline_query': {'query': '!pic', 'from': {'language_code': 'fr', 'is_bot': False, 'username': 'BFASCHAT', 'first_name': 'Account Banned', 'id': 197005208}, 'offset': '', 'id': '846130926053868021'}, 'update_id': 343156660}
+2019-04-17 13:50:16,170 - __main__ - INFO - !pic
+2019-04-17 13:50:16,170 - __main__ - WARNING - %%
+2019-04-17 13:50:16,170 - telegram.ext.dispatcher - ERROR - An uncaught error was raised while processing the update
+Traceback (most recent call last):
+  File "/app/.data/6193a291f30f888a15758094388052f6-site-packages/telegram/ext/dispatcher.py", line 333, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/app/.data/6193a291f30f888a15758094388052f6-site-packages/telegram/ext/handler.py", line 117, in handle_update
+    return self.callback(update, context)
+  File "bot.py", line 77, in inlinequery
+    c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Media = ? AND Fname LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (media, likeDate, offset ))
+NameError: name 'offset' is not defined
+2019-04-17 13:50:26,261 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:50:26,262 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:50:26,262 - telegram.bot - DEBUG - []
+2019-04-17 13:50:26,262 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:50:26,262 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:50:36,357 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - https://api.telegram.org:443 "POST /bot770345593:AAF1j7Efjwn8dRXamGRHCPC-kPG4PtDbQpA/getUpdates HTTP/1.1" 200 23
+2019-04-17 13:50:36,358 - telegram.bot - DEBUG - No new updates found.
+2019-04-17 13:50:36,358 - telegram.bot - DEBUG - []
+2019-04-17 13:50:36,358 - telegram.bot - DEBUG - Exiting: get_updates
+2019-04-17 13:50:36,358 - telegram.bot - DEBUG - Entering: get_updates
+2019-04-17 13:50:51,272 - telegram.ext.dispatcher - DEBUG - Setting singleton dispatcher as <telegram.ext.dispatcher.Dispatcher object at 0x7f431f527f28>
+2019-04-17 13:50:51,273 - JobQueue - DEBUG - JobQueue thread started
+2019-04-17 13:50:51,274 - telegram.ext.updater - DEBUG - dispatcher - started
+2019-04-17 13:50:51,274 - telegram.ext.updater - DEBUG - updater - started
+2019-04-17 13:50:51,274 - telegram.ext.updater - DEBUG - Updater thread started (polling)
+2019-04-17 13:50:51,274 - telegram.ext.updater - DEBUG - Start network loop retry bootstrap del webhook
+2019-04-17 13:50:51,274 - telegram.bot - DEBUG - Entering: delete_webhook
+2019-04-17 13:50:51,275 - telegram.vendor.ptb_urllib3.urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.telegram.org
+2019-04-17 13:50:51,276 - telegram.ext.dispatcher - DEBUG - Dispatcher started
+2019-04-17 13:50:51,292 - utils.typing - INFO - Plugin haste was imported
+2019-04-17 13:50:51,295 - pyrogram.client.client - WARNING - Successfully loaded 12 plugins from "plugins"

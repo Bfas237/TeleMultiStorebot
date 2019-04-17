@@ -1,72 +1,7 @@
-from utils.typing import *
-from docs.docs import *
-
-import logging
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
- 
-def answer_inline(update, inline_query):
-    """Handle the inline query."""
-    query = update.inline_query.query
-    logger.info(query) 
-    chat_id = update.effective_user.id
-    userd = chat_id 
-    articles = []
-    sw = []
-    conn = sqlite3.connect('inshorts.db') 
-    c = conn.cursor()
-    con = conn.cursor()
-    switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.OPEN_FILE_FOLDER)
-    DEFAULT_RESULTS = [
-            InlineQueryResultArticle(
-                id=uuid4(),
-                title="About Tele MultiStore Bot",
-                input_message_content=InputTextMessageContent(
-            "{} **Tele MultiStore**\n\n"
-            "Tele MultiStore is an advanced, easy-to-use Telegram bot that replaces keeps track of all "
-            "your uploaded files either through forwading, uploading "
-            "or downloading from the web.".format(Emoji.CARD_INDEX_DIVIDERS),
-                ),
-                description="How to use Tele MultiStore",
-                thumb_url=ABOUT_BOT_THUMB 
-            ),
-            InlineQueryResultArticle(
-                id=uuid4(),
-                title="Usage",
-                input_message_content=InputTextMessageContent(HELP),
-                description="How to use Tele MultiStore Bot",
-                thumb_url=FILES_THUMB
-            ),
-            InlineQueryResultArticle(
-                id=uuid4(),
-                title="Help and Faqs",
-                input_message_content=InputTextMessageContent(HELP_INLINE),
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [InlineKeyboardButton("⏏️ Inline Help 🆘", switch_inline_query_current_chat="!h")]
-                    ]  
-                ),
-                description="Useful faqs on how it works",
-                thumb_url=HELP_THUMB
-            )
-            
-        ]
-    
-    string = update.inline_query.query.lower()
-    
-    if string == "":
-        update.inline_query.answer(
-            results=DEFAULT_RESULTS,
-            cache_time=CACHE_TIME, 
-            is_personal=True,
-            switch_pm_text=switch_pm_text,
-            switch_pm_parameter="start",
-        )
-
-        return
-    offset = int(update.inline_query.offset or 0)
-    su = []
+#@Client.on_inline_query() 
+def ddanswer():
     if query.startswith('!pic'):
       likeDate = "%" + str(query[5:]) + "%"
       media = "Pictures"
@@ -80,7 +15,7 @@ def answer_inline(update, inline_query):
       for ft in things:
         su.append(str(ft[3]))
       if offset == 0:
-            articles = [
+            articles.append(
                 InlineQueryResultArticle(
                     id=uuid4(),
                     title=str(su[0]),
@@ -91,7 +26,7 @@ def answer_inline(update, inline_query):
                     ),
                     thumb_url=MISC_SEARCH_THUMB,
                 )
-            ]
+            )
       switch_pm_text = "{} TELE MULTISTORE BOT".format(Emoji.BALLOT_BOX_WITH_BALLOT)
       if things:
         s = 's'
@@ -100,12 +35,12 @@ def answer_inline(update, inline_query):
         for num, th in enumerate(things):
           sw.append(str(th[0]))
           articles.append(InlineQueryResultCachedPhoto(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,photo_file_id="{}".format(str(th[2])),
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                photo_file_id=str(th[3]),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!pic "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
         count = len(articles) - 1
@@ -132,16 +67,16 @@ def answer_inline(update, inline_query):
       
       count = len(articles) - 1
       if articles:
-        update.inline_query.answer(
+        inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
             switch_pm_parameter="start",
-            offset=offset if not offset > count else 4,
+            next_offset=offset,
         ) 
     else:
         if offset:
-            update.inline_query.answer(
+            inline_query.answer(
                 results=[],
                 cache_time=CACHE_TIME,
                 switch_pm_text=switch_pm_text,
@@ -151,7 +86,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!ms'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -192,7 +127,7 @@ def answer_inline(update, inline_query):
                     input_message_content=InputTextMessageContent(
                     "Try uploading something first"
                 ))] 
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -216,7 +151,7 @@ def answer_inline(update, inline_query):
                 ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!f "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!ms "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -299,7 +234,7 @@ def answer_inline(update, inline_query):
         ]
           switch_pm_text = "🆘 TELE MULTISTORE HELP"
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -314,7 +249,7 @@ def answer_inline(update, inline_query):
               su.append(str(ft[3]))
           except IndexError as e:
             articles = INLINE_HELP
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -328,7 +263,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!apk'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -369,7 +304,7 @@ def answer_inline(update, inline_query):
                     input_message_content=InputTextMessageContent(
                     "Try uploading something first"
                 ))] 
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -385,13 +320,15 @@ def answer_inline(update, inline_query):
         
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              articles.append(InlineQueryResultCachedDocument(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=APK_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!apk "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -422,7 +359,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!exe'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -463,7 +400,7 @@ def answer_inline(update, inline_query):
                     input_message_content=InputTextMessageContent(
                     "Try uploading something first"
                 ))] 
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -479,13 +416,15 @@ def answer_inline(update, inline_query):
         
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              articles.append(InlineQueryResultCachedDocument(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=SOFTWARE_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!exe "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -518,7 +457,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!doc'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -566,13 +505,15 @@ def answer_inline(update, inline_query):
         
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              articles.append(InlineQueryResultCachedDocument(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=DOC_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!doc "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -604,7 +545,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!mp3'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -645,7 +586,7 @@ def answer_inline(update, inline_query):
                     input_message_content=InputTextMessageContent(
                     "Try uploading something first"
                 ))] 
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -660,13 +601,15 @@ def answer_inline(update, inline_query):
         
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              articles.append(InlineQueryResultCachedAudio(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,audio_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MP3_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!mp3 "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -698,7 +641,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!vid'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -739,7 +682,7 @@ def answer_inline(update, inline_query):
                     input_message_content=InputTextMessageContent(
                     "Try uploading something first"
                 ))] 
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -755,13 +698,15 @@ def answer_inline(update, inline_query):
         
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              articles.append(InlineQueryResultCachedVideo(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,video_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=IMG_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!vid "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -793,7 +738,7 @@ def answer_inline(update, inline_query):
         elif query.startswith('!zip'): 
           logger.warning(string)
           if string == "":
-            update.inline_query.answer(
+            inline_query.answer(
                     results=[],
                     cache_time=CACHE_TIME,
                     switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
@@ -834,7 +779,7 @@ def answer_inline(update, inline_query):
                     input_message_content=InputTextMessageContent(
                     "Try uploading something first"
                 ))] 
-            update.inline_query.answer(
+            inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
@@ -850,13 +795,15 @@ def answer_inline(update, inline_query):
         
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              articles.append(InlineQueryResultCachedDocument(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=IMG_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
+                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query="!zip "+str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
             count = len(articles) - 1
@@ -885,6 +832,62 @@ def answer_inline(update, inline_query):
         
         
         
+        
+        elif query.startswith('!tri'): 
+          logger.warning(string)
+          
+          switch_pm_text = "🆘 TELE MULTISTORE HELP"
+          if string == "":
+            inline_query.answer(
+                    results=[],
+                    cache_time=CACHE_TIME,
+                    switch_pm_text="{} Type to search Raw Docs".format(Emoji.MAGNIFYING_GLASS_TILTED_RIGHT),
+                    switch_pm_parameter="start",
+                )
+          
+          if len(string[6:]) > 1:
+            BASE = "https://haste.thevillage.chat"
+            result = requests.post("{}/documents".format(BASE), data=string[6:].encode("UTF-8")).json()
+            inl = ["{}/{}".format(BASE, result["key"])]
+            inls = ["{}".format(result["key"])]
+            
+            INLINE_HELP = [
+            InlineQueryResultArticle(
+                id=uuid4(),
+                title="✅ Success",
+                input_message_content=InputTextMessageContent(str(inl[0])),
+                description=str(inl[0]),
+                thumb_url=INLINE_HELP_SOFTWARE_THUMB 
+            )
+            
+        ]
+          
+          else:
+            INLINE_HELP = [
+            InlineQueryResultArticle(
+                id=uuid4(),
+                title="Inline HasteBin",
+                input_message_content=InputTextMessageContent("Inline HasteBin"),
+                description="Inline HasteBin",
+                thumb_url=INLINE_HELP_SOFTWARE_THUMB 
+            )
+            
+        ]
+          things = ["ok"]
+          logger.warning('Query "%s"', things)
+          try:
+            for ft in things:
+              su.append(str(ft[4]))
+          except IndexError as e:
+            articles = INLINE_HELP
+            inline_query.answer(
+            results=articles,
+            cache_time=CACHE_TIME,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="start",
+            next_offset=offset,
+        ) 
+            return
             
         elif len(string) > 0:
           articles.append(
@@ -900,7 +903,7 @@ def answer_inline(update, inline_query):
                 )
             )
           likeDate = "%" + str(query) + "%"
-          med = []
+           
           c.execute('SELECT DownloadId, Fname, FileId, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 8 OFFSET ?', (likeDate, likeDate, likeDate, offset ))
           result = c.fetchall() 
           con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE User = ?", (chat_id, ))  
@@ -914,51 +917,18 @@ def answer_inline(update, inline_query):
             all = str(su[0])
             for num, th in enumerate(things):
               sw.append(str(th[0]))
-              med.append(th[3])
-              for me in med:
-                if 'Music' in me:
-                  articles.append(InlineQueryResultCachedAudio(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,audio_file_id="{}".format(str(th[2])),
+              articles.append(InlineQueryResultArticle(
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=GLOBAL_THUMB,
                     description="Click to view the details",
-                    caption="{}".format(str(th[1])),
+                    input_message_content=InputTextMessageContent(
+                    "{}".format(str(th[1]))
+                ),
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
                     ]  
                 ))) 
-                elif 'Video' in me:
-                  
-                  articles.append(InlineQueryResultCachedVideo(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,video_file_id="{}".format(str(th[2])),
-                    description="Click to view the details",
-                    caption="{}".format(str(th[1])),
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
-                    ]  
-                ))) 
-                elif 'Pictures' in me:
-                  
-                  articles.append(InlineQueryResultCachedPhoto(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,photo_file_id="{}".format(str(th[2])),
-                    description="Click to view the details",
-                    caption="{}".format(str(th[1])),
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
-                    ]  
-                ))) 
-                else:
-                  articles.append(InlineQueryResultCachedDocument(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
-                    description="Click to view the details",
-                    caption="{}".format(str(th[1])),
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [InlineKeyboardButton("🔄 Send to another Chat", switch_inline_query=str(sw[0]))], [InlineKeyboardButton("📥 Instant Download", url="https://telegram.me/jhbjh14514jjhbot?start=dl_"+str(sw[0]))]
-                    ]  
-                ))) 
-                 
+                
             count = len(articles) - 1
             res = ""
             ress = ""
@@ -983,15 +953,15 @@ def answer_inline(update, inline_query):
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.CROSS_MARK, str(count), s if count > 1 else '', strings if count <= 1 else str(string))
         if articles:
-          update.inline_query.answer(
+          inline_query.answer(
             results=articles,
             cache_time=CACHE_TIME,
             switch_pm_text=switch_pm_text,
             switch_pm_parameter="start",
-            offset=offset,
+            next_offset=offset,
         ) 
-        else: 
-            update.inline_query.answer(
+        else:
+            inline_query.answer(
                 results=[],
                 cache_time=CACHE_TIME,
                 switch_pm_text='{} No results for "{}"'.format(Emoji.CROSS_MARK, string),

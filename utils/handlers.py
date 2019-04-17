@@ -3,10 +3,6 @@ import mimetypes
 import mimetypes, magic, math
 from utils.guess import *
 import time
-requests = requests.Session()
-
-
-
 download_path = "{}/Downloads".format(os.getcwd())
 if not os.path.isdir(download_path):
   os.makedirs(download_path)
@@ -252,21 +248,14 @@ def get_filename(url):
     """
     Get an authentique filename from content-dispostion
     """
-    cookies = requests.cookies.get_dict()
-    cookies=cookies
-    result = requests.get(url, allow_redirects=True, stream=True, timeout=60.0, cookies=cookies)
-    cookies = dict(result.cookies)
-    cookies.update(result.cookies)
-    
-    #print sessions https://github.com/ibiBgOR/centr/blob/master/modules/m_runtastic.py
-    # known_sessions = read_known_sessions()
-    # for s in sessions:
-    #    if s['id'] in known_sessions:
-    #        continue
-    #    if check_download_session(urlparse.urljoin(r4.url, s['page_url']) + '.tcx', download_dir, cookies):
-    #        known_sessions.add(s['id'])
-    # write_known_sessions(known_sessions)
-
+    options={}
+    base_headers = {
+        'User-Agent':  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.5',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'zh-CN,zh;q=0.8'
+    }
+    headers = dict(base_headers, **options)
+    result = requests.get(url, allow_redirects=True, stream=True, headers=headers)
     fname = None
     cd = result.headers.get("content-disposition")
     if cd:
@@ -365,6 +354,7 @@ def get_filename(url):
         filenam, ext
                   )
 
+        print(ext)
       ent = ext
       if ent in common_types or ent in types_map:
         print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
@@ -375,7 +365,7 @@ def get_filename(url):
     return[filenam, content_type, su, fname]
 
 
-#print(get_filename("https://codeload.github.com/pyrogram/pyrogram/zip/develop")) 
+#print(get_filename("https://mega.nz/#!XghijKwb!VRzywnPl3c-18FNtD77ax0yW-NlvlldE_g3iUjoR3G0")) 
 
   
 def generate_uuid():

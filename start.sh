@@ -8,3 +8,4 @@ if ! [ -d ".data/$MD5-site-packages" ]; then
 fi 
 exec env PYTHONPATH="$PWD/.data/$MD5-site-packages" python3 bot.py
 
+

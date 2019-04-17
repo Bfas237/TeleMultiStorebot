@@ -4,5 +4,5 @@ TgCrypto
 bs4
 clint
 python-magic
-timeago 
-
+timeago
+python-telegram-bot==12.0.0b1

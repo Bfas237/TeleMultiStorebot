@@ -1,4 +1,6 @@
 from utils.typing import *
+from pyrogram import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove, ForceReply
+
 MAIN_MENU = [
     [
         InlineKeyboardButton('📁 File Manager', callback_data=b'files'),
