@@ -18,9 +18,8 @@ def start(bot, m):
       smsg = "start_msg"
       id=m.chat.id 
     sent = m.reply(smsg.format(user, id), quote=True)
-    rest(bot, m)
+   
 BASE = "https://haste.thevillage.chat"
-def rest(bot, m):
-  bot.restart()
+
 logger.info('Plugin haste was imported')
  
