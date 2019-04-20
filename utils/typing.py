@@ -27,7 +27,6 @@ logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
 logger = logging.getLogger(__name__)
 import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING) 
-logging.getLogger("telegram").setLevel(logging.INFO) 
 from uuid import uuid4 
 
 from pyrogram.errors import UserIsBlocked, FloodWait, FileIdInvalid, BadRequest, Flood, InternalServerError, SeeOther, Unauthorized, UnknownError, MessageNotModified

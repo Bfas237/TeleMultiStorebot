@@ -32,17 +32,17 @@ HELP = (
     "Use this bot inline to search for Uploaded, files, videos, games, apps and other misc files\n\n"
 
     "*Search Examples*\n"
-    "`@jhbjh14514jjhbot <terms>` – Global Search\n"
-    "`@jhbjh14514jjhbot !exe <terms>` – Privately Search your storage\n"
-    "`@jhbjh14514jjhbot !store <terms>` – Search apps and games\n\n"
+    "`@TeleMultiStoreBot <terms>` – Global Search\n"
+    "`@TeleMultiStoreBot !soft <terms>` – Privately Search your storage\n"
+    "`@TeleMultiStoreBot !store <terms>` – Search apps and games\n\n"
 
     "*List*\n"
-    "`@jhbjh14514jjhbot !pic` – Search Pictures\n"
-    "`@jhbjh14514jjhbot !zip` – Search Archive files\n"
-    "`@jhbjh14514jjhbot !store` – Search apps and games\n"
-    "`@jhbjh14514jjhbot !vid` –  Search movies and series\n"
-    "`@jhbjh14514jjhbot !mp3` – Search songs\n"
-    "`@jhbjh14514jjhbot !ms` – Search Misc Files\n\n".format(Emoji.ROBOT_FACE)
+    "`@TeleMultiStoreBot !pic` – Search Pictures\n"
+    "`@TeleMultiStoreBot !zip` – Search Archive files\n"
+    "`@TeleMultiStoreBot !store` – Search apps and games\n"
+    "`@TeleMultiStoreBot !vid` –  Search movies and series\n"
+    "`@TeleMultiStoreBot !mp3` – Search songs\n"
+    "`@TeleMultiStoreBot !doc` – Search Pdfs, docs, epub\n\n".format(Emoji.ROBOT_FACE)
 )
 HELP_INLINE = (
     "{} *TELE MULTISTORE BOT*\n\n"

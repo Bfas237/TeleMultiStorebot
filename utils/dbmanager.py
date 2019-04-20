@@ -11,10 +11,10 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
-"""  
+"""
 with sqlite3.connect('inshorts.db', check_same_thread=False) as conn:
     cur = conn.cursor()
-    cursor = conn.execute("UPDATE files SET `Media` = ? WHERE Media = ? AND User = ?", ("Software", "Files", 197005208))"""
+    cursor = conn.execute("DELETE FROM files WHERE Media = ?", ("Music"))"""
       
 def addtoDb(fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s, priv, media):
     conn = sqlite3.connect('inshorts.db', check_same_thread=False)
@@ -29,7 +29,7 @@ def addtoDb(fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m,
     if row is None:
         cur.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private, Media) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s, priv, media ))
         count += 1 
-    conn.commit()
+    conn.commit() 
 
     print ("Total news written to database : ", count)  
     
@@ -307,11 +307,12 @@ class DBHelper:
             row = self.c.fetchone()
             if row is None:
                 news = 0
+                valid = cur.rowcount
             else: 
                 news = row[3]
-                
+                valid = cur.rowcount
             self.conn.commit()
-            return news
+            return[news, valid]
     
        def filen(self, fid):
     
@@ -415,7 +416,7 @@ class DBHelper:
                 
                 
        def delete_all(self, owner):
-                stmt="DELETE FROM files WHERE User= (?)"
+                stmt="DELETE FROM files WHERE Media= (?)"
                 args=(owner )
                 self.conn.execute(stmt,args)
                 self.conn.commit() 
@@ -438,6 +439,22 @@ class DBHelper:
             self.conn.close()
 
 db = DBHelper()
+"""mu = []
+sw = []
+for num, th in enumerate(mu[0:49]):
+  sw.append(str(th[0]))
+for i in sw:
+  db.delete_item(i, 197005208)
+with sqlite3.connect('inshorts.db', check_same_thread=False) as conn:
+      cur = conn.cursor()
+      cur.execute("SELECT DownloadId FROM files WHERE Media = ? ORDER BY ID DESC LIMIT 100", ('Music', )) 
+      row = cur.fetchall()
+      for r in row:
+        mu.append(r[0])
+        print(mu) 
+      for o in mu:
+        cur.execute("DELETE FROM files WHERE DownloadId= (?) AND User= (?)", (197005208, o)) 
+      print(cur.rowcount)"""
 now = datetime.now()
 y = int(now.strftime("%Y"))
 mm = int(now.strftime("%m")) 

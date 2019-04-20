@@ -89,13 +89,13 @@ def answer_inline(update, inline_query):
       things = [list(i) for i in result]
       logger.warning('Query "%s"', things) 
       try:
-        for ft in things:
+        for ft in things[0:49]:
           su.append(str(ft[3]))
         if offset == 0:
             articles = [
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title=str(su[0]),
+                    title=str(su[0]).upper(),
                     description="All your desired image in one click",
                     input_message_content=InputTextMessageContent(
                         "🖼 **Image Store**\n\n"
@@ -124,10 +124,10 @@ def answer_inline(update, inline_query):
         s = 's'
         all = str(su[0])
         
-        for num, th in enumerate(things):
+        for num, th in enumerate(things[0:49]):
           sw.append(str(th[0]))
           articles.append(InlineQueryResultCachedPhoto(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,photo_file_id="{}".format(str(th[2])),
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=IMG_THUMB,photo_file_id="{}".format(str(th[2])),
                     description="Click to view the details",
                     caption="{}".format(str(th[1])),
                 reply_markup=InlineKeyboardMarkup(
@@ -151,8 +151,17 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]])
+
+                )] 
         count = len(articles) - 1
         
         switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if string == "!f" else str(query[5:]))
@@ -189,16 +198,16 @@ def answer_inline(update, inline_query):
             "by typing either the full or just part of the name "
             "or by extension. It works like magic.`\n"
             "\n"
-            "*Supported Syntax:*  `@jhbjh14514jjhbot <cmd> <terms>`"
+            "*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`"
             "\n\n"
-            "*Example:*    `@jhbjh14514jjhbot !exe idm`",
+            "*Example:*    `@TeleMultiStoreBot !soft idm`",
                 parse_mode=ParseMode.MARKDOWN,
                 ),
         reply_markup=InlineKeyboardMarkup([[
            
             InlineKeyboardButton(
                 "Give it a try",
-                switch_inline_query_current_chat="!exe idm"
+                switch_inline_query_current_chat="!soft idm"
             )]]),
                 description="Learn how to search for software",
                 thumb_url=INLINE_HELP_SOFTWARE_THUMB 
@@ -213,9 +222,9 @@ def answer_inline(update, inline_query):
             " regex pattern either using the full app name "
             "or by extension. It works like magic.`\n"
             "\n"
-            "*Supported Syntax:*  `@jhbjh14514jjhbot <cmd> <terms>`"
+            "*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`"
             "\n\n"
-            "*Example:*    `@jhbjh14514jjhbot !store telegram`",
+            "*Example:*    `@TeleMultiStoreBot !store telegram`",
                 parse_mode=ParseMode.MARKDOWN,
                 ),
         reply_markup=InlineKeyboardMarkup([[
@@ -243,7 +252,7 @@ def answer_inline(update, inline_query):
           things = ["ok"]
           logger.warning('Query "%s"', things)
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
           except IndexError as e:
             articles = INLINE_HELP
@@ -279,13 +288,13 @@ def answer_inline(update, inline_query):
           things = [list(i) for i in result]
           logger.warning('Query "%s"', things)
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
             if offset == 0:
               articles.append(
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title=str(su[0]),
+                    title=str(su[0]).upper(),
                     description="Your onestop mobile app search",
                     input_message_content=InputTextMessageContent(
                         "📱 **Mobile Apps finder**\n\n"
@@ -316,7 +325,7 @@ def answer_inline(update, inline_query):
             s = 's'
             all = str(su[0])
         
-            for num, th in enumerate(things):
+            for num, th in enumerate(things[0:49]):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultCachedDocument(
                     id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
@@ -343,8 +352,15 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) - 1
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[7:]))
@@ -374,14 +390,14 @@ def answer_inline(update, inline_query):
           things = [list(i) for i in result]
           logger.warning('Query "%s"', things)
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
             if offset == 0:
               articles.append(
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title=str(su[0]),
-                    description="Your onestop mobile app search",
+                    title=str(su[0]).upper(),
+                    description="Find all types of documents for your personal needs",
                     input_message_content=InputTextMessageContent(
                         "📱 **Mobile Apps finder**\n\n"
                         "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
@@ -411,10 +427,10 @@ def answer_inline(update, inline_query):
             s = 's'
             all = str(su[0])
         
-            for num, th in enumerate(things):
+            for num, th in enumerate(things[0:49]):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultCachedDocument(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
+                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=DOC_THUMB,document_file_id="{}".format(str(th[2])),
                     description="Click to view the details",
                     caption="{}".format(str(th[1])),
                 reply_markup=InlineKeyboardMarkup(
@@ -438,8 +454,15 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) - 1
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[7:]))
@@ -470,7 +493,7 @@ def answer_inline(update, inline_query):
           things = [list(i) for i in result]
           logger.warning('Query "%s"', things)
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
             if offset == 0:
               articles.append(
@@ -507,7 +530,7 @@ def answer_inline(update, inline_query):
             s = 's'
             all = str(su[0])
         
-            for num, th in enumerate(things):
+            for num, th in enumerate(things[0:49]):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultCachedDocument(
                     id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
@@ -534,8 +557,15 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) - 1
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[7:]))
@@ -564,7 +594,7 @@ def answer_inline(update, inline_query):
           things = [list(i) for i in result]
           logger.warning('Query "%s"', things)
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
             if offset == 0:
               articles.append(
@@ -606,7 +636,7 @@ def answer_inline(update, inline_query):
             s = 's'
             all = str(su[0])
         
-            for num, th in enumerate(things):
+            for num, th in enumerate(things[0:49]):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultCachedDocument(
                     id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,document_file_id="{}".format(str(th[2])),
@@ -628,13 +658,20 @@ def answer_inline(update, inline_query):
             switch_pm_text = "{} Found {} {} \"{}\"".format(Emoji.OPEN_BOOK, count, res if len(str(string[7:])) == 0 else ress, all if len(str(string[7:])) < 1 else str(query[7:]))
           elif not things:  
             s = 's'
-            all = 'Document'
+            all = 'Software'
             articles = [InlineQueryResultArticle(
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) - 1
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[7:]))
@@ -663,14 +700,14 @@ def answer_inline(update, inline_query):
           things = [list(i) for i in result]
           logger.warning('Query "%s"', things) 
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
             if offset == 0:
               articles.append(
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title=str(su[0]),
-                    description="Your onestop mobile app search",
+                    title=str(su[0]).upper(),
+                    description="Your soul is filled with lovely music",
                     input_message_content=InputTextMessageContent(
                         "🖼 **Mobile Apps finder**\n\n"
                         "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
@@ -699,10 +736,10 @@ def answer_inline(update, inline_query):
             s = 's'
             all = str(su[0])
         
-            for num, th in enumerate(things):
+            for num, th in enumerate(things[0:49]):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultCachedAudio(
-                    id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,audio_file_id="{}".format(str(th[2])),
+                    id=uuid4(), title="("+str(num)+") - {} @Bfas237Bots".format(str(th[1])), thumb_url=MP3_THUMB,audio_file_id="{}".format(str(th[2])),
                     description="Click to view the details",
                     caption="{}".format(str(th[1])),
                 reply_markup=InlineKeyboardMarkup(
@@ -726,8 +763,15 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) - 1
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
@@ -757,19 +801,19 @@ def answer_inline(update, inline_query):
           things = [list(i) for i in result]
           logger.warning('Query "%s"', things)
           try:
-            for ft in things:
+            for ft in things[0:49]:
               su.append(str(ft[3]))
             if offset == 0:
               articles.append(
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title=str(su[0]),
+                    title=str(su[0]).upper(),
                     description="Your onestop mobile app search",
                     input_message_content=InputTextMessageContent(
                         "🖼 **Mobile Apps finder**\n\n"
                         "`This section deals with all mobile apps. You just need to pass a search term and get the available results`"
                     ),
-                    thumb_url=APK_SEARCH_THUMB,
+                    thumb_url=SOFTWARE_THUMB,
                 )
             )
             
@@ -794,7 +838,7 @@ def answer_inline(update, inline_query):
             s = 's'
             all = str(su[0])
         
-            for num, th in enumerate(things):
+            for num, th in enumerate(things[0:49]):
               sw.append(str(th[0]))
               articles.append(InlineQueryResultCachedVideo(
                     id=uuid4(), title="("+str(num)+") - {}".format(str(th[1])), thumb_url=MEDIA_THUMB,video_file_id="{}".format(str(th[2])),
@@ -821,8 +865,15 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Try Searching for ("+str(rowcount)+")",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) - 1
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.OPEN_BOOK, count, s if count > 1 else '', all if strings == "!f" else str(query[5:]))
@@ -894,8 +945,15 @@ def answer_inline(update, inline_query):
                     id=uuid4(), title="Your search returned Nothing", thumb_url=NOT_FOUND,
                     description="Click to view details",
                     input_message_content=InputTextMessageContent(
-                    "Here's how to install **Pyrogram**"
-                ))] 
+                    "This section happens to be empty.... Sorry!!!\n\n*Supported Syntax:*  `@TeleMultiStoreBot <cmd> <terms>`",
+                parse_mode=ParseMode.MARKDOWN,
+                ),
+        reply_markup=InlineKeyboardMarkup([[
+           
+            InlineKeyboardButton(
+                "Try this example",
+                switch_inline_query_current_chat="!store telegram"
+            )]]))] 
             count = len(articles) * 0
             strings = (string[:8] + '..') if len(string) > 10 else string
             switch_pm_text = "{} Found {} Result{} for \"{}\"".format(Emoji.CROSS_MARK, str(count), s if count > 1 else '', strings if count <= 1 else str(string))

@@ -9,9 +9,6 @@ def sendServerStartedMessage(bot, m):
     link = " ".join(m.command[1:])
     logger.info(m.text)     
     msg = m.text
-    if '/files@' in link:
-      logger.info(msg)  
-      m.reply(msg) 
     chat_id = m.chat.id
     bot.send_chat_action(chat_id,'TYPING')
     # Connecting to the SQL database
@@ -30,29 +27,50 @@ def sendServerStartedMessage(bot, m):
     state[m.from_user.id]['actions'].append('files')
     logger.warning(state) 
     chat_id = str(dd)
-    c.execute("SELECT ID, Fname, DownloadId, Size FROM files WHERE User = ? ORDER BY ID DESC LIMIT 5 OFFSET ?", (chat_id, off, ))
+    likeDate = "%" + str(link) + "%"
+    c.execute("SELECT ID, Fname, DownloadId, Size, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 1000 OFFSET ?", (likeDate, likeDate, likeDate, off, ))
     con.execute("SELECT COUNT (*) FROM files WHERE User = ?", (chat_id, ))
     last = 0
+    su = []
+    med = ""
+    if "Software" in su:
+      med = "🗳"
+    elif "Music" in su:
+      med = "📮"
+    elif "Video" in su:
+      med = "💽"
+    elif "Documents" in su:
+      med = "📑"
+    elif "Archives" in su:
+      med = "🗃"
+    elif "Apps" in su:
+      med = "🗂"
+    elif "Pictures" in su:
+      med = "🖼"
+    else:
+      med = "📦"
     rowcount = con.fetchone()[0]
     rows = c.fetchall() 
-    conn.close() 
+    things = [list(i) for i in rows]
+    for ft in things[0:49]:
+      su.append(str(ft[4])) 
     try:  
-      if len(rows) > 0: 
+      if things: 
         items = ""
-        lens = len(rows) * 0 
-        for row in rows:
+        lens = len(rows) 
+        for num, row in enumerate(things[0:5]):
             items +=  (
               "<code>#{}</code> " 
               " <b>{}</b>"     
-              "\n<a href='https://telegram.me/jhbjh14514jjhbot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/jhbjh14514jjhbot?start=de_{}'>📍 Details</a>\n"       
-              "<i>{}</i>\n"  
-              "------\n" 
-              "".format(str(row[0]), row[1][:50], row[2], row[2], pretty_size(int(row[3]))))
+              "\n\n<a href='https://telegram.me/TeleMultiStoreBot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/TeleMultiStoreBot?start=de_{}'>📍 Details</a>  | 🗳 <code>{}</code> |  <b>{}</b>\n"       
+              "\n"  
+              "-------------------------\n" 
+              "\n".format(str(num), (row[1][:70] + '..') if len(row[1]) > 75 else row[1], row[2], row[2], pretty_size(int(row[3])), med, row[4]))
         
-        kb = search_keyboard(offset=0, rows=rowcount, last=last, show_download=True)
+        kb = search_keyboard(query=link, offset=0 if off <= 5 else off, rows=rowcount, last=last, show_download=True)
         reply_markup = InlineKeyboardMarkup(kb)
         username = m.from_user.username
-        src = m.reply("📄 <b>{}</b>'s files Library:   <b>{} out of {}</b> \n\n {}".format(username, lens, rowcount, items),reply_markup = reply_markup, parse_mode="html")
+        src = m.reply("📄 <b>{}</b>'s files Library:   <b>Page {} out of {}</b> \n\n {}".format(username, 0 if off <= 5 else off, len(things), items),reply_markup = reply_markup, parse_mode="html")
         user_chat = state.get(m.from_user.id, None)
         user_chat['msg'] = None
         user_chat['msgid'] = src

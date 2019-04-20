@@ -10,30 +10,21 @@ def parse_inline_message_id(inline_message_id):
     inline_message_id += "=" * ((4 - len(inline_message_id) % 4) % 4) 
     dc_id, _id, access_hash = unpack("<iqq",b64decode(inline_message_id,"-_"))
     return api.types.InputBotInlineMessageID(dc_id=dc_id,id=_id,access_hash=access_hash)
-def help(update, context):
-    update.edit_message_text(text="Use /start to test this bot.")
 
 @Client.on_callback_query()
 def pyrogram_data(m, query):
     global state  
     off = 0
-    uploader = query.inline_message_id
-    if uploader:
-      m.send_cached_media(query.from_user.id, "BQADBAADiwcAArF7qFEf81c7frLZowI", caption="Powered with ❤️ - @Bfas237Bots")
-      m.answer_callback_query(query.id, "it works!")  
-      return
-    else:
-      uploader = query.from_user.id
     update = query 
     cb = query.data
-    
+    uploader = query.from_user.id
     chat_id = query.message.chat.id
     logger.warning('%s and %s just pressed the keyboard button', uploader, chat_id)
     data = query.data
     dataid = query.id
     data = data.split(b'%')
+    logger.warning(data)
     
-     
     conn = sqlite3.connect('inshorts.db') 
     c = conn.cursor()
     con = conn.cursor()
@@ -43,7 +34,6 @@ def pyrogram_data(m, query):
     offset = 0
     q = ''
     adm = ''
-    next = ''
     inv = "😔 `404` **Invalid FILE_ID**.\n\n Send /files to see your saved files"
     hide = False
     auth = set()
@@ -56,12 +46,12 @@ def pyrogram_data(m, query):
 
         if name == b'act':
             action = args[0]
-        if name == b'end':
+        elif name == b'end':
             end = args[0]
+        elif name == 'query':
+            link = b'='.join(args)
         elif name == b'off':
             offset = int(args[0])
-        elif name == b'next':
-            next = int(args[0])
         elif name == b'auth':
             auth = set(int(arg) for arg in args if arg != b'')
         elif name == b'adm':
@@ -78,12 +68,12 @@ def pyrogram_data(m, query):
             q = b'='.join(args)
         elif name == b'hide':
             hide = int(args[0])
-    con.execute("SELECT DISTINCT COUNT (*) FROM files WHERE User = ?", (chat_id, ))  
-    cf.execute("SELECT * FROM files WHERE ID = (SELECT MAX(ID) FROM files) ORDER BY ID ASC")
+    con.execute("SELECT DISTINCT COUNT (*) FROM files")  
+    
     rowcount = con.fetchone()[0]
-    lasts = cf.fetchone()[0]
-    logger.warning(lasts)
+    
     last = 0
+    logger.info(q)
     if action == b'old':
         new_offset = offset + 5
     elif action == b'new':
@@ -92,32 +82,52 @@ def pyrogram_data(m, query):
         new_offset = 0
       
     elif action == b'last':
-      if not offset > lasts:
-        new_offset = lasts - 1
-      elif offset <= 0:
-        offset = 0
+      last = last + offset + 5 
+      if not last > rowcount:
+        new_offset = rowcount - 1
       else:
-        new_offset = lasts - 1
+        new_offset = rowcount - 1
+        show_next = False
     else:
         new_offset = offset 
         
     logger.warning(new_offset) 
-    c.execute("SELECT DISTINCT ID, Fname, DownloadId, Size FROM files WHERE User = ? ORDER BY ID DESC LIMIT 5 OFFSET ?", (chat_id, new_offset, ))
-    
+    likeDate = "%" + str(q.decode('UTF-8')) + "%"
+    c.execute("SELECT ID, Fname, DownloadId, Size, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 100 OFFSET ?", (likeDate, likeDate, likeDate, new_offset, ))
+    med = ""
+    su = []
+    if "Software" in su:
+      med = "🗳"
+    elif "Music" in su:
+      med = "📮"
+    elif "Video" in su:
+      med = "💽"
+    elif "Documents" in su:
+      med = "📑"
+    elif "Archives" in su:
+      med = "🗃"
+    elif "Apps" in su:
+      med = "🗂"
+    elif "Pictures" in su:
+      med = "🖼"
+    else:
+      med = "📦"
+    items = ""
     rows = c.fetchall() 
-    conn.close() 
-    items = "" 
-    try:
-        if len(rows) > 0: 
-          lens = len(rows)
-          for row in rows:
+    things = [list(i) for i in rows]
+    for ft in things[0:49]:
+      su.append(str(ft[4])) 
+    try:  
+        if things:
+          lens = len(rows) 
+          for num, row in enumerate(things[0:5]):
               items +=  (
               "<code>#{}</code> " 
               " <b>{}</b>"     
-              "\n<a href='https://telegram.me/jhbjh14514jjhbot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/jhbjh14514jjhbot?start=de_{}'>📍 Details</a>\n"       
-              "<i>{}</i>\n"  
-              "------\n" 
-              "".format(str(row[0]), row[1][:50], row[2], row[2], pretty_size(int(row[3]))))
+              "\n\n<a href='https://telegram.me/TeleMultiStoreBot?start=dl_{}'>📥 Download</a>  | <a href='https://telegram.me/TeleMultiStoreBot?start=de_{}'>📍 Details</a>  | ⚖️ <code>{}</code> |  {} <b>{}</b>\n"       
+              "\n"  
+              "-------------------------\n" 
+              "\n".format(str(num), (row[1][:70] + '..') if len(row[1]) > 75 else row[1], row[2], row[2], pretty_size(int(row[3])), med, row[4]))
 
     except (TypeError, ValueError, AttributeError):
         items = None 
@@ -131,10 +141,10 @@ def pyrogram_data(m, query):
             reply = items
         elif (offset < 0):
             m.answer_callback_query(query.id, "WTF! {}, 🙄 I can't go back to the future 😏".format(query.from_user.first_name), show_alert=True)
-            offset = offset + 4
+            offset = 0
         elif (offset > rowcount):
             m.answer_callback_query(query.id, "Hold on! {}, That was it i have nothing more to show you 🚶🏼‍♂️🚶🏼‍♂️🚶🏼‍♂️".format(query.from_user.first_name), show_alert=True)
-            offset = offset - 4
+            offset = offset - 5
             return
         try:
           ids = [chat_id, str(hide.decode('UTF-8'))]
@@ -381,8 +391,7 @@ def pyrogram_data(m, query):
     
     if reply:
         try:
-            kb = search_keyboard(offset=offset, rows=rowcount, last=last, show_download=show_download)
-            print(new_offset)
+            kb = search_keyboard(query=q, offset=offset, rows=rowcount, last=last, show_download=show_download)
             username = query.from_user.first_name
             reply_markup = InlineKeyboardMarkup(kb)
             m.edit_message_text(
@@ -395,8 +404,8 @@ def pyrogram_data(m, query):
         ) 
         
         except UnboundLocalError as e:
-          logger.warning(e)
-          m.answer_callback_query(query.id, "⚠️ Actually you can't navigate because your uploads are less than 5\n\n\n🗳 Total Uploads: {}".format(rowcount), show_alert=True)
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than 5\n\n\n🗳 Total Uploads: {}".format(rowcount), show_alert=True)
           return
          
         except AttributeError as e: 
@@ -405,12 +414,12 @@ def pyrogram_data(m, query):
           return
         
         except MessageNotModified as e:
-          logger.warning(e)
-          m.answer_callback_query(query.id, "⚠️ Sorry ....", show_alert=True)
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than 5\n\n\n🗳 Total Uploads: {}".format(rowcount), show_alert=True)
           return
     else:
         try:
-            kb = search_keyboard(offset=offset, rows=rowcount, last=last, show_download=show_download)
+            kb = search_keyboard(query=q, offset=offset, rows=rowcount, last=last, show_download=show_download)
             username = query.from_user.first_name
             reply_markup = InlineKeyboardMarkup(kb)
             m.edit_message_reply_markup(update.message.chat.id, 
@@ -420,8 +429,8 @@ def pyrogram_data(m, query):
           m.answer_callback_query(query.id, "Hold on! {}, Your session has expired 🙄:(".format(query.from_user.first_name), show_alert=True)
           return
         except MessageNotModified as e:
-          logger.warning(e)
-          m.answer_callback_query(query.id, "⚠️ Actually you cant navigate because your uploads are less than {}\n\n\n🗳 Total Uploads: {}".format(offset+4, rowcount), show_alert=True)
+          logger.debug(e)
+          m.answer_callback_query(query.id, "⚠️ Actually you can navigate because your uploads are less than {}\n\n\n🗳 Total Uploads: {}".format(offset+4, rowcount), show_alert=True)
           return
         except UnboundLocalError as e:
           logger.debug(e)

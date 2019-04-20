@@ -38,12 +38,13 @@ def my_handler(bot, m):
         report = "**❗Report:**\n\n✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
         err = "\n**❌ Invalid file token:**\n\nUse /help to learn more about me"
         nauth = "\n**⚠️ 506 Unknown Error:**\n\n You are not authorised to delete this file because are not the owner\n\n Your uploaded file can be accessed using /files"
+        unknown = "\n**⚠️ 309 UnkTraced Error:**\n\n This file could not be deleted for some technical fault. It will be rectified as soon as possible"
         snews = fileid(tnews)
         ver = db.checkifexist(tnews, chat_id)
         if snews: 
           if (ver == chat_id):
-            db.delete_item(tnews, chat_id)
-            m.reply(report)
+            ok = db.delete_item(tnews, chat_id)
+            send = m.reply(report) if ok[1] is not 1 else m.reply(unknown)
           else:
             m.reply(nauth)
         else:

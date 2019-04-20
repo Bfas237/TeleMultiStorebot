@@ -12,5 +12,4 @@ ignore
 logfile.txt
 trigger
 welcome
-plugins/filet/filet.py
 plugins/welcome/welcome.py
