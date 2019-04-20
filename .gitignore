@@ -9,7 +9,8 @@ plugins/cool-file.js
 plugins/speed/speed.p
 unknown_errors.txt
 ignore
+logfile.txt
 trigger
 welcome
-logfile.txt
+plugins/filet/filet.py
 plugins/welcome/welcome.py

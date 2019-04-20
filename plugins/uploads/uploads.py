@@ -16,7 +16,8 @@ def my_handler(bot, m):
     file_name = ""
     file_size = ""
     extension = ""
-    
+    media = ""
+    #print(m)
     download_id = generate_uuid()
     nauth = "\n**⚠️ 541 Unknown Media Type:**\n\n Media type not allowed\n\n To see supported media types, send /media_types"
     invalid_media_type = "\n**⚠️ 614 Unsupported Media Type:**\n\n Media type not Supported\n\n To see supported media types, send /media_types"
@@ -24,29 +25,39 @@ def my_handler(bot, m):
       file_size = file.document.file_size
       file_name = file.document.file_name
       file_id = file.document.file_id
-      extension = guess_extension(file.document.mime_type)
-      
+      extension = guess_extension(file.document.mime_type) 
+      media = check_media(file_name)
     elif file.video:
       file_size = file.video.file_size
       file_name = file.video.file_name
       file_id = file.video.file_id
+      mime = file.video.mime_type
       extension = guess_extension(file.video.mime_type)
+      media = "Video"
     elif file.audio:
       file_size = file.audio.file_size
       file_name = file.audio.file_name
       file_id = file.audio.file_id
       extension = guess_extension(file.audio.mime_type)
+      media = "Music"
     elif file.photo:
       file_size = file.photo.sizes[-1]["file_size"]
       file_id = file.photo.sizes[-1]["file_id"]
       download_id = generate_uuid()
       file_name = file.photo.id + ".jpg"
       extension = get_extension(file)
-    elif file.sticker:
+      media = "Pictures"
+    elif file.voice:
+      file_size = file.voice.file_size
+      file_name = "voice_"+str(file.voice.date)
+      file_id = file.voice.file_id
+      extension = guess_extension(file.voice.mime_type)
+      media = "Voice"
+     
+    elif file.video_note:
       if m.chat.type == 'private':
         m.reply(nauth)
-      return
-    elif file.voice:
+    elif file.sticker:
       if m.chat.type == 'private':
         m.reply(nauth)
       return
@@ -54,17 +65,8 @@ def my_handler(bot, m):
       if m.chat.type == 'private':
         m.reply(nauth)
       return
-    elif file.videonote:
-      if m.chat.type == 'private':
-        m.reply(nauth)
-      return
-    elif file.voice:
-      if m.chat.type == 'private':
-        m.reply(nauth)
-      return
     else:
-      return
-    media = check_media(file_name)
+      pass
     if not media:
       m.reply(invalid_media_type)
       return
@@ -80,17 +82,17 @@ def my_handler(bot, m):
           chk, ext = splitext(file_name)
           logger.info(chk)
           
-      chk = db.doc(file_name)
+      chk = doc(file_name)
       item = ""
       private = 0
       if (chk != 0):
-        num, row, fid, dat, tim, siz, did = db.vfileid(chk)
+        num, row, fid, dat, tim, siz, did = vfileid(chk)
         if row:
-            user = db.ufil(did, str(uploader))
+            user = ufil(did, str(uploader))
             ids.append(user)
-            usr = db.getuser(did, str(uploader))
+            usr = getuser(did, str(uploader))
             idss = [str(uploader), usr]
-            d, df, ff, h, m, s = db.cdate(did)
+            d, df, ff, h, m, s = cdate(did)
 
             ds = datetime(d, df, ff, h, m, s)
 
@@ -114,13 +116,9 @@ def my_handler(bot, m):
               "⚖️ <i>{}</i>\n"
               "------------------------------""".format(str(num), str(row[:50]), dat, timedate(ds), pretty_size(int(siz))))
 
-                bot.send_chat_action(chat_id,'TYPING')
-                time.sleep(1)
 
             kb = doc_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])
             reply_markup = InlineKeyboardMarkup(kb)
-
-            message.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup)
 
 
       else:
@@ -135,20 +133,21 @@ def my_handler(bot, m):
         times = datetime.now().strftime("%I:%M%p")
         dates = datetime.now().strftime("%B %d, %Y")
 
-        db.fetchNews(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s, 0, media)
+        addtoDb(file_name, file_size, file_id, download_id, times, dates, str(uploader), url, year, month, day, h, m, s, 0, media)
 
 
-        chk = db.doc(file_name)
+        chk = doc(file_name)
         item = ""
+        row = "" 
         private = 0
         if (chk != 0):
-          num, row, fid, dat, tim, siz, did = db.vfileid(chk)
+          num, row, fid, dat, tim, siz, did = vfileid(chk)
         if row:
-            user = db.ufil(did, str(uploader))
+            user = ufil(did, str(uploader))
             ids.append(user)
-            usr = db.getuser(did, str(uploader))
+            usr = getuser(did, str(uploader))
             idss = [str(uploader), usr]
-            d, df, ff, h, m, s = db.cdate(did)
+            d, df, ff, h, m, s = cdate(did)
 
             ds = datetime(d, df, ff, h, m, s)
 
@@ -177,11 +176,9 @@ def my_handler(bot, m):
 
             kb = doc_keyboard(id=did, admin=usr in idss if usr else False, confirmed=user in ids if user else False, ids=user, chat_id=chat_id, private=private, auth=[])  
             reply_markup = InlineKeyboardMarkup(kb)
-
-            message.reply("{}\n\nPowered with ❤️ - @Bfas237Bots".format(item), parse_mode="html", reply_markup=reply_markup)
     except sqlite3.ProgrammingError as e:
           logger.debug(e)
-          message.reply("Hold on! {}, you aqre spamming take it easy. 🙄:(".format(message.from_user.first_name))
+          message.reply("Hold on! {}, you are spamming take it easy. 🙄:(".format(message.from_user.first_name))
           return
     except FileIdInvalid as e:
           logger.debug(e)

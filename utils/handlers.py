@@ -3,7 +3,7 @@ import mimetypes
 import mimetypes, magic, math
 from utils.guess import *
 import time
-download_path = "{}/Downloads".format(os.getcwd())
+download_path = "{}/.data/".format(os.getcwd())
 if not os.path.isdir(download_path):
   os.makedirs(download_path)
 options={}
@@ -21,7 +21,7 @@ def timedate(dat):
     return timeago.format(dat, now)
 
 
-
+ 
 def read_known_sessions():
     if not os.path.isfile(known_sessions_file):
         return set()
@@ -56,18 +56,12 @@ def check_media(chk):
     if hou is not None:
       if chk.lower().endswith(('.apk', '.xapk', '.jar', '.jav')):
         media = "Apps"
-      elif chk.lower().endswith(('.png', '.jpg', '.jpeg', '.jpe')):
-        media = "Pictures"
       elif chk.lower().endswith(('.exe', '.msi')):
         media = "Software"
-      elif chk.lower().endswith(('.mp3', '.AAC','.M4A')):
-        media = "Music"
-      elif chk.lower().endswith(('.avi', '.mkv','.webm', '.mp4', '.m1v', '.movie', '.mpeg', '.mov')):
-        media = "Video"
       elif chk.lower().endswith(('.doc', '.docx','.txt','.pdf','.epub','.bat','.py','.js','.html','.css','.go','.xlb','.xls')):
-        media = "Document"
+        media = "Documents"
       elif chk.lower().endswith(('.zip', '.rar','.7z','.gz','.bin')):
-        media = "Achives"
+        media = "Archives"
       else:
         media = "Misc"
       return media
@@ -151,10 +145,9 @@ def DFromUToTelegramProgress(client,
                              total,
                              msg,
                              chat_id,
-                             start) -> None:
+                             start, text) -> None:
    
     # 1048576 is 1 MB in bytes
-    text = "**⌛️ Uploading:**"
     now = time.time()
     diff = now - start
     if round(diff % 4.00) == 0 or current == total:
@@ -261,7 +254,8 @@ def get_filename(url):
     if cd:
         value, params = cgi.parse_header(cd)
         fname = params.get("filename")
-    content_type = ""
+    content_type = ""  
+    filenams = "" 
     su = []
     code = result.status_code
     headers = result.headers
@@ -332,10 +326,10 @@ def get_filename(url):
             filenam
         )
       if ext in common_types.keys() or ext in types_map.keys():
-        ext = '{}'.format(exts)
-        mime_typ = '{}'.format(types_map[exts])
-        print(ext)
-        print(mime_typ)
+        ext = '{}'.format(ext)
+        mime_typ = '{}'.format(types_map[ext])
+        filenams = filenam+ext
+        
 
       elif content_type == 'image/jpeg' or content_type == 'image/jpg' or content_type == 'image/jpe':
             ext = '.jpeg'
@@ -351,10 +345,8 @@ def get_filename(url):
       elif None == ext:
         ext = mimetypes.guess_extension(content_type)
         logger.warning("No extension for '%s', guessed '%s'.",
-        filenam, ext
-                  )
+        filenam, ext)
 
-        print(ext)
       ent = ext
       if ent in common_types or ent in types_map:
         print ('File Extenstion: {} has MIME Type: {}.'.format(ent, types_map[ent]))
@@ -362,11 +354,7 @@ def get_filename(url):
         if content_type in v:
           su.append(k)
         
-    return[filenam, content_type, su, fname]
-
-
-#print(get_filename("https://mega.nz/#!XghijKwb!VRzywnPl3c-18FNtD77ax0yW-NlvlldE_g3iUjoR3G0")) 
-
+    return[filenams,filenam, content_type, su, fname]
   
 def generate_uuid():
         random_string = ''
@@ -440,6 +428,8 @@ def get_filename_from_cd(cd):
 
 
 
+nowq = datetime.now()
+current_date_time = str(nowq).split(" ")[0] + " " + str(nowq.hour) + ":" + str(nowq.minute) + ":" + str(nowq.second)
 
 def DownL(url):
     fname, ext = get_filename(url)
@@ -463,12 +453,10 @@ def DownL(url):
 
 
 
-def DownLoadFile(url, file_name, client, message_id, chat_id):
+def DownLoadFile(url, file_name, fnames, client, message_id, chat_id):
     r = requests.get(url, stream=True, allow_redirects=True, headers=headers)
-    fname, ext = get_filename(url)
-    file_name = fname+ext
-
-    with open(download_path+"/"+file_name, 'wb') as file:
+    File_name = file_name
+    with open(download_path+file_name, 'wb') as file:
       total_length = int(r.headers.get('content-length', 0)) or None
       downloaded_size = 0
       chunk_size=8192*1024
@@ -483,12 +471,11 @@ def DownLoadFile(url, file_name, client, message_id, chat_id):
             dl += len(chunk)
             file.write(chunk)
             done = int(100 * dl / total_length)
+            DFromUToTelegramProgress(client, dl, total_length, message_id, chat_id, start, "**📥 Downloading:**")
             downloaded_size += chunk_size
-            DFromUToTelegramProgress(client, dl, total_length, message_id, chat_id, start)
             file.flush()
             os.fsync(file.fileno())
+            
     return file_name
 
-
-
-  
+     

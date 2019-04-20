@@ -4,9 +4,11 @@ from telegram import InlineQueryResultArticle, ParseMode, \
     InputTextMessageContent
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 from telegram.utils.helpers import escape_markdown
+
 logging.basicConfig(level=logging.WARNING,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+logging.getLogger("telegram").setLevel(logging.WARNING)
 plugins = dict(
     root="plugins"
 )
@@ -14,7 +16,7 @@ from plugins.inlines.inline import *
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
+app = Client("mybot", bot_token=os.environ.get("TOKEN"), api_id=os.environ.get("api_id"), api_hash=os.environ.get("api_hash"), plugins=plugins)
 
 def main():
     # Create the Updater and pass it your bot's token.
@@ -28,18 +30,17 @@ def main():
     # on different commands - answer in Telegram
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(InlineQueryHandler(answer_inline))
-
+    
     # log all errors
     dp.add_error_handler(error)
 
     # Start the Bot
     updater.start_polling()
-    Client("mybot", bot_token=os.environ.get("TOKEN"), api_id=os.environ.get("api_id"), api_hash=os.environ.get("api_hash"), plugins=plugins).run()
-    # Block until the user presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
+    app.run()
     updater.idle()
+
 
 if __name__ == "__main__" :
     main()
     
+      

@@ -103,7 +103,7 @@ def reg_keyboard(id, admin, confirmed, ids, chat_id, private, auth):
     
 def search_keyboard(offset, rows, last, show_download):  
     data = list()
-    
+    rows = rows
     data.append('off=' + str(int(offset)))
     data.append('next=' + str(int(rows)))
     data.append('dl=' + str(int(show_download)))
@@ -116,8 +116,10 @@ def search_keyboard(offset, rows, last, show_download):
         offset = 0
     else:
         new_offset = rows - 1
+    kb = []
     if offset == 0 and not rows < offset:
-      kb = [[
+      kb.append(
+        [
             InlineKeyboardButton(
                 text='⬇️' + ' Goto Last Page',
                 callback_data=b'act=last%' + data.encode('UTF-8')),
@@ -125,8 +127,10 @@ def search_keyboard(offset, rows, last, show_download):
         InlineKeyboardButton(
             text='Older ➡️',
             callback_data=b'act=old%' + data.encode('UTF-8')
-        ),
-    ], list()]
+        )
+        ]
+      )
+   
     elif (offset == new_offset):
       kb = [[
         InlineKeyboardButton(
@@ -141,7 +145,7 @@ def search_keyboard(offset, rows, last, show_download):
       
     
     elif offset > 0 and not rows < 0 and not offset < 0:
-      kb[1].append(
+      kb.append([
         InlineKeyboardButton(
             text='⬅️ Newer',
             callback_data=b'act=new%' + data.encode('UTF-8')
@@ -149,7 +153,8 @@ def search_keyboard(offset, rows, last, show_download):
         InlineKeyboardButton(
             text='Older ➡️',
             callback_data=b'act=old%' + data.encode('UTF-8')
-        )) 
+        )]
+        ) 
     return kb
 
 def private_keyboard(id, admin, confirmed, ids, chat_id):  

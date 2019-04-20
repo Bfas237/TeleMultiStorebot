@@ -1,6 +1,6 @@
 
 from os import path
-import logging, urllib, os, re, sys, sqlite3, json, io, requests, datetime, requests, shutil, traceback, os.path, urllib.request, time, fnmatch
+import logging, urllib, os, re, sys, sqlite3, json, io, requests, datetime, requests, shutil, traceback, os.path, urllib.request, time, fnmatch, glob
 #shutil.rmtree('/screenshots/') 
 from mimetypes import guess_extension
 import concurrent.futures
@@ -11,7 +11,7 @@ import tempfile
 import shutil
 import sys
 from six.moves.urllib.parse import urlparse, urljoin
-
+from itertools import islice
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
@@ -27,9 +27,10 @@ logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
 logger = logging.getLogger(__name__)
 import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING) 
+logging.getLogger("telegram").setLevel(logging.INFO) 
 from uuid import uuid4 
 
-from pyrogram.errors import UserIsBlocked, FloodWait, FileIdInvalid, BadRequest, Flood, InternalServerError, SeeOther, Unauthorized, UnknownError
+from pyrogram.errors import UserIsBlocked, FloodWait, FileIdInvalid, BadRequest, Flood, InternalServerError, SeeOther, Unauthorized, UnknownError, MessageNotModified
 from pyrogram.api.types import UserProfilePhoto, ChatPhoto, MessageMediaPhoto, MessageMediaDocument, InputBotInlineMessageID, InputBotInlineMessageMediaAuto
 import random as r
 from requests import get

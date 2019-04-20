@@ -9,3 +9,6 @@ fi
 exec env PYTHONPATH="$PWD/.data/$MD5-site-packages" python3 bot.py
 
 
+
+
+

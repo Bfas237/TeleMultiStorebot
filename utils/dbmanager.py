@@ -11,7 +11,93 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
+"""  
+with sqlite3.connect('inshorts.db', check_same_thread=False) as conn:
+    cur = conn.cursor()
+    cursor = conn.execute("UPDATE files SET `Media` = ? WHERE Media = ? AND User = ?", ("Software", "Files", 197005208))"""
+      
+def addtoDb(fn, fs, fid, dlid, times, dates, user, link, year, month, day, h, m, s, priv, media):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor()
+    title = fn
+    content = fid
+    fsize = fs 
+    downloadid = dlid
+    count = 0 
+    cur.execute('''SELECT Fname FROM files WHERE Fname = ? OR FileId = ?''', (title, content))
+    row = cur.fetchone()
+    if row is None:
+        cur.execute('''INSERT INTO files (Fname, FileId, Size, Date, Time, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds, Private, Media) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (title, content, fsize, dates, times, downloadid, user, link, year, month, day, h, m, s, priv, media ))
+        count += 1 
+    conn.commit()
+
+    print ("Total news written to database : ", count)  
+    
+
+def vfileid(fid):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor() 
+    likeDate = "%" + fid + "%"  
+    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+    row = cur.fetchone()
+    if row is None:
+        news = 0
+    else: 
+        news = row[0], row[2], row[3], row[1], row[4], row[5], row[6]
+      
+    return news  
+def doc(fid):
   
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    c = conn.cursor()
+    likeDate = "%" + fid + "%"
+    c.execute("SELECT Fname, DownloadId FROM files WHERE Fname LIKE ? ORDER BY ID DESC LIMIT 1", (likeDate, )) 
+    row = c.fetchone()
+    if row is None:
+      news = 0
+    else:
+      news = row[1]
+    return news  
+    
+       
+def cdate(fid):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    c = conn.cursor()
+    likeDate = "%" + fid + "%" 
+    c.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (likeDate, ))
+    row = c.fetchone()
+    if row is None:
+      news = 0
+    else:
+      news = row[9], row[10], row[11], row[12], row[12], row[13]
+    
+    return news   
+
+def ufil(fid, user):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    cur = conn.cursor() 
+    likeDate = "%" + fid + "%"  
+    cur.execute("SELECT ID, Date, Fname, FileId, Time, Size, DownloadId, User, Link, Year, Month, Day, Hour, Minute, Seconds FROM files WHERE User = ? AND DownloadId LIKE ? ORDER BY ID ASC LIMIT 1", (user, likeDate, )) 
+    row = cur.fetchone()
+    if row is None:
+        news = 0
+    else: 
+        news = row[7] 
+      
+    return news  
+  
+def getuser(fid, owner):
+    conn = sqlite3.connect('inshorts.db', check_same_thread=False)
+    c = conn.cursor() 
+    likeDate = "%" + fid + "%" 
+    c.execute('''SELECT DISTINCT User FROM files WHERE User = ? AND Private = 1 AND DownloadId LIKE ? limit 1''', (owner, likeDate, ))
+    user = c.fetchone()
+    if user is not None: 
+      return user[0]
+    else:
+      return 0
+              
+              
 class DBHelper:
        def __init__(self, dbname="inshorts.db"):
             self.dbname = dbname
@@ -38,13 +124,13 @@ class DBHelper:
             self.c.executescript('''CREATE TABLE IF NOT EXISTS files
     (
     ID INTEGER NOT NULL PRIMARY KEY UNIQUE,
-    Media TEXT DEFAULT "Misc", 
-    Fname TEXT, 
+    Media TEXT DEFAULT "Files", 
+    Fname TEXT COLLATE NOCASE, 
     Size TEXT,
-    FileId INTEGER,
+    FileId TEXT,
     Date TEXT,
     Time TEXT,
-    DownloadId TEXT,
+    DownloadId TEXT COLLATE NOCASE,
     Link TEXT,
     User TEXT,
     Private INTEGER,
