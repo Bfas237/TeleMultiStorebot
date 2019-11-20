@@ -5,14 +5,14 @@
 
 
 
-> An advanced Multipurpose [Telegram Bot](http://t.me/TeleMultiStoreBot) for uploading and sharing mdeia files across chats. 
+> An advanced Multipurpose [Telegram Bot](http://t.me/TeleMultiStoreBot) for uploading and sharing media files across chats. 
 > Supports Inline Mode for quciker and better compatibility
 > (Almost) Complete but for now its still in BETA stage.
 
 Requirements
 ---------
 
-* Python >=3.5
+* Python >=3.6
 * Telegram account.
 * Telegram API key, you can get one simply with [@BotFather](https://core.telegram.org/bots#botfather) with simple commands right after creating your bot.
 * Your own `API_ID` and `API_HASH` [HOW TO GET MY API CREDENTIALS](https://docs.pyrogram.ml/start/Setup.html#api-keys)
