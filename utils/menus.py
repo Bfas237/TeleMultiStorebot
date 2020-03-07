@@ -75,30 +75,35 @@ def reg_keyboard(id, admin, confirmed, ids, chat_id, private, auth):
     data.append('qry=' + str(id))
     data = '%'.join(data)
     logger.warning(data)
-    kb = [[
+    
+    if (private == 1):
+      kb = [[
             InlineKeyboardButton(
                 text=('💾' + ' Save this file') if not confirmed else ('🗑' + ' Remove from Storage'),
                 callback_data=b'act=copy%' + data.encode('UTF-8')
             )
         ], [
-            InlineKeyboardButton(
-                text=('🗳' + ' View all Saved Files') if not confirmed else ('📦' + ' Access Your File Storage'),
-                callback_data=b'act=first%' + data.encode('UTF-8')
-            )
-        ], list()]
-    if (private == 1):
-        kb[1].append( 
+            
             InlineKeyboardButton(
                 text= ('🔐' + ' Make this file private') if not admin else ('🔓' + ' Unlock this file '),
                 callback_data=b'act=auth%' + data.encode('UTF-8')
-            )
-        )
-        kb[2].append( 
+            ) 
+        ], list()]
+      kb[1].append( 
             InlineKeyboardButton(
                 text='📥 Download',
                 callback_data=b'act=dl%' + data.encode('UTF-8')
             ) 
         )
+    elif (private == 0):
+      kb = [[
+            
+            InlineKeyboardButton(
+                text='📥 Download',
+                callback_data=b'act=dl%' + data.encode('UTF-8')
+            ) 
+        ]]
+      
     return kb  
     
 def search_keyboard(query, offset, rows, last, show_download):  
