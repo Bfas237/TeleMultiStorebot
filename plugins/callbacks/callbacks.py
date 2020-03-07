@@ -22,7 +22,7 @@ def pyrogram_data(m, query):
     logger.warning('%s and %s just pressed the keyboard button', uploader, chat_id)
     data = query.data
     dataid = query.id
-    data = data.split(b'%')
+    data = data.split('%')
     logger.warning(data)
     
     conn = sqlite3.connect('inshorts.db') 
@@ -42,31 +42,31 @@ def pyrogram_data(m, query):
     show_download = False 
     admin = False
     for elem in data:
-        name, *args = elem.split(b'=') 
+        name, *args = elem.split('=') 
 
-        if name == b'act':
+        if name == 'act':
             action = args[0]
-        elif name == b'end':
+        elif name == 'end':
             end = args[0]
         elif name == 'query':
-            link = b'='.join(args)
-        elif name == b'off':
+            link = '='.join(args)
+        elif name == 'off':
             offset = int(args[0])
-        elif name == b'auth':
-            auth = set(int(arg) for arg in args if arg != b'')
-        elif name == b'adm':
+        elif name == 'auth':
+            auth = set(int(arg) for arg in args if arg != '')
+        elif name == 'adm':
             adm = int(args[0])
-        elif name == b'cnf':
+        elif name == 'cnf':
             confirmed = bool(int(args[0]))
-        elif name == b'prv':
+        elif name == 'prv':
             private = bool(int(args[0]))
-        elif name == b'dl':
+        elif name == 'dl':
             show_download = bool(int(args[0]))
-        elif name == b'owner':
+        elif name == 'owner':
             admin = bool(int(args[0]))
-        elif name == b'qry':
-            q = b'='.join(args)
-        elif name == b'hide':
+        elif name == 'qry':
+            q = '='.join(args)
+        elif name == 'hide':
             hide = int(args[0])
     con.execute("SELECT DISTINCT COUNT (*) FROM files")  
     
@@ -74,14 +74,14 @@ def pyrogram_data(m, query):
     
     last = 0
     logger.info(q)
-    if action == b'old':
+    if action == 'old':
         new_offset = offset + 5
-    elif action == b'new':
+    elif action == 'new':
         new_offset = offset - 5
-    elif action == b'first':
+    elif action == 'first':
         new_offset = 0
       
-    elif action == b'last':
+    elif action == 'last':
       last = last + offset + 5 
       if not last > rowcount:
         new_offset = rowcount - 1
@@ -92,7 +92,7 @@ def pyrogram_data(m, query):
         new_offset = offset 
         
     logger.warning(new_offset) 
-    likeDate = "%" + str(q.decode('UTF-8')) + "%"
+    likeDate = "%" + str(q) + "%"
     c.execute("SELECT ID, Fname, DownloadId, Size, Media FROM files WHERE Fname LIKE ? OR DownloadId LIKE ? OR Media LIKE ? ORDER BY ID DESC LIMIT 100 OFFSET ?", (likeDate, likeDate, likeDate, new_offset, ))
     med = ""
     su = []
@@ -136,7 +136,7 @@ def pyrogram_data(m, query):
         offset = new_offset
 
     reply = None
-    if action in (b'old', b'new', b'last', b'first'):
+    if action in ('old', 'new', 'last', 'first'):
         if items:
             reply = items
         elif (offset < 0):
@@ -147,11 +147,11 @@ def pyrogram_data(m, query):
             offset = offset - 5
             return
         try:
-          ids = [chat_id, str(hide.decode('UTF-8'))]
+          ids = [chat_id, str(hide)]
           confirmed = chat_id in ids if chat_id else False
         except:
           pass
-    elif action == b'copy': 
+    elif action == 'copy': 
         
         if not confirmed:
           report = "**❗Report:**\n\n✅ File successfully deleted from your storage:\n\nSend /files to see your download history"
@@ -177,7 +177,7 @@ def pyrogram_data(m, query):
           mins = int(now.strftime("%M"))
           sec = int(now.strftime("%S"))
           try:
-              tnews = str(q.decode('UTF-8'))
+              tnews = str(q)
               snews = db.fileid(tnews)
               df = db.returnfid(tnews, chat_id)
               if df is not None:
@@ -252,7 +252,7 @@ def pyrogram_data(m, query):
           err = "\n**❌ Invalid file token:**\n\nUse /help to learn more about me"
           nauth = "\n**⚠️ 506 Unknown Error:**\n\n You are not authorised to delete this file because are not the owner\n\n Your uploaded file can be accessed using /files"
           try:
-              tnews = str(q.decode('UTF-8'))
+              tnews = str(q)
               snews = db.fileid(tnews)
               ver = db.checkifexist(tnews, chat_id)
               ids = [chat_id, str(ver)]
@@ -264,7 +264,7 @@ def pyrogram_data(m, query):
                   db.delete_item(tnews, chat_id)
                   m.edit_message_text(chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(report), disable_web_page_preview=True, reply_markup=reply_markups) 
                   m.answer_callback_query(query.id, "File was removed successfully")
-                  #g = str(q.decode('UTF-8')) 
+                  #g = str(q) 
                 elif not ver: 
                   m.edit_message_text(
             chat_id=update.message.chat.id, message_id=update.message.message_id, text="{}".format(nauth), disable_web_page_preview=True, reply_markup=reply_markups) 
@@ -291,10 +291,10 @@ def pyrogram_data(m, query):
         return
 
 
-    elif action == b'auth': 
+    elif action == 'auth': 
         if not admin:
-            did = str(q.decode('UTF-8'))
-            user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+            did = str(q)
+            user = db.ufil(str(q), str(chat_id))
             ids = [chat_id, str(user)]
             pr = db.make_private(did, str(chat_id))
             usr = db.getuser(did, str(chat_id))
@@ -314,8 +314,8 @@ def pyrogram_data(m, query):
             return 
             
         else:
-            did = str(q.decode('UTF-8'))
-            user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+            did = str(q)
+            user = db.ufil(str(q), str(chat_id))
             ids = [chat_id, str(user)]
             pr = db.make_public(did, str(chat_id))
             usr = db.getuser(did, str(chat_id))
@@ -340,21 +340,21 @@ def pyrogram_data(m, query):
         return
       
       
-    elif action == b'dl':
-        user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+    elif action == 'dl':
+        user = db.ufil(str(q), str(chat_id))
         ids = [chat_id, str(user)]
-        did = str(q.decode('UTF-8'))
-        user = db.ufil(str(q.decode('UTF-8')), str(chat_id))
+        did = str(q)
+        user = db.ufil(str(q), str(chat_id))
         ids = [chat_id, str(user)]
         pr = db.make_private(did, str(chat_id))
         usr = db.getuser(did, str(chat_id))
         if (admin == 1):
           m.answer_callback_query(query.id, "⚠️ You are not authorized to download this file. Sorry", show_alert=True)
           return 
-        kbs =  regs_keyboard(id=str(q.decode('UTF-8')), admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
+        kbs =  regs_keyboard(id=str(q), admin=True, confirmed=user in ids if user else False, ids=user, chat_id=chat_id)  
         reply_markups = InlineKeyboardMarkup(kbs)
         try:
-            g = str(q.decode('UTF-8'))
+            g = str(q)
             snews = db.fileid(g)
             if snews:
                 num, row, fid, dat, tim, siz, did = db.vfileid(g)

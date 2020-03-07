@@ -1,6 +1,6 @@
 
 # Tele MultiStore Bot
-[![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.05-red.svg)](https://docs.pyrogram.ml)
+[![LIBRARY](https://img.shields.io/badge/Advanced%20Multipurpose%20Telegram%20Store%20Bot-V0.05-red.svg)](https://docs.pyrogram.org)
 ![PYTHON](https://img.shields.io/badge/Python-%3E%3D3.5-8892bf.svg) [![LIBRARY](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://telegram.me/bfas237botdevs) [![LIBRARY](https://img.shields.io/badge/IRC-Channel-36ade1.svg)](https://telegram.me/https://webchat.freenode.net/?channels=##bfas237bots)
 
 
@@ -15,7 +15,7 @@ Requirements
 * Python >=3.6
 * Telegram account.
 * Telegram API key, you can get one simply with [@BotFather](https://core.telegram.org/bots#botfather) with simple commands right after creating your bot.
-* Your own `API_ID` and `API_HASH` [HOW TO GET MY API CREDENTIALS](https://docs.pyrogram.ml/start/Setup.html#api-keys)
+* Your own `API_ID` and `API_HASH` [HOW TO GET MY API CREDENTIALS](https://docs.pyrogram.org)
 
 
 Dependencies
@@ -37,7 +37,7 @@ Create env variables as the one below.
 
 ##### ENV Configuration
 
-* Replace the values as specified [HERE](https://docs.pyrogram.ml/start/Setup#api-keys).
+* Replace the values as specified [HERE](https://docs.pyrogram.org).
 
 > If you use Heroku then this will be very easy to understand
 
