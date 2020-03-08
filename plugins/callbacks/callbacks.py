@@ -398,7 +398,7 @@ def pyrogram_data(m, query):
             chat_id=update.message.chat.id, 
              message_id=update.message.message_id,
             text="📄 <b>{}</b>'s files Library:   <b>{} out of {}</b> \n\n {}".format(username, offset, rowcount, reply),
-             parse_mode=pyrogram.ParseMode.HTML,
+             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=reply_markup
         ) 
